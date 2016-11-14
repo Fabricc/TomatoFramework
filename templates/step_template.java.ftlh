@@ -1,15 +1,18 @@
-package {package}
+<#noautoesc>
+package ${package}
 import cucumber.api.PendingException;
 import cucumber.api.java.en.Given;
 
-public class {name} {
+public class ${name} {
 
-
-@Given("^\\[{regex}\\]$")
-public void {name_function}() throws Throwable {
+<#list steps as step>
+@Given("^\\[${step.regex}\\]$")
+public void ${step.name_function}() throws Throwable {
 
         // Write code here that turns the phrase above into concrete actions
         throw new PendingException();
     }
+</#list>
 
 }
+</#noautoesc>

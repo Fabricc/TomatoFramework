@@ -40,16 +40,17 @@ public class Grammar {
 
         for(String e: exps){
             result+=expand(e);
+            result+=" ";
         }
         return result;
 
     }
 
-    private String expand(String form) {
-        List<String> values = expressions.get(form);
+    private String expand(String non_terminal) {
+        List<String> values = expressions.get(non_terminal);
 
         if (values == null) {
-            return form;
+            return non_terminal;
         } else {
             //String result = "(";
             String result = "(?:";
@@ -108,50 +109,41 @@ public class Grammar {
 //    }
 
 
-    public void generate(Map<String,List<String>> expressions) throws IOException, TemplateException {
+    public void generate(Map<String,List<String>> input_expressions) throws IOException, TemplateException {
 
-        Configuration cfg = new Configuration();
-
-        // Where do we load the templates from:
-        cfg.setClassForTemplateLoading(Grammar.class, "templates");
-
-        // Some other recommended settings:
-        cfg.setIncompatibleImprovements(new Version(2, 3, 20));
-        cfg.setDefaultEncoding("UTF-8");
-        cfg.setLocale(Locale.US);
-        cfg.setTemplateExceptionHandler(TemplateExceptionHandler.RETHROW_HANDLER);
-
-        Template template = cfg.getTemplate("step_template.java.ftl");
-
-        Map<String,Object> input = new HashMap();
-        input.put("name", "quality_steps_generated");
-        input.put("name", "Parser");
+        Template template = CodeGenerator.initialize("templates","step_template.java.ftlh");
 
 
 
+        Map<String,Object> root = new HashMap();
+        root.put("name", "quality_steps_generated");
+        root.put("package", "Parser");
+        List<StepDefinitionDataModel> list = new LinkedList<StepDefinitionDataModel>();
 
 
-
-
-            Iterator it = expressions.entrySet().iterator();
+            Iterator it = input_expressions.entrySet().iterator();
             while (it.hasNext()) {
+
                 Map.Entry pair = (Map.Entry)it.next();
                 //System.out.println(pair.getKey() + " = " + pair.getValue());
 
                 String exp = buildRegExpression((List<String>) pair.getValue());
-                String regex = "@Given(\"^\\\\["+exp+"\\\\]$)";
 
-               input.put("name_function", pair.getKey());
+               //root.put("name_function", pair.getKey());
+                list.add(new StepDefinitionDataModel((String) pair.getKey(),exp));
 
-                input.put("regex", exp);
+                //root.put("regex", exp);
                 it.remove(); // avoids a ConcurrentModificationException
             }
+
+            root.put("steps",list);
 
         // 2.3. Generate the output
 
         // Write output to the console
         Writer consoleWriter = new OutputStreamWriter(System.out);
-        template.process(input, consoleWriter);
+        template.process(root, consoleWriter);
+        consoleWriter.close();
 
 
 
@@ -166,6 +158,7 @@ public class Grammar {
 
         Map<String,List<String>> m = new HashMap<String, List<String>>();
         m.put("alternativeOne",addToList("the","Probability","of","stateFormula","timeBound"));
+        m.put("alternativeTwo",addToList("the","Probability", "is", "that","stateFormula","timeBound"));
 
         try {
             g.generate(m);
