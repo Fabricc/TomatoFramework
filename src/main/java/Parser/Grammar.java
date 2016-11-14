@@ -4,9 +4,11 @@ package Parser;
 import java.io.*;
 import java.util.*;
 
+import Parser.support.TermOccurrence;
 import freemarker.template.*;
 
-import static Parser.helper.addToList;
+import static Parser.support.helper.addToList;
+import static Parser.support.helper.extractTerms;
 
 /**
  * Created by UA06NP on 09/11/2016.
@@ -16,20 +18,26 @@ import static Parser.helper.addToList;
 public class Grammar {
 
     Map<String, List<String>> expressions = new HashMap<String, List<String>>();
-    Map<String, String> constraints = new HashMap<String, String>();
+    Map<String, Object> constraints = new HashMap<String, Object>();
 
     Grammar(){
         expressions.put("Probability", addToList("probability", "chance"));
+
         expressions.put("timeBound", addToList("upperTimeBound","lowerTimeBound"));
         expressions.put("upperTimeBound",addToList("within the next", "in less than"));
         expressions.put("lowerTimeBound",addToList("after","in more than"));
         expressions.put("timeUnits",addToList("time units","time steps"));
         expressions.put("timeInterval",addToList("between \\d+ and \\d+ timeUnits"));
         expressions.put("stateFormula",addToList("\\\"(\\\\w+)\\\""));
+        expressions.put("p",addToList("(0\\.[0-9]+|1)"));
+        expressions.put("t",addToList("([0-9]*\\.[0-9]+|[0-9]+)"));
 
         constraints.put("upperTimeBand",">");
         constraints.put("lowerTimeBand","<");
         constraints.put("timeInterval","><");
+        constraints.put("p",Double.class);
+        constraints.put("t",Double.class);
+        constraints.put("stateFormula",String.class);
     }
 
 
@@ -46,10 +54,49 @@ public class Grammar {
 
     }
 
-    private String expand(String non_terminal) {
-        List<String> values = expressions.get(non_terminal);
+//    private String expand(String non_terminal) {
+//        //if()
+//
+//        List<String> values = expressions.get(non_terminal);
+//
+//        if (values == null) {
+//            return non_terminal;
+//        } else {
+//            //String result = "(";
+//            String result = "(?:";
+//            boolean first_symbol = true;
+//
+//            for (String s : values) {
+//                if (!first_symbol) result += "|";
+//                else first_symbol = false;
+//
+//                String[] decomposition = s.split(" ");
+//
+//                for(int i=0; i<decomposition.length; i++){
+//                    result+=expand(decomposition[i]);
+//                    if(i!=decomposition.length-1){
+//                        result+=" ";
+//                    }
+//                }
+//
+//
+//
+//            }
+//            return result + ")";
+//
+//        }
+//    }
 
-        if (values == null) {
+    private String expand(String expression) {
+
+
+        ArrayList<TermOccurrence> nonTerminals=extractTerms(expression);
+
+        for(TermOccurrence word: nonTerminals ){
+            List<String> derivations = expressions.get(word.getTerm());
+            expand(word.getTerm());
+
+            if (derivations == null) {
             return non_terminal;
         } else {
             //String result = "(";
@@ -60,53 +107,28 @@ public class Grammar {
                 if (!first_symbol) result += "|";
                 else first_symbol = false;
 
-                result += expand(s);
+                String[] decomposition = s.split(" ");
+
+                for(int i=0; i<decomposition.length; i++){
+                    result+=expand(decomposition[i]);
+                    if(i!=decomposition.length-1){
+                        result+=" ";
+                    }
+                }
+
+
 
             }
             return result + ")";
 
-        }
-    }
-
-//    public void generate(Map<String,List<String>> expressions){
-//
-//        try{
-//            PrintWriter writer = new PrintWriter("quality_steps_generated.java", "UTF-8");
-//            writer.println("package Parser");
-//            writer.println("import cucumber.api.PendingException;\n" +
-//                    "import cucumber.api.java.en.Given;");
-//            writer.println("public class quality_steps_generated {");
-//
-//
-//
-//            Iterator it = expressions.entrySet().iterator();
-//            while (it.hasNext()) {
-//                Map.Entry pair = (Map.Entry)it.next();
-//                //System.out.println(pair.getKey() + " = " + pair.getValue());
-//
-//                String exp = buildRegExpression((List<String>) pair.getValue());
-//
-//                writer.println("@Given(\"^\\\\["+exp+"\\\\]$)");
-//
-//                writer.println("public void "+pair.getKey()+"() throws Throwable {\n" +
-//                        "\n" +
-//                        "        // Write code here that turns the phrase above into concrete actions\n" +
-//                        "        throw new PendingException();\n" +
-//                        "    }");
-//
-//                it.remove(); // avoids a ConcurrentModificationException
-//            }
-//
-//            writer.println("}");
-//            writer.close();
-//        } catch (Exception e) {
-//            // do something
 //        }
-//
-////
-////        String[] alternativeOneForms = {"the", }
-////        buildRegExpression('altenativeOne',)
-//    }
+
+        }
+
+
+
+
+    }
 
 
     public void generate(Map<String,List<String>> input_expressions) throws IOException, TemplateException {
@@ -159,6 +181,10 @@ public class Grammar {
         Map<String,List<String>> m = new HashMap<String, List<String>>();
         m.put("alternativeOne",addToList("the","Probability","of","stateFormula","timeBound"));
         m.put("alternativeTwo",addToList("the","Probability", "is", "that","stateFormula","timeBound"));
+
+//        Map<String, String> m = new HashMap<String, String>();
+//        m.put("alternativeOne","the Probability of stateFormula timeBound");
+//        m.put("alternativeTwo","the Probability is that stateFormula timeBound");
 
         try {
             g.generate(m);
