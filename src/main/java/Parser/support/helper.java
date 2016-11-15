@@ -33,6 +33,7 @@ public static ArrayList<TermOccurrence> extractTerms(String expression){
         }else{
             if(s.equals("")) first_char=i;
             s+=c;
+            if(i==expression.length()-1) res.add(new TermOccurrence(s,first_char,i));
         }
     }
     return res;
@@ -41,8 +42,15 @@ public static ArrayList<TermOccurrence> extractTerms(String expression){
 
 
     public static void main(String[] args) {
-        String str = "(atBound | thanBound hji ||( jo))";
-        System.out.println(extractTerms(str));
+//        String str = "(atBound | thanBound hji ||( jo))";
+//        System.out.println(extractTerms(str));
+
+        StringBuffer buf = new StringBuffer("Java this is a test");
+
+        int start = 3;
+        int end = 4;
+        buf.replace(start, end, "4"); // Java Developers v1.4
+        System.out.println(buf);
 
 
 
