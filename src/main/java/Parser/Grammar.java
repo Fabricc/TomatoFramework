@@ -4,6 +4,7 @@ package Parser;
 import java.io.*;
 import java.util.*;
 
+import Parser.support.SemanticWrapper;
 import Parser.support.TermOccurrence;
 import freemarker.template.*;
 
@@ -18,7 +19,7 @@ import static Parser.support.helper.extractTerms;
 public class Grammar {
 
     Map<String, String> expressions = new HashMap<String, String>();
-    Map<String, Object> constraints = new HashMap<String, Object>();
+    Map<String, SemanticWrapper> constraints = new HashMap<String, SemanticWrapper>();
 
     Grammar(){
 
@@ -32,33 +33,52 @@ public class Grammar {
         expressions.put("p","(0\\.[0-9]+|1)");
         expressions.put("t","([0-9]*\\.[0-9]+|[0-9]+)");
 
-        constraints.put("upperTimeBand",">");
-        constraints.put("lowerTimeBand","<");
-        constraints.put("timeInterval","><");
-        constraints.put("p",Double.class);
-        constraints.put("t",Double.class);
-        constraints.put("stateFormula",String.class);
+        constraints.put("upperTimeBand",new SemanticWrapper(">"));
+        constraints.put("lowerTimeBand",new SemanticWrapper("<"));
+        constraints.put("timeBound",new SemanticWrapper("time"));
+        constraints.put("timeInterval",new SemanticWrapper("><"));
+        constraints.put("p",new SemanticWrapper(Double.class));
+        constraints.put("t",new SemanticWrapper(Double.class));
+        constraints.put("stateFormula",new SemanticWrapper(String.class));
     }
 
 
 
 
-    private String buildRegExpression(String expression, Boolean grouping , Boolean capturingGroup) {
-
+    private String buildRegExpression(String expression, Boolean isInGroup , Boolean isIncapturingGroup, Set<String> semantic) {
 
         ArrayList<TermOccurrence> nonTerminals=extractTerms(expression);
         String result=expression;
 
 
         for(TermOccurrence word: nonTerminals ){
-            String derivations = expressions.get(word.getTerm());
-            if(derivations!=null) result = result.replace(word.getTerm(),buildRegExpression(derivations,true, true));
+            String term=word.getTerm();
+            String derivations = expressions.get(term);
+            if(derivations!=null) {
 
+                boolean capturingGroupReplacement = false;
+                if(constraints.get(term)!=null) {
+                    semantic.add(term);
+                    capturingGroupReplacement=true;
+                }
+
+                String replacement = buildRegExpression(derivations, true, capturingGroupReplacement, semantic);
+
+                String regex_intern= "\\s"+term+"\\s";
+                String regex_begin="^"+term+"\\s";
+                String regex_end="\\s"+term+"$";
+
+                result = result.replaceAll(regex_begin,replacement+" ");
+                result = result.replaceAll(regex_intern," "+replacement+" ");
+                result = result.replaceAll(regex_end," "+replacement);
+            }
             }
 
-            if(!grouping) return result;
-            if(capturingGroup)  return "(?:"+result+")";
-            return "("+result+")";
+
+
+            if(!isInGroup) return result;
+            if(isIncapturingGroup)  return "("+result+")";
+            return "(?:"+result+")";
 
 
     }
@@ -73,7 +93,10 @@ public class Grammar {
         Map<String,Object> root = new HashMap();
         root.put("name", "quality_steps_generated");
         root.put("package", "Parser");
+
         List<StepDefinitionDataModel> list = new LinkedList<StepDefinitionDataModel>();
+
+
 
 
             Iterator it = input_expressions.entrySet().iterator();
@@ -81,11 +104,22 @@ public class Grammar {
 
                 Map.Entry pair = (Map.Entry)it.next();
                 //System.out.println(pair.getKey() + " = " + pair.getValue());
+                Set<String> semantic = new HashSet<String>();
 
-                String exp = buildRegExpression((String) pair.getValue(),false,false);
+                String exp = buildRegExpression((String) pair.getValue(),false,false,semantic);
+
+                List<ParameterDataModel> params = new LinkedList<ParameterDataModel>();
+
+                for(String s: semantic){
+                    SemanticWrapper sw = constraints.get(s);
+                    if(sw.getDescriptor().equals("class")){
+                        params.add(new ParameterDataModel(((Class)sw.get()).getCanonicalName(),s));
+                    }
+                }
+
 
                //root.put("name_function", pair.getKey());
-                list.add(new StepDefinitionDataModel((String) pair.getKey(),exp));
+                list.add(new StepDefinitionDataModel((String) pair.getKey(),exp,params));
 
                 //root.put("regex", exp);
                 it.remove(); // avoids a ConcurrentModificationException
@@ -107,8 +141,10 @@ public class Grammar {
         Grammar g = new Grammar();
 
         Map<String,String> m = new HashMap<String, String>();
-        m.put("alternativeOne","the Probability of stateFormula timeBound");
+
+        m.put("alternativeOne","the Probability of stateFormula timeBound t");
         m.put("alternativeTwo","the Probability is that stateFormula timeBound");
+
 
 
         try {
