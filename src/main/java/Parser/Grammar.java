@@ -3,6 +3,8 @@ package Parser;
 
 import java.io.*;
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import Parser.support.SemanticWrapper;
 import Parser.support.TermOccurrence;
@@ -10,6 +12,7 @@ import freemarker.template.*;
 
 
 import static Parser.support.helper.extractTerms;
+import static Parser.support.helper.replaceTerm;
 
 /**
  * Created by UA06NP on 09/11/2016.
@@ -24,18 +27,25 @@ public class Grammar {
     Grammar(){
 
         expressions.put("Probability", "probability|chance");
+        expressions.put("probabilityBound", "atBound|thanBound");
+        expressions.put("atBound","at most|at least");
+        expressions.put("thanBound","greaterThan|lowerThan");
+        expressions.put("greaterThan","greater than|higher than");
+        expressions.put("lowerThan","lower than|less than");
+        expressions.put("Of","of|to|that|in which");
         expressions.put("timeBound", "upperTimeBound|lowerTimeBound");
         expressions.put("upperTimeBound","within the next|in less than");
         expressions.put("lowerTimeBound","after|in more than");
         expressions.put("timeUnits","time units|time steps");
         expressions.put("timeInterval","between \\d+ and \\d+ timeUnits");
-        expressions.put("stateFormula","\\\"(\\\\w+)\\\"");
-        expressions.put("p","(0\\.[0-9]+|1)");
-        expressions.put("t","([0-9]*\\.[0-9]+|[0-9]+)");
+        expressions.put("stateFormula","\"([^\"]*)\"");
+        expressions.put("p","0\\.[0-9]+|1");
+        expressions.put("t","[0-9]*\\.[0-9]+|[0-9]+");
 
         constraints.put("upperTimeBand",new SemanticWrapper(">"));
         constraints.put("lowerTimeBand",new SemanticWrapper("<"));
-        constraints.put("timeBound",new SemanticWrapper("time"));
+        constraints.put("probabilityBound",new SemanticWrapper("probability constraint"));
+        constraints.put("timeBound",new SemanticWrapper("time constraint"));
         constraints.put("timeInterval",new SemanticWrapper("><"));
         constraints.put("p",new SemanticWrapper(Double.class));
         constraints.put("t",new SemanticWrapper(Double.class));
@@ -45,7 +55,7 @@ public class Grammar {
 
 
 
-    private String buildRegExpression(String expression, Boolean isInGroup , Boolean isIncapturingGroup, Set<String> semantic) {
+    private String buildRegExpressionIntern(String expression, Boolean isInGroup , Boolean isInCapturingGroup, Set<String> semantic, String father) {
 
         ArrayList<TermOccurrence> nonTerminals=extractTerms(expression);
         String result=expression;
@@ -57,30 +67,35 @@ public class Grammar {
             if(derivations!=null) {
 
                 boolean capturingGroupReplacement = false;
-                if(constraints.get(term)!=null) {
+                SemanticWrapper meaning = constraints.get(term);
+                if(meaning!=null) {
+                    if(meaning.getDescriptor().equals("class")){
                     semantic.add(term);
                     capturingGroupReplacement=true;
+                    }else{
+                        if(father!=null){
+                            //implementare associazione con multiple scelte
+                        }
+                    }
                 }
 
-                String replacement = buildRegExpression(derivations, true, capturingGroupReplacement, semantic);
+                String replacement = buildRegExpressionIntern(derivations, true, capturingGroupReplacement, semantic, father);
 
-                String regex_intern= "\\s"+term+"\\s";
-                String regex_begin="^"+term+"\\s";
-                String regex_end="\\s"+term+"$";
-
-                result = result.replaceAll(regex_begin,replacement+" ");
-                result = result.replaceAll(regex_intern," "+replacement+" ");
-                result = result.replaceAll(regex_end," "+replacement);
+                result=replaceTerm(term,replacement,result);
             }
             }
 
 
 
             if(!isInGroup) return result;
-            if(isIncapturingGroup)  return "("+result+")";
+            if(isInCapturingGroup)  return "("+result+")";
             return "(?:"+result+")";
 
 
+    }
+
+    private String buildRegExpression(String expression, Set<String> semantic){
+        return buildRegExpressionIntern(expression,false,false,semantic,"null");
     }
 
 
@@ -106,7 +121,7 @@ public class Grammar {
                 //System.out.println(pair.getKey() + " = " + pair.getValue());
                 Set<String> semantic = new HashSet<String>();
 
-                String exp = buildRegExpression((String) pair.getValue(),false,false,semantic);
+                String exp = buildRegExpression((String) pair.getValue(),semantic);
 
                 List<ParameterDataModel> params = new LinkedList<ParameterDataModel>();
 
@@ -137,13 +152,25 @@ public class Grammar {
     }
 
     public static void main(String[] args) {
-        // write your code here
+
+//        String test = "how are youare";
+//        String regex_intern= "\\s(are)\\s";
+//
+//        test = test.replaceAll(regex_intern,"is");
+
+
+//        System.out.println(test.split("is"));
+
+
+
+
         Grammar g = new Grammar();
 
         Map<String,String> m = new HashMap<String, String>();
 
-        m.put("alternativeOne","the Probability of stateFormula timeBound t");
-        m.put("alternativeTwo","the Probability is that stateFormula timeBound");
+        m.put("alternativeOne","the Probability Of stateFormula timeBound t is probabilityBound p");
+//        m.put("alternativeTwo","the Probability is that stateFormula timeBound");
+//        m.put("alternativeThree","with ['a'] Probability ['of'] probabilityBound p stateFormula timeBound t");
 
 
 

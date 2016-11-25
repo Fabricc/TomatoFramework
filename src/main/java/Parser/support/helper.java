@@ -3,6 +3,8 @@ package Parser.support;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Created by UA06NP on 09/11/2016.
@@ -39,6 +41,32 @@ public static ArrayList<TermOccurrence> extractTerms(String expression){
     return res;
 }
 
+public static String replaceTerm(String term, String replacement, String context){
+
+    String result = context;
+
+    final List<Pattern> rxs = new ArrayList<Pattern>();
+
+    rxs.add(Pattern.compile("(\\s)"+term+"(\\s)"));
+    rxs.add(Pattern.compile("(^)"+term+"(\\s)"));
+    rxs.add(Pattern.compile("(\\s)"+term+"($)"));
+    rxs.add(Pattern.compile("(\\|)"+term+"(\\|)"));
+    rxs.add(Pattern.compile("(\\()"+term+"(\\|)"));
+    rxs.add(Pattern.compile("(^)"+term+"(\\))"));
+    rxs.add(Pattern.compile("(^)"+term+"(\\|)"));
+    rxs.add(Pattern.compile("(\\|)"+term+"($)"));
+    rxs.add(Pattern.compile("(\\()"+term+"($)"));
+
+
+    for (Pattern rx : rxs) {
+        Matcher m = rx.matcher(result);
+        if (m.find()){
+            result= m.replaceAll("$1"+replacement+"$2");
+        }
+    }
+
+    return result;
+}
 
 
     public static void main(String[] args) {
