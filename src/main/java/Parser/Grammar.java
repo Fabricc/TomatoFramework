@@ -38,7 +38,7 @@ public class Grammar {
         expressions.put("timeUnits","'time units'|'time steps'");
         expressions.put("timeInterval","'between '\\d+' and '\\d+' 'timeUnits");
         //Parameters rules
-        expressions.put("stateFormula","\\\\\"([^\\\\\"]*)\\\\\"");
+        expressions.put("stateFormula","[^\\\\\"]*");
         expressions.put("p","0\\.[0-9]+|1");
         expressions.put("t","[0-9]*\\.[0-9]+|[0-9]+");
 
@@ -76,7 +76,7 @@ public class Grammar {
                     boolean capturingGroupReplacement = isInCapturingGroup;
                     boolean isATerminalClass = false;
 
-                    //manage semantic of the term, if present
+
 
                     SemanticWrapper meaning = constraints.get(term);
 
@@ -86,6 +86,7 @@ public class Grammar {
                             parameters.add(term);
                             capturingGroupReplacement = true;
                             isATerminalClass = true;
+                            father=term;
 
                         }
 
@@ -113,11 +114,17 @@ public class Grammar {
             }
         }
 
+            SemanticWrapper meaning = constraints.get(right_hand_value);
 
 
 
             if(!isInGroup) return result;
-            if(isInCapturingGroup)  return "("+result+")";
+            if(isInCapturingGroup){
+                if(meaning!=null && meaning.getDescriptor().equals("class") &&  meaning.get().equals(String.class)){
+                    return "\\\\\"("+result+")\\\\\"";
+                }
+                return "("+result+")";
+            }
             return "(?:"+result+")";
 
 
