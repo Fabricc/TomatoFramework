@@ -10,7 +10,7 @@ import java.io.IOException;
 /**
  * Created by ricch on 13/11/2016.
  */
-public class CodeGenerator {
+public class CodeGeneratorConfigurator {
     public static Template initialize(String templateFolder, String templateFile) throws IOException {
         // Create your Configuration instance, and specify if up to what FreeMarker
 // version (here 2.3.25) do you want to apply the fixes that are not 100%

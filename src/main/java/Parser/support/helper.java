@@ -22,16 +22,35 @@ public class helper {
 public static ArrayList<TermOccurrence> extractTerms(String expression){
     String s="";
     int first_char=0;
+    boolean first_appendix=false;
     ArrayList<TermOccurrence> res = new ArrayList<TermOccurrence>();
 
     for (int i = 0;i < expression.length(); i++){
         char c = expression.charAt(i);
-        if(c==' '||c=='|'||c=='('||c==')'){
-            if(s.equals("")) continue;
-            else {
-                res.add(new TermOccurrence(s, first_char, i));
+
+        if(c==' '||c=='|'||c=='('||c==')'||c=='\''){
+
+            if(c=='\'' && first_appendix==false){
+                first_appendix=true;
+            }
+
+            if(c==' ' && first_appendix==true) {
+                s+=c;
+                continue;
+            }
+
+            if(!s.equals("")) {
+                TermOccurrence t = new TermOccurrence(s, first_char, i);
+                if(first_appendix){
+                    t.defineTerminalString();
+                    first_appendix=false;
+                }
+
+                res.add(t);
+
                 s="";
             }
+
         }else{
             if(s.equals("")) first_char=i;
             s+=c;
@@ -47,15 +66,17 @@ public static String replaceTerm(String term, String replacement, String context
 
     final List<Pattern> rxs = new ArrayList<Pattern>();
 
-    rxs.add(Pattern.compile("(\\s)"+term+"(\\s)"));
-    rxs.add(Pattern.compile("(^)"+term+"(\\s)"));
-    rxs.add(Pattern.compile("(\\s)"+term+"($)"));
-    rxs.add(Pattern.compile("(\\|)"+term+"(\\|)"));
-    rxs.add(Pattern.compile("(\\()"+term+"(\\|)"));
-    rxs.add(Pattern.compile("(^)"+term+"(\\))"));
-    rxs.add(Pattern.compile("(^)"+term+"(\\|)"));
-    rxs.add(Pattern.compile("(\\|)"+term+"($)"));
-    rxs.add(Pattern.compile("(\\()"+term+"($)"));
+//    rxs.add(Pattern.compile("(\\s)"+term+"(\\s)"));
+//    rxs.add(Pattern.compile("(^)"+term+"(\\s)"));
+//    rxs.add(Pattern.compile("(\\s)"+term+"($)"));
+//    rxs.add(Pattern.compile("(\\|)"+term+"(\\|)"));
+//    rxs.add(Pattern.compile("(\\()"+term+"(\\|)"));
+//    rxs.add(Pattern.compile("(^)"+term+"(\\))"));
+//    rxs.add(Pattern.compile("(^)"+term+"(\\|)"));
+//    rxs.add(Pattern.compile("(\\|)"+term+"($)"));
+//    rxs.add(Pattern.compile("(\\()"+term+"($)"));
+
+    rxs.add(Pattern.compile("(\\b)"+term+"(\\b)"));
 
 
     for (Pattern rx : rxs) {

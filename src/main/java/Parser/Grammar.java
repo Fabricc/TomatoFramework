@@ -3,8 +3,6 @@ package Parser;
 
 import java.io.*;
 import java.util.*;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import Parser.support.SemanticWrapper;
 import Parser.support.TermOccurrence;
@@ -21,29 +19,33 @@ import static Parser.support.helper.replaceTerm;
 
 public class Grammar {
 
-    Map<String, String> expressions = new HashMap<String, String>();
-    Map<String, SemanticWrapper> constraints = new HashMap<String, SemanticWrapper>();
+    public Map<String, String> expressions = new HashMap<String, String>();
+    public Map<String, SemanticWrapper> constraints = new HashMap<String, SemanticWrapper>();
 
     Grammar(){
-
-        expressions.put("Probability", "probability|chance");
+        //Probability rules
+        expressions.put("Probability", "'probability'|'chance'");
         expressions.put("probabilityBound", "atBound|thanBound");
-        expressions.put("atBound","at most|at least");
+        expressions.put("atBound","'at most'|'at least'");
         expressions.put("thanBound","greaterThan|lowerThan");
-        expressions.put("greaterThan","greater than|higher than");
-        expressions.put("lowerThan","lower than|less than");
-        expressions.put("Of","of|to|that|in which");
+        expressions.put("greaterThan","'greater than'|'higher than'");
+        expressions.put("lowerThan","'lower than'|'less than'");
+        expressions.put("Of","'of'|'to'|'that'|'in which'");
+        //Time rules
         expressions.put("timeBound", "upperTimeBound|lowerTimeBound");
-        expressions.put("upperTimeBound","within the next|in less than");
-        expressions.put("lowerTimeBound","after|in more than");
-        expressions.put("timeUnits","time units|time steps");
-        expressions.put("timeInterval","between \\d+ and \\d+ timeUnits");
-        expressions.put("stateFormula","\"([^\"]*)\"");
+        expressions.put("upperTimeBound","'within the next'|'in less than'");
+        expressions.put("lowerTimeBound","'after'|'in more than'");
+        expressions.put("timeUnits","'time units'|'time steps'");
+        expressions.put("timeInterval","'between '\\d+' and '\\d+' 'timeUnits");
+        //Parameters rules
+        expressions.put("stateFormula","\\\\\"([^\\\\\"]*)\\\\\"");
         expressions.put("p","0\\.[0-9]+|1");
         expressions.put("t","[0-9]*\\.[0-9]+|[0-9]+");
 
-        constraints.put("upperTimeBand",new SemanticWrapper(">"));
-        constraints.put("lowerTimeBand",new SemanticWrapper("<"));
+        constraints.put("upperTimeBound",new SemanticWrapper("<"));
+        constraints.put("lowerTimeBound",new SemanticWrapper(">"));
+        constraints.put("atBound",new SemanticWrapper("<"));
+        constraints.put("thanBound",new SemanticWrapper(">"));
         constraints.put("probabilityBound",new SemanticWrapper("probability constraint"));
         constraints.put("timeBound",new SemanticWrapper("time constraint"));
         constraints.put("timeInterval",new SemanticWrapper("><"));
@@ -55,35 +57,62 @@ public class Grammar {
 
 
 
-    private String buildRegExpressionIntern(String expression, Boolean isInGroup , Boolean isInCapturingGroup, Set<String> semantic, String father) {
+    private String buildRegExpressionIntern(String expression, Boolean isInGroup , Boolean isInCapturingGroup, Set<String> parameters, Map<String,Pair> lexical_parameters, String right_hand_value, Boolean isAClass) {
 
-        ArrayList<TermOccurrence> nonTerminals=extractTerms(expression);
         String result=expression;
 
 
-        for(TermOccurrence word: nonTerminals ){
-            String term=word.getTerm();
-            String derivations = expressions.get(term);
-            if(derivations!=null) {
+        if(!isAClass) {
 
-                boolean capturingGroupReplacement = false;
-                SemanticWrapper meaning = constraints.get(term);
-                if(meaning!=null) {
-                    if(meaning.getDescriptor().equals("class")){
-                    semantic.add(term);
-                    capturingGroupReplacement=true;
-                    }else{
-                        if(father!=null){
-                            //implementare associazione con multiple scelte
+            ArrayList<TermOccurrence> nonTerminals = extractTerms(expression);
+
+            for (TermOccurrence word : nonTerminals) {
+                String father = right_hand_value;
+                String term = word.getTerm();
+                String derivations = expressions.get(term);
+                if (!word.isTerminalString() && derivations != null) {
+
+
+                    boolean capturingGroupReplacement = isInCapturingGroup;
+                    boolean isATerminalClass = false;
+
+                    //manage semantic of the term, if present
+
+                    SemanticWrapper meaning = constraints.get(term);
+
+                    if (meaning != null) {
+
+                        if (meaning.getDescriptor().equals("class")) {
+                            parameters.add(term);
+                            capturingGroupReplacement = true;
+                            isATerminalClass = true;
+
+                        }
+
+                        if (meaning.getDescriptor().equals("string")) {
+                            capturingGroupReplacement = true;
+                            if (father == null) {
+                                father = term;
+                            } else {
+                                lexical_parameters.put(term, new Pair(father, (String) constraints.get(father).get()));
+                                father = term;
+                            }
                         }
                     }
+
+                    String replacement = buildRegExpressionIntern(derivations, true, capturingGroupReplacement, parameters, lexical_parameters, father, isATerminalClass);
+
+                    result = replaceTerm(term, replacement, result);
+                } else {
+                    if (right_hand_value != null) {
+                        lexical_parameters.put(term, new Pair(right_hand_value, (String) constraints.get(right_hand_value).get()));
+                    }
+                    result=result.replaceFirst("'"+term+"'",term);
                 }
-
-                String replacement = buildRegExpressionIntern(derivations, true, capturingGroupReplacement, semantic, father);
-
-                result=replaceTerm(term,replacement,result);
+                //right_hand_value=null;
             }
-            }
+        }
+
 
 
 
@@ -94,96 +123,8 @@ public class Grammar {
 
     }
 
-    private String buildRegExpression(String expression, Set<String> semantic){
-        return buildRegExpressionIntern(expression,false,false,semantic,"null");
-    }
-
-
-    public void generate(Map<String,String> input_expressions) throws IOException, TemplateException {
-
-        Template template = CodeGenerator.initialize("templates","step_template.java.ftlh");
-
-
-
-        Map<String,Object> root = new HashMap();
-        root.put("name", "quality_steps_generated");
-        root.put("package", "Parser");
-
-        List<StepDefinitionDataModel> list = new LinkedList<StepDefinitionDataModel>();
-
-
-
-
-            Iterator it = input_expressions.entrySet().iterator();
-            while (it.hasNext()) {
-
-                Map.Entry pair = (Map.Entry)it.next();
-                //System.out.println(pair.getKey() + " = " + pair.getValue());
-                Set<String> semantic = new HashSet<String>();
-
-                String exp = buildRegExpression((String) pair.getValue(),semantic);
-
-                List<ParameterDataModel> params = new LinkedList<ParameterDataModel>();
-
-                for(String s: semantic){
-                    SemanticWrapper sw = constraints.get(s);
-                    if(sw.getDescriptor().equals("class")){
-                        params.add(new ParameterDataModel(((Class)sw.get()).getCanonicalName(),s));
-                    }
-                }
-
-
-               //root.put("name_function", pair.getKey());
-                list.add(new StepDefinitionDataModel((String) pair.getKey(),exp,params));
-
-                //root.put("regex", exp);
-                it.remove(); // avoids a ConcurrentModificationException
-            }
-
-            root.put("steps",list);
-
-        // 2.3. Generate the output
-
-        // Write output to the console
-        Writer consoleWriter = new OutputStreamWriter(System.out);
-        template.process(root, consoleWriter);
-        consoleWriter.close();
-
-    }
-
-    public static void main(String[] args) {
-
-//        String test = "how are youare";
-//        String regex_intern= "\\s(are)\\s";
-//
-//        test = test.replaceAll(regex_intern,"is");
-
-
-//        System.out.println(test.split("is"));
-
-
-
-
-        Grammar g = new Grammar();
-
-        Map<String,String> m = new HashMap<String, String>();
-
-        m.put("alternativeOne","the Probability Of stateFormula timeBound t is probabilityBound p");
-//        m.put("alternativeTwo","the Probability is that stateFormula timeBound");
-//        m.put("alternativeThree","with ['a'] Probability ['of'] probabilityBound p stateFormula timeBound t");
-
-
-
-        try {
-            g.generate(m);
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (TemplateException e) {
-            e.printStackTrace();
-        }
-
-
-        return;
+    public String buildRegExpression(String expression, Set<String> parameters, Map<String,Pair> lexical_parameters){
+        return buildRegExpressionIntern(expression,false,false,parameters,lexical_parameters,null,false);
     }
 
 
