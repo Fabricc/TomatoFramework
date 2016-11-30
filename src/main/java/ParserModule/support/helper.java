@@ -1,4 +1,4 @@
-package Parser.support;
+package ParserModule.support;
 
 import java.util.ArrayList;
 import java.util.LinkedList;

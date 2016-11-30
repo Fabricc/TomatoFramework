@@ -47,5 +47,13 @@ two freemarker.jar-s and unpredictable behavior!
             <version>2.3.25-incubating</version>
         </dependency>
 
+
+        <!-- https://mvnrepository.com/artifact/org.aspectj/aspectjrt -->
+        <dependency>
+            <groupId>org.aspectj</groupId>
+            <artifactId>aspectjrt</artifactId>
+            <version>1.8.9</version>
+        </dependency>
+
     </dependencies>
 </project>

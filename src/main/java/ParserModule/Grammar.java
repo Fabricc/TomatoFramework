@@ -1,16 +1,14 @@
-package Parser;
+package ParserModule;
 
 
-import java.io.*;
 import java.util.*;
 
-import Parser.support.SemanticWrapper;
-import Parser.support.TermOccurrence;
-import freemarker.template.*;
+import ParserModule.support.SemanticWrapper;
+import ParserModule.support.TermOccurrence;
 
 
-import static Parser.support.helper.extractTerms;
-import static Parser.support.helper.replaceTerm;
+import static ParserModule.support.helper.extractTerms;
+import static ParserModule.support.helper.replaceTerm;
 
 /**
  * Created by UA06NP on 09/11/2016.

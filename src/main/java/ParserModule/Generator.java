@@ -1,6 +1,6 @@
-package Parser;
+package ParserModule;
 
-import Parser.support.SemanticWrapper;
+import ParserModule.support.SemanticWrapper;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
 
@@ -18,9 +18,10 @@ public class Generator {
 
 
 
+
         Map<String,Object> root = new HashMap();
         root.put("name", "quality_steps_generated");
-        root.put("package", "Parser");
+        root.put("package", "ParserModule");
 
         List<StepDefinitionDataModel> list = new LinkedList<StepDefinitionDataModel>();
 
@@ -79,18 +80,6 @@ public class Generator {
 
     public static void main(String[] args) {
 
-//        String test = "how are youare";
-//        String regex_intern= "\\s(are)\\s";
-//
-//        test = test.replaceAll(regex_intern,"is");
-
-
-//        System.out.println(test.split("is"));
-
-
-
-
-        Grammar g = new Grammar();
 
         Map<String,String> m = new HashMap<String, String>();
 

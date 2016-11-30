@@ -1,4 +1,4 @@
-package Parser;
+package ParserModule;
 
 import freemarker.template.Configuration;
 import freemarker.template.Template;

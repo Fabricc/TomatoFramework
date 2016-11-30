@@ -1,6 +1,5 @@
-package Parser;
+package ParserModule;
 
-import java.util.LinkedList;
 import java.util.List;
 
 /**

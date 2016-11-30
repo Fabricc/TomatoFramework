@@ -1,4 +1,4 @@
-package Parser;
+package ParserModule;
 
 /**
  * Created by UA06NP on 01/11/2016.
