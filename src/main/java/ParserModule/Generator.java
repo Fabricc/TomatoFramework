@@ -1,11 +1,12 @@
 package ParserModule;
 
-import ParserModule.support.SemanticWrapper;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
 
 import java.io.*;
 import java.util.*;
+
+import ParserModule.support.SemanticWrapper;
 
 /**
  * Created by UA06NP on 28/11/2016.
@@ -102,3 +103,4 @@ public class Generator {
     }
 
 }
+
