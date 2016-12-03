@@ -9,7 +9,7 @@ import cucumber.api.java.en.Then;
 public class quality_steps_generated {
 	Scenario scenario;
 	
-	@Before
+	@Before("@quality")
 	public void before(Scenario scenario){
 		this.scenario=scenario;
 	}
@@ -20,15 +20,15 @@ public class quality_steps_generated {
         return;
 	}
 	
-	@Given("^I want to do stuff$")
-	public void dostuff() throws Throwable{
-		System.out.println("dostuff");
+	@Given("^I want to do stuff and I insert (\\d)$")
+	public void dostuff(int number) throws Throwable{
+		System.out.println("dostuff with the number "+number);
         return;
 	}
 	
-	@Given("^other stuff happens$")
-	public void otherstuff() throws Throwable{
-		System.out.println("otherstuff");
+	@Given("^other stuff happens and I insert \"([^\"]*)\"$")
+	public void otherstuff(String str) throws Throwable{
+		System.out.println("otherstuff with the string "+str);
         return;
 	}
 	
@@ -46,6 +46,8 @@ public void alternativeTwo(String stateFormula) throws Throwable {
         // Write code here that turns the phrase above into concrete actions
         throw new PendingException();
     }
+    
+@Tomato
 @Given("^\\[the (?:probability|chance) (?:of|to|that|in which) \"([^\"]*)\" (?:(?:within the next|in less than)|(?:after|in more than)) (\\d+) is (?:(?:at most|at least)|(?:(?:greater than|higher than)|(?:lower than|less than))) (\\d+)\\]$")
 public void alternativeOne(String stateFormula, int p,int t) throws Throwable {
 	   TesterModuleMessenger tmm = new TesterModuleMessenger();

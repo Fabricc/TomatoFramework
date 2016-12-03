@@ -6,26 +6,46 @@ import java.lang.reflect.Method;
 public class TesterModule {
 
 	public static void executeTests(TesterModuleMessenger tmm) {
+		
+		
+		
 		System.out.println("insideExecuteTest");
 		
-		System.out.println(tmm.getClasses().get(0));
-		
 		try{
+			
+			for(int i = 0; i<tmm.getClasses().size(); i++){
+				Class c = Class.forName(tmm.getClasses().get(i));
+				
+				String met = tmm.getMethods().get(i);
+				
+				tmm.getClassArguments().get(i);
+				
+				Class[] class_arguments= tmm.getClassArguments().get(i);
+				
+				for(int j = 0; j<class_arguments.length; j++){
+					if(class_arguments[j].equals(Integer.class)){
+						class_arguments[j] = int.class;
+					}
+				}
+				
+				
+				Method method = c.getMethod(met,tmm.getClassArguments().get(i));
+				
+				Object o = c.newInstance();
+		        method.invoke(o,tmm.getArguments().get(i));
+		        
+			}
 		
-		Class c = Class.forName(tmm.getClasses().get(0));
 		
 
-		Method method = c.getMethod(tmm.getMethods().get(0));
 		
-		Object o = c.newInstance();
-        method.invoke(o);
-        
 		} catch (InvocationTargetException e) {
 			// TODO Auto-generated catch block
-			System.err.println(e.getCause());
+			e.printStackTrace();
 		} catch (ClassNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			
 		} catch (NoSuchMethodException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -43,3 +63,4 @@ public class TesterModule {
 	}
 
 }
+

@@ -11,34 +11,49 @@ import org.aspectj.lang.annotation.After;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
+import org.aspectj.lang.reflect.CodeSignature;
 
 import cucumber.api.Scenario;
 
 @Aspect
-public class Generic {
+public class TesterModuleAspect {
 	
 	private Scenario scen;
 	
 	private List<String> classes = new LinkedList<String>();
 	private List<String> methods= new LinkedList<String>();
 	private List<Object[]> arguments= new LinkedList<Object[]>();
+	private List<Class[]> classesOfArguments = new LinkedList<Class[]>();
+	
+	private Boolean storing = false;
 	
     @After("execution(* *.before(Scenario)) && args(s)")
     public void spotBefore(Scenario s){
     	
     	System.out.println("Esegui scenario "+s.getName());
+    	this.storing = true;
     	this.scen=s;
     	}
     
-    @After("execution(@cucumber.api.java.en.Given * *(..))")
+    @After("call(* *.getMethod(String, ..))")
+    public void disableStoreMethods(){
+    	this.storing = false;
+    }
+    
+    @After("execution(@cucumber.api.java.en.Given * *(..)) && !@annotation(TesterModule.src.test.java.Tomato)")
     public void storeMethods(JoinPoint jp){
+    	if(this.storing){
+
     	
     	if(scen.getSourceTagNames().contains("@quality")){
     		
-    		classes.add(jp.getThis().getClass().getCanonicalName());
-    		methods.add(jp.getSignature().getName());
-    		arguments.add(jp.getArgs());
-    		
+    		this.classes.add(jp.getThis().getClass().getCanonicalName());
+    		this.methods.add(jp.getSignature().getName());
+    		this.arguments.add(jp.getArgs());
+    		CodeSignature cs = (CodeSignature)jp.getSignature();
+    		this.classesOfArguments.add(cs.getParameterTypes());
+
+    	}
     	}
     }
     
@@ -46,9 +61,9 @@ public class Generic {
     @Before("call(void TesterModule.executeTests(TesterModuleMessenger)) && args(tmm)")
     public void addInformation(TesterModuleMessenger tmm){
     	
-    	tmm.insertMethod(classes, methods, arguments);
+    	tmm.insertMethod(classes, methods, arguments, classesOfArguments);
     
-    	System.out.println("ma prima sono qui");
+    	System.out.println("adding stored method");
     	
     }
     
