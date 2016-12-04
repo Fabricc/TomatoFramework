@@ -1,12 +1,22 @@
-package TesterModule.src.test.java;
+package tomato.TesterModule.main;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
-public class TesterModule {
-
-	public static void executeTests(TesterModuleMessenger tmm) {
+public class ParentTestingSuite {
+	TesterModuleMessenger tmm;
+	
+	public ParentTestingSuite(){
+		this.tmm = new TesterModuleMessenger();
+	}
+	
+	public TesterModuleMessenger getMessenger() {
 		
+		return this.tmm;
+	}
+
+	public void invokeTestingSuite(TesterModuleMessenger tmm) {
+		this.tmm = tmm;
 		
 		
 		System.out.println("insideExecuteTest");
@@ -22,17 +32,19 @@ public class TesterModule {
 				
 				Class[] class_arguments= tmm.getClassArguments().get(i);
 				
-				for(int j = 0; j<class_arguments.length; j++){
-					if(class_arguments[j].equals(Integer.class)){
-						class_arguments[j] = int.class;
-					}
-				}
-				
+//				for(int j = 0; j<class_arguments.length; j++){
+//					if(class_arguments[j].equals(Integer.class)){
+//						class_arguments[j] = int.class;
+//					}
+//				}
+//				
 				
 				Method method = c.getMethod(met,tmm.getClassArguments().get(i));
 				
 				Object o = c.newInstance();
 		        method.invoke(o,tmm.getArguments().get(i));
+		        
+		       
 		        
 			}
 		
@@ -61,6 +73,8 @@ public class TesterModule {
 		}
 		
 	}
+
+	
 
 }
 

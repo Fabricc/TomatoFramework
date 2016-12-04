@@ -1,12 +1,21 @@
-package ParserModule;
+package tomato.ParserModule;
+
+import java.io.FileOutputStream;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
+import java.io.Writer;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
-
-import java.io.*;
-import java.util.*;
-
-import ParserModule.support.SemanticWrapper;
+import tomato.ParserModule.support.SemanticWrapper;
 
 /**
  * Created by UA06NP on 28/11/2016.

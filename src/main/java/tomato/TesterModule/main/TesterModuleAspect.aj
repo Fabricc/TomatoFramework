@@ -1,6 +1,5 @@
-package TesterModule.src.test.java;
+package tomato.TesterModule.main;
 
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.LinkedList;
 import java.util.List;
@@ -40,7 +39,7 @@ public class TesterModuleAspect {
     	this.storing = false;
     }
     
-    @After("execution(@cucumber.api.java.en.Given * *(..)) && !@annotation(TesterModule.src.test.java.Tomato)")
+    @After("execution(@cucumber.api.java.en.Given * *(..)) && !@annotation(tomato.TesterModule.main.Tomato)")
     public void storeMethods(JoinPoint jp){
     	if(this.storing){
 
@@ -58,7 +57,7 @@ public class TesterModuleAspect {
     }
     
     
-    @Before("call(void TesterModule.executeTests(TesterModuleMessenger)) && args(tmm)")
+    @Before("call(void *.invokeTestingSuite(TesterModuleMessenger)) && args(tmm)")
     public void addInformation(TesterModuleMessenger tmm){
     	
     	tmm.insertMethod(classes, methods, arguments, classesOfArguments);

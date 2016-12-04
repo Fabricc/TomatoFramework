@@ -1,4 +1,4 @@
-package TesterModule.src.test.java;
+package tomato.TesterModule.main;
 
 public @interface Tomato {
 

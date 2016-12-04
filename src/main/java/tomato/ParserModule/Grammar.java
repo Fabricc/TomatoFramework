@@ -1,14 +1,11 @@
-package ParserModule;
+package tomato.ParserModule;
 
 
 import java.util.*;
 
-import ParserModule.support.SemanticWrapper;
-import ParserModule.support.TermOccurrence;
-
-
-import static ParserModule.support.helper.extractTerms;
-import static ParserModule.support.helper.replaceTerm;
+import tomato.ParserModule.support.SemanticWrapper;
+import tomato.ParserModule.support.TermOccurrence;
+import tomato.ParserModule.support.helper;
 
 /**
  * Created by UA06NP on 09/11/2016.
@@ -62,7 +59,7 @@ public class Grammar {
 
         if(!isAClass) {
 
-            ArrayList<TermOccurrence> nonTerminals = extractTerms(expression);
+            ArrayList<TermOccurrence> nonTerminals = helper.extractTerms(expression);
 
             for (TermOccurrence word : nonTerminals) {
                 String father = right_hand_value;
@@ -101,7 +98,7 @@ public class Grammar {
 
                     String replacement = buildRegExpressionIntern(derivations, true, capturingGroupReplacement, parameters, lexical_parameters, father, isATerminalClass);
 
-                    result = replaceTerm(term, replacement, result);
+                    result = helper.replaceTerm(term, replacement, result);
                 } else {
                     if (right_hand_value != null) {
                         lexical_parameters.put(term, new Pair(right_hand_value, (String) constraints.get(right_hand_value).get()));
