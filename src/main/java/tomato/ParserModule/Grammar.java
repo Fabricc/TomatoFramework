@@ -34,8 +34,8 @@ public class Grammar {
         expressions.put("timeInterval","'between '\\d+' and '\\d+' 'timeUnits");
         //Parameters rules
         expressions.put("stateFormula","[^\\\\\"]*");
-        expressions.put("p","0\\.[0-9]+|1");
-        expressions.put("t","[0-9]*\\.[0-9]+|[0-9]+");
+        expressions.put("p","\\\\\\d+\\\\\\.\\\\\\d+");
+        expressions.put("t","\\\\\\\\d+\\\\\\\\.\\\\\\\\d+");
 
         constraints.put("upperTimeBound",new SemanticWrapper("<"));
         constraints.put("lowerTimeBound",new SemanticWrapper(">"));

@@ -57,7 +57,7 @@ public class TesterModuleAspect {
     }
     
     
-    @Before("call(void *.invokeTestingSuite(TesterModuleMessenger)) && args(tmm)")
+    @Before("call(boolean *.invokeTestingSuite(TesterModuleMessenger)) && args(tmm)")
     public void addInformation(TesterModuleMessenger tmm){
     	
     	tmm.insertMethod(classes, methods, arguments, classesOfArguments);

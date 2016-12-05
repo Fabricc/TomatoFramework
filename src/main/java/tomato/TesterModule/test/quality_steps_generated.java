@@ -1,23 +1,17 @@
 package tomato.TesterModule.test;
 
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.util.HashMap;
+import static org.junit.Assert.assertEquals;
+
+import org.junit.Assert;
 
 import cucumber.api.PendingException;
 import cucumber.api.Scenario;
 import cucumber.api.java.Before;
 import cucumber.api.java.en.Given;
-import cucumber.api.java.en.Then;
-import tomato.ParserModule.Pair;
-import tomato.TesterModule.main.ParentTestingSuite;
 import tomato.TesterModule.main.ProbabilisticTestingSuite;
+import tomato.TesterModule.main.StateFormulaNotAssignedException;
 import tomato.TesterModule.main.TesterModuleMessenger;
 import tomato.TesterModule.main.Tomato;
-import tomato.support.LexicalParametersSerializer;
-
-import static org.junit.Assert.assertEquals;
 
 public class quality_steps_generated {
 
@@ -45,11 +39,12 @@ public class quality_steps_generated {
         return;
 	}
 	
-	@Given("^I want to do stuff and I insert (\\d)$")
-	public void dostuff(int number) throws Throwable{
+	@Given("^I want to do stuff and I insert (\\d+\\.\\d+)$")
+	public void dostuff(double number) throws Throwable{
 		System.out.println("dostuff with the number "+number);
 		Thread.sleep(400);
-		 assertEquals(number, 1);
+		
+		 Assert.assertEquals(number, 1, 0);
 		
         return;
 	}
@@ -77,19 +72,29 @@ public class quality_steps_generated {
     }
     
     @Tomato
-	@Given("^\\[the (?:probability|chance) (?:of|to|that|in which) \"([^\"]*)\" ((?:within the next|in less than)|(?:after|in more than)) (\\d+) is ((?:at most|at least)|(?:(?:greater than|higher than)|(?:lower than|less than))) (\\d+)\\]$")
-	public void alternativeOne(String stateFormula, String timeBound, int t, String probabilityBound, int p) throws Throwable {
-	   
+	@Given("^\\[the (?:probability|chance) (?:of|to|that|in which) \"([^\"]*)\" ((?:within the next|in less than)|(?:after|in more than)) (\\d+\\.\\d+) is ((?:at most|at least)|(?:(?:greater than|higher than)|(?:lower than|less than))) (\\d+\\.\\d+)\\]$")
+	public void alternativeOne(String stateFormula, String timeBound, double t, String probabilityBound, double p) throws Throwable {
+    	 System.out.println("alternativeOneStarted");
     	tmm.insertParameter("stateFormula", stateFormula);
     	tmm.insertLexicalParameter("timeBound", timeBound);
     	tmm.insertParameter("t", t);
     	tmm.insertLexicalParameter("probabilityBound", probabilityBound);
     	tmm.insertParameter("p", p);
-    	this.ptt.invokeTestingSuite(tmm);
-
-        // Write code here that turns the phrase above into concrete actions
+    	
+    	try{
+    		if(this.ptt.invokeTestingSuite(tmm)) System.out.println("Quality constraint satisfied");
+    		else Assert.fail("Quality constraint not satisfied");
+    	}
+    	catch(StateFormulaNotAssignedException e){
+    		System.err.println("StateFormula not assigned");
+    		return;
+    	}catch(Exception e){
+    		Assert.fail("Quality constraint not satisfied");
+    		System.err.println(e.getCause());
+    	}
+    	
+    	
         System.out.println("alternativeOneFinished");
-        return;
     }
 
 

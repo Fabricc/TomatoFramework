@@ -16,7 +16,7 @@ public class TesterModuleMessenger {
 	private Map<String, Pair> semantic;
 	private Map<String, Object> parameters;
 	
-	public TesterModuleMessenger(){
+	protected TesterModuleMessenger(){
 		this.semantic = LexicalParametersSerializer.deserialize();
 	}
 	

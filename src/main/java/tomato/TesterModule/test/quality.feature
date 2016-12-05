@@ -4,9 +4,9 @@ Feature: Quality testing
 
 @quality
   Scenario: Execute quality testing
-  	Given I want to do stuff and I insert 1
+  	Given I want to do stuff and I insert 1.0
   	When other stuff happens and I insert "hello"
-    Then [the probability of "something happening" after 5 is at least 3]
+    Then [the probability of "something happening" after 0.1 is at most 0.5]
     
 	Scenario: I don't execute quality testing
 		Then don't do it

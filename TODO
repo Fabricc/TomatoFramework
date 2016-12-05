@@ -7,3 +7,4 @@ TO DO:
 -optimizing class, arguments and method passage through reflection with construnctors and using shared class instance
 -optimize timing method in probabilistic testing suite
 -manage exception handling
+-fix "at least|at most" bug
