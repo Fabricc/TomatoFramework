@@ -1,26 +1,54 @@
 package ParserModule
+import org.junit.Assert;
+
 import cucumber.api.PendingException;
+import cucumber.api.Scenario;
+import cucumber.api.java.Before;
 import cucumber.api.java.en.Given;
+import tomato.TesterModule.main.ProbabilisticTestingSuite;
+import tomato.TesterModule.main.StateFormulaNotAssignedException;
+import tomato.TesterModule.main.TesterModuleMessenger;
+import tomato.TesterModule.main.Tomato;
 
 public class quality_steps_generated {
 
-@Given("^\\[with (?:probability|chance) ((at most|at least)|((greater than|higher than)|(lower than|less than))) (\d+\.\d+) \"([^\"]*)\" ((within the next|in less than)|(after|in more than)) (\\d+\\.\\d+)\\]$")
-public void alternativeThree(java.lang.Double p,java.lang.Double t,java.lang.String stateFormula) throws Throwable {
+	ProbabilisticTestingSuite ptt;
+	Scenario scenario;
+	TesterModuleMessenger tmm;
+	
+	@Before("@quality")
+	public void before(Scenario scenario){
+		this.scenario=scenario;
+		this.ptt = new ProbabilisticTestingSuite();
+		
+		//Assign your StateFormulas and you rules here
+		
+		tmm = ptt.getMessenger();
+}
 
-        // Write code here that turns the phrase above into concrete actions
-        throw new PendingException();
-    }
-@Given("^\\[the (?:probability|chance) is that \"([^\"]*)\" ((within the next|in less than)|(after|in more than))\\]$")
-public void alternativeTwo(java.lang.String stateFormula) throws Throwable {
-
-        // Write code here that turns the phrase above into concrete actions
-        throw new PendingException();
-    }
-@Given("^\\[the (?:probability|chance) (?:of|to|that|in which) \"([^\"]*)\" ((within the next|in less than)|(after|in more than)) (\\d+\\.\\d+) is ((at most|at least)|((greater than|higher than)|(lower than|less than))) (\d+\.\d+)\\]$")
-public void alternativeOne(java.lang.Double p,java.lang.Double t,java.lang.String stateFormula) throws Throwable {
-
-        // Write code here that turns the phrase above into concrete actions
-        throw new PendingException();
+@Given("^\\[with (?:(at most|at least)[ a]|(?: a)? ((greater than|higher than)|(lower than|less than))) (\\d+\\.\\d+) (?:probability|chance) \"([^\"]*)\" ((?:within the next|in less than) (\d+\.\d+)|(?:after|in more than) (\d+\.\d+)) (\\d+\\.\\d+)\\]$")
+public void alternativeFive(java.lang.String atBound,java.lang.String thanBound,java.lang.Double p,java.lang.String stateFormula,java.lang.String timeBound,java.lang.Double t) throws Throwable {
+		
+		tmm.insertParameter("atBound", atBound);
+		tmm.insertParameter("thanBound", thanBound);
+		tmm.insertParameter("p", p);
+		tmm.insertParameter("stateFormula", stateFormula);
+		tmm.insertParameter("timeBound", timeBound);
+		tmm.insertParameter("t", t);
+    	
+    	try{
+    		if(this.ptt.invokeTestingSuite(tmm)) System.out.println("Quality constraint satisfied");
+    		else Assert.fail("Quality constraint not satisfied");
+    	}
+    	catch(StateFormulaNotAssignedException e){
+    		System.err.println("StateFormula not assigned");
+    		Assert.fail("Quality constraint not satisfied");
+    	}catch(Exception e){
+    		e.printStackTrace();
+    		Assert.fail("Quality constraint not satisfied");
+    		
+    	}
+    	
     }
 
 }

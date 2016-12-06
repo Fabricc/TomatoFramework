@@ -7,6 +7,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Callable;
+import java.util.concurrent.ThreadLocalRandom;
 
 public abstract class ParentTestingSuite {
 	TesterModuleMessenger tmm;
@@ -22,6 +23,7 @@ public abstract class ParentTestingSuite {
 	
 	private Map<String, List<String>> stateFormulaStepsMap;
 	private Map<String, stateFormulaImplementation> stateFormulaMethodsMap;
+	private List<RuleTuple> rules;
 	
 	public void assignStateFormula(String stateFormula, stateFormulaImplementation method){
 		if(stateFormulaMethodsMap == null) stateFormulaMethodsMap = new HashMap<String,stateFormulaImplementation>();
@@ -37,6 +39,36 @@ public abstract class ParentTestingSuite {
 		
 	}
 	
+	public void assignRuleRandom(String stateFormula, String method, String argument, Double min, Double max){
+		if(rules==null) rules = new LinkedList<RuleTuple>();
+		rules.add(new RandomRuleTuple(stateFormula, method, argument, min, max));
+		// nextInt is normally exclusive of the top value,
+		// so add 1 to make it inclusive
+		}
+	
+	public Object[] modifyArguments(String stateFormula, String method, Class[] class_arguments, Object[] arguments,
+			String[] names) {
+		
+		Object[] modified_arguments = arguments.clone();
+		
+		for(int i = 0; i<class_arguments.length; i++){
+			String argument_name = names[i];
+			
+			for(RuleTuple rt: rules){
+				if(rt.identifyRule(stateFormula, method, argument_name)){
+					if(rt.getRule().equals("random")) modified_arguments[i]=((RandomRuleTuple)rt).getRandomValue();
+					break;
+				}
+			}
+		}
+		
+		return modified_arguments;
+		
+	}
+	
+	
+	
+	
 	
 	protected List<String> getStateFormulaSteps(String stateFormula){
 		return stateFormulaStepsMap.get(stateFormula);
@@ -47,6 +79,8 @@ public abstract class ParentTestingSuite {
 	}
 
 	public abstract boolean invokeTestingSuite(TesterModuleMessenger tmm) throws StateFormulaNotAssignedException;
+
+
 
 		
 //		try{

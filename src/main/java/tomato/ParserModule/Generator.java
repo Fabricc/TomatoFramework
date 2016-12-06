@@ -44,24 +44,26 @@ public class Generator {
 
             Map.Entry pair = (Map.Entry)it.next();
             //System.out.println(pair.getKey() + " = " + pair.getValue());
-            Set<String> parameters = new HashSet<String>();
+            List<String> parameters = new LinkedList<String>();
 
-            Grammar g  = new Grammar();
+            Grammar grammar  = new Grammar();
 
-            String exp = g.buildRegExpression((String) pair.getValue(),parameters,lexical_parameters);
+            String exp = grammar.buildRegExpression((String) pair.getValue(),parameters,lexical_parameters);
 
             List<ParameterDataModel> params = new LinkedList<ParameterDataModel>();
 
-            for(String s: parameters){
-                SemanticWrapper sw = g.constraints.get(s);
+            for(String name: parameters){
+                SemanticWrapper sw = grammar.constraints.get(name);
                 if(sw.getDescriptor().equals("class")){
-                    params.add(new ParameterDataModel(((Class)sw.get()).getCanonicalName(),s));
-                }
+                	String type=((Class)sw.get()).getCanonicalName();
+                    params.add(new ParameterDataModel(type,name));
+                }else params.add(new ParameterDataModel("java.lang.String",name));
             }
 
 
             //root.put("name_function", pair.getKey());
-            list.add(new StepDefinitionDataModel((String) pair.getKey(),exp,params));
+            String name_expression = (String) pair.getKey();
+            list.add(new StepDefinitionDataModel(name_expression,exp,params));
 
             //root.put("regex", exp);
             it.remove(); // avoids a ConcurrentModificationException
@@ -93,9 +95,10 @@ public class Generator {
 
         Map<String,String> m = new HashMap<String, String>();
 
-        m.put("alternativeOne","'the' Probability Of stateFormula timeBound t 'is' probabilityBound p");
-        m.put("alternativeTwo","'the' Probability 'is' 'that' stateFormula timeBound");
-        m.put("alternativeThree","'with' Probability probabilityBound p stateFormula timeBound t");
+        //m.put("alternativeOne","'the' Probability Of stateFormula timeBound t 'is' probabilityBound p");
+       // m.put("alternativeTwo","'the' Probability 'is' probabilityBound p 'that' stateFormula timeBound");
+       // m.put("alternativeThree","'with'[' a'] Probability[' of'] probabilityBound p stateFormula timeBound t");
+        m.put("alternativeFive", "'with' aProbabilityBound p Probability stateFormula timeBound t");
 
 
 

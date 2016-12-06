@@ -23,6 +23,7 @@ public class TesterModuleAspect {
 	private List<String> methods= new LinkedList<String>();
 	private List<Object[]> arguments= new LinkedList<Object[]>();
 	private List<Class[]> classesOfArguments = new LinkedList<Class[]>();
+	private List<String[]> nameOfArguments = new LinkedList<String[]>();
 	
 	private Boolean storing = false;
 	
@@ -51,6 +52,7 @@ public class TesterModuleAspect {
     		this.arguments.add(jp.getArgs());
     		CodeSignature cs = (CodeSignature)jp.getSignature();
     		this.classesOfArguments.add(cs.getParameterTypes());
+    		this.nameOfArguments.add(cs.getParameterNames());
 
     	}
     	}
@@ -60,7 +62,7 @@ public class TesterModuleAspect {
     @Before("call(boolean *.invokeTestingSuite(TesterModuleMessenger)) && args(tmm)")
     public void addInformation(TesterModuleMessenger tmm){
     	
-    	tmm.insertMethod(classes, methods, arguments, classesOfArguments);
+    	tmm.insertMethod(classes, methods, arguments, classesOfArguments, nameOfArguments);
     
     	System.out.println("adding stored method");
     	

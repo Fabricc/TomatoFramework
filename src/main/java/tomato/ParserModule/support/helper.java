@@ -1,5 +1,6 @@
 package tomato.ParserModule.support;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -18,43 +19,57 @@ public class helper {
 
         return list;
     }
+    
 
 public static ArrayList<TermOccurrence> extractTerms(String expression){
-    String s="";
+    String term="";
     int first_char=0;
     boolean first_appendix=false;
+    boolean square_brackets=false;
+    
     ArrayList<TermOccurrence> res = new ArrayList<TermOccurrence>();
 
     for (int i = 0;i < expression.length(); i++){
-        char c = expression.charAt(i);
+        char current_character = expression.charAt(i);
 
-        if(c==' '||c=='|'||c=='('||c==')'||c=='\''){
+        if(current_character==' '||current_character=='|'||current_character=='('||current_character==')'
+        		||current_character=='\''||current_character=='['||current_character==']'){
 
-            if(c=='\'' && first_appendix==false){
+            if(current_character=='\'' && first_appendix==false){
                 first_appendix=true;
             }
+            
+            
+            if(current_character=='[') square_brackets=true;
 
-            if(c==' ' && first_appendix==true) {
-                s+=c;
+            if(current_character==' ' && first_appendix==true) {
+                term+=current_character;
                 continue;
             }
 
-            if(!s.equals("")) {
-                TermOccurrence t = new TermOccurrence(s, first_char, i);
+            if(!term.equals("")) {
+                TermOccurrence t = new TermOccurrence(term, first_char, i);
                 if(first_appendix){
                     t.defineTerminalString();
                     first_appendix=false;
                 }
+                
+                if(square_brackets){
+                	t.defineOptional();
+                	square_brackets=false;
+                }
 
                 res.add(t);
 
-                s="";
+                term="";
             }
+            
+            //consume special character
 
         }else{
-            if(s.equals("")) first_char=i;
-            s+=c;
-            if(i==expression.length()-1) res.add(new TermOccurrence(s,first_char,i));
+            if(term.equals("")) first_char=i;
+            term+=current_character;
+            if(i==expression.length()-1) res.add(new TermOccurrence(term,first_char,i));
         }
     }
     return res;

@@ -7,6 +7,7 @@ public class TermOccurrence {
     String term;
     int startIndex, endIndex;
     boolean isTerminal = false;
+	private boolean isOptional = false;
 
     public TermOccurrence(String term, int startIndex, int endIndex) {
 
@@ -28,6 +29,10 @@ public class TermOccurrence {
 
     public boolean isTerminalString(){
         return isTerminal;
+    }
+    
+    public boolean isOptional(){
+    	return isOptional;
     }
 
     public String getTerm() {
@@ -53,5 +58,9 @@ public class TermOccurrence {
 
     public void defineTerminalString() {
         this.isTerminal=true;
+    }
+    
+    public void defineOptional(){
+    	this.isOptional =true;
     }
 }

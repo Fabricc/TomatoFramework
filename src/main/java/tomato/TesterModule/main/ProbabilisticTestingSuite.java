@@ -61,14 +61,17 @@ public class ProbabilisticTestingSuite extends ParentTestingSuite {
 			//throw new StateFormulaNotAssignedException();
 		//}
 		
-
+		StopWatch stopwatch = new StopWatch();
+		
 		for(int i = 0; i<numberIterations; i++){
 			System.out.println("Iteration nr."+ (i+1));
 			
 			boolean noExceptions = true;
-			StopWatch stopwatch = new StopWatch();
+			
+			stopwatch.reset();
 			
 			for(int j = 0; j<tmm.getClasses().size() && noExceptions; j++){
+				
 				Class c = null;
 				boolean timed = false;
 				
@@ -76,39 +79,46 @@ public class ProbabilisticTestingSuite extends ParentTestingSuite {
 				String met = tmm.getMethods().get(j);
 				if(steps.contains(met)) timed=true;
 				
-				tmm.getClassArguments().get(j);
-				
 				Class[] class_arguments= tmm.getClassArguments().get(j);
 				
 				Method method = null;
 				
 					c = Class.forName(tmm.getClasses().get(j));
-					method = c.getMethod(met,tmm.getClassArguments().get(j));
+					method = c.getMethod(met,class_arguments);
 				
 				
-				Object o;
-				
-					o = c.newInstance();
+				    Object o = c.newInstance();
 			
 				if(timed){
 					try{
-						Object obj =tmm.getArguments().get(j);
 						
+						System.out.println("Measuring method:"+met);
 						
-							
-						if(!stopwatch.isStarted()) stopwatch.start();
+						if(!stopwatch.isStarted()) {
+							stopwatch.reset();
+							stopwatch.start();
+						}
 						else stopwatch.resume();
-						method.invoke(o,tmm.getArguments().get(j));
+						
+						Object[] arguments = tmm.getArguments().get(j);
+						String[] names = tmm.getNameOArguments().get(j);
+						
+						Object[] modified_arguments = super.modifyArguments(stateFormula, met, class_arguments, arguments, names);
+						
+						method.invoke(o,modified_arguments);
 						//if(userdefined_mode) sfi.execute();
-						if(i==tmm.getClasses().size()-1) stopwatch.stop();
+						if(i==(tmm.getClasses().size()-1)) stopwatch.stop();
 						else stopwatch.suspend();
 						
 					}catch(Exception e){
+						e.printStackTrace();
 						stopwatch.stop();
 						noExceptions=false;
 					}
 					
-					} else method.invoke(o,tmm.getArguments().get(j));
+					} else {
+						method.invoke(o,tmm.getArguments().get(j));
+					}
 				}
 			
 			long milliseconds = stopwatch.getTime();
@@ -132,11 +142,7 @@ public class ProbabilisticTestingSuite extends ParentTestingSuite {
 	@Override
 	public boolean invokeTestingSuite(TesterModuleMessenger tmm) throws StateFormulaNotAssignedException{
 		
-		
-		int mode = 0; //1 for method scope, 2 for scenario scope, 3 for ad-hoc method scope
-		
-		tmm.getParameter("timeBound");
-		System.out.print("Tomato Framework =================== Starting execution");
+		System.out.println("Tomato Framework =================== Starting execution");
 		
 		String stateFormula = (String)tmm.getParameter("stateFormula");
 		
@@ -214,6 +220,7 @@ public class ProbabilisticTestingSuite extends ParentTestingSuite {
 		conditionChecker probabilityChecker = new conditionChecker((String)tmm.getParameter("probabilityBound"));
 		
 		double executionProbability = number_of_passed/(executions.size());
+		System.out.println("Tomato Framework =================== Stopping execution");
 		return probabilityChecker.compare(probabilityConditionValue,executionProbability);
 		
 		

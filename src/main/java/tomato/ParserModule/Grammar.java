@@ -1,6 +1,7 @@
 package tomato.ParserModule;
 
 
+import java.io.File;
 import java.util.*;
 
 import tomato.ParserModule.support.SemanticWrapper;
@@ -21,21 +22,24 @@ public class Grammar {
         //Probability rules
         expressions.put("Probability", "'probability'|'chance'");
         expressions.put("probabilityBound", "atBound|thanBound");
+        expressions.put("aProbabilityBound", "atBound[' a']|[' a'] thanBound");
         expressions.put("atBound","'at most'|'at least'");
         expressions.put("thanBound","greaterThan|lowerThan");
         expressions.put("greaterThan","'greater than'|'higher than'");
         expressions.put("lowerThan","'lower than'|'less than'");
         expressions.put("Of","'of'|'to'|'that'|'in which'");
         //Time rules
-        expressions.put("timeBound", "upperTimeBound|lowerTimeBound");
+        expressions.put("timeBound", "upperTimeBound t|lowerTimeBound t");
         expressions.put("upperTimeBound","'within the next'|'in less than'");
         expressions.put("lowerTimeBound","'after'|'in more than'");
         expressions.put("timeUnits","'time units'|'time steps'");
         expressions.put("timeInterval","'between '\\d+' and '\\d+' 'timeUnits");
         //Parameters rules
         expressions.put("stateFormula","[^\\\\\"]*");
-        expressions.put("p","\\\\\\d+\\\\\\.\\\\\\d+");
+        expressions.put("p","\\\\\\\\d+\\\\\\\\.\\\\\\\\d+");
         expressions.put("t","\\\\\\\\d+\\\\\\\\.\\\\\\\\d+");
+        
+
 
         constraints.put("upperTimeBound",new SemanticWrapper("<"));
         constraints.put("lowerTimeBound",new SemanticWrapper(">"));
@@ -52,64 +56,73 @@ public class Grammar {
 
 
 
-    private String buildRegExpressionIntern(String expression, Boolean isInGroup , Boolean isInCapturingGroup, Set<String> parameters, Map<String,Pair> lexical_parameters, String right_hand_value, Boolean isAClass) {
+    private String buildRegExpressionIntern(String expression, Boolean isInGroup , Boolean isInCapturingGroup, List<String> parameters, Map<String,Pair> lexical_parameters, String nonTerminalFather, Boolean isTerminal) {
 
         String result=expression;
 
 
-        if(!isAClass) {
+        if(!isTerminal) {
 
             ArrayList<TermOccurrence> nonTerminals = helper.extractTerms(expression);
 
             for (TermOccurrence word : nonTerminals) {
-                String father = right_hand_value;
+                String father = nonTerminalFather;
                 String term = word.getTerm();
                 String derivations = expressions.get(term);
                 if (!word.isTerminalString() && derivations != null) {
 
 
                     boolean capturingGroupReplacement = isInCapturingGroup;
-                    boolean isATerminalClass = false;
+                    boolean isATerminalForm = false;
 
 
 
-                    SemanticWrapper meaning = constraints.get(term);
+                    SemanticWrapper meaning_of_the_term = constraints.get(term);
 
-                    if (meaning != null) {
+                    if (meaning_of_the_term != null) {
 
-                        if (meaning.getDescriptor().equals("class")) {
-                            parameters.add(term);
+                        if (meaning_of_the_term.getDescriptor().equals("class")) {
+                        	if(!parameters.contains(term)) parameters.add(term);
                             capturingGroupReplacement = true;
-                            isATerminalClass = true;
+                            isATerminalForm = true;
                             father=term;
 
                         }
 
-                        if (meaning.getDescriptor().equals("string")) {
-                            capturingGroupReplacement = true;
+                        if (meaning_of_the_term.getDescriptor().equals("string")) {
+                            
                             if (father == null) {
                                 father = term;
+                                if(!parameters.contains(father)) parameters.add(father);
+                                capturingGroupReplacement = true;
                             } else {
                                 lexical_parameters.put(term, new Pair(father, (String) constraints.get(father).get()));
                                 father = term;
+                                capturingGroupReplacement = false;
                             }
                         }
                     }
 
-                    String replacement = buildRegExpressionIntern(derivations, true, capturingGroupReplacement, parameters, lexical_parameters, father, isATerminalClass);
+                    String replacement = buildRegExpressionIntern(derivations, true, capturingGroupReplacement, parameters, lexical_parameters, father, isATerminalForm);
 
                     result = helper.replaceTerm(term, replacement, result);
                 } else {
-                    if (right_hand_value != null) {
-                        lexical_parameters.put(term, new Pair(right_hand_value, (String) constraints.get(right_hand_value).get()));
+                    if (nonTerminalFather != null) {
+                        lexical_parameters.put(term, new Pair(nonTerminalFather, (String) constraints.get(nonTerminalFather).get()));
                     }
-                    result=result.replaceFirst("'"+term+"'",term);
+                    
+                    String toReplace = "'"+term+"'";
+                    
+                    if(word.isOptional()){
+                    	toReplace="\\["+toReplace+"\\]";
+                    	result=result.replaceAll(toReplace, "\\(\\?\\:"+term+"\\)\\?");
+                    	
+                    }else result=result.replaceFirst(toReplace,term);
                 }
-                //right_hand_value=null;
             }
         }
 
-            SemanticWrapper meaning = constraints.get(right_hand_value);
+            SemanticWrapper meaning = constraints.get(nonTerminalFather);
 
 
 
@@ -125,7 +138,7 @@ public class Grammar {
 
     }
 
-    public String buildRegExpression(String expression, Set<String> parameters, Map<String,Pair> lexical_parameters){
+    public String buildRegExpression(String expression, List<String> parameters, Map<String,Pair> lexical_parameters){
         return buildRegExpressionIntern(expression,false,false,parameters,lexical_parameters,null,false);
     }
 

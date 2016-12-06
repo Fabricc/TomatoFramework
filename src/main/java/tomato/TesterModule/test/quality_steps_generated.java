@@ -1,7 +1,5 @@
 package tomato.TesterModule.test;
 
-import static org.junit.Assert.assertEquals;
-
 import org.junit.Assert;
 
 import cucumber.api.PendingException;
@@ -28,6 +26,11 @@ public class quality_steps_generated {
 		
 		this.ptt = new ProbabilisticTestingSuite();
 		ptt.assignStateFormula("something happening", "dostuff");
+		ptt.assignStateFormula("something happening", "otherstuff");
+		ptt.assignRuleRandom("something happening", "dostuff", "number", 1.0, 10.0);
+		
+		ptt.assignStateFormula("something else happening", "dostuff");
+		ptt.assignRuleRandom("something else happening", "dostuff", "number", 0.5, 1.0);
 		
 		
 		tmm = ptt.getMessenger();
@@ -44,7 +47,7 @@ public class quality_steps_generated {
 		System.out.println("dostuff with the number "+number);
 		Thread.sleep(400);
 		
-		 Assert.assertEquals(number, 1, 0);
+		 //Assert.assertEquals(number, 1, 0);
 		
         return;
 	}
@@ -75,11 +78,17 @@ public class quality_steps_generated {
 	@Given("^\\[the (?:probability|chance) (?:of|to|that|in which) \"([^\"]*)\" ((?:within the next|in less than)|(?:after|in more than)) (\\d+\\.\\d+) is ((?:at most|at least)|(?:(?:greater than|higher than)|(?:lower than|less than))) (\\d+\\.\\d+)\\]$")
 	public void alternativeOne(String stateFormula, String timeBound, double t, String probabilityBound, double p) throws Throwable {
     	 System.out.println("alternativeOneStarted");
+//    	tmm.insertParameter("stateFormula", stateFormula);
+//    	tmm.insertLexicalParameter("timeBound", timeBound);
+//    	tmm.insertParameter("t", t);
+//    	tmm.insertLexicalParameter("probabilityBound", probabilityBound);
+//    	tmm.insertParameter("p", p);
+    	 
     	tmm.insertParameter("stateFormula", stateFormula);
-    	tmm.insertLexicalParameter("timeBound", timeBound);
-    	tmm.insertParameter("t", t);
-    	tmm.insertLexicalParameter("probabilityBound", probabilityBound);
-    	tmm.insertParameter("p", p);
+     	tmm.insertParameter("timeBound", timeBound);
+     	tmm.insertParameter("t", t);
+     	tmm.insertParameter("probabilityBound", probabilityBound);
+     	tmm.insertParameter("p", p);
     	
     	try{
     		if(this.ptt.invokeTestingSuite(tmm)) System.out.println("Quality constraint satisfied");
@@ -87,10 +96,11 @@ public class quality_steps_generated {
     	}
     	catch(StateFormulaNotAssignedException e){
     		System.err.println("StateFormula not assigned");
-    		return;
-    	}catch(Exception e){
     		Assert.fail("Quality constraint not satisfied");
-    		System.err.println(e.getCause());
+    	}catch(Exception e){
+    		e.printStackTrace();
+    		Assert.fail("Quality constraint not satisfied");
+    		
     	}
     	
     	
