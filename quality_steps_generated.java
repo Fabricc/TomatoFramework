@@ -26,15 +26,83 @@ public class quality_steps_generated {
 		tmm = ptt.getMessenger();
 }
 
-@Given("^\\[with (?:((?:(?: a)?(?: a)?)?(\\d+\\.\\d+)(?:(?: a)?(?: a)?)?most|(?:(?: a)?(?: a)?)?(\\d+\\.\\d+)(?:(?: a)?(?: a)?)?le(?:(?: a)?(?: a)?)?st)[(?:(?: a)?(?: a)?)?(?:(?: a)?(?: a)?)?(?:(?: a)?(?: a)?)?(?:(?: a)?(?: a)?)?]|[(?:(?: a)?(?: a)?)?(?:(?: a)?(?: a)?)?(?:(?: a)?(?: a)?)?(?:(?: a)?(?: a)?)?](?:(?: a)?(?: a)?)?th(?:(?: a)?(?: a)?)?nBound) (\\d+\\.\\d+) (?:probability|chance) \"([^\"]*)\" ((?:within the next|in less than) (\d+\.\d+)|(?:after|in more than) (\d+\.\d+)) (\\d+\\.\\d+)\\]$")
-public void alternativeFive(java.lang.String atBound,java.lang.String thanBound,java.lang.Double p,java.lang.String stateFormula,java.lang.String timeBound,java.lang.Double t) throws Throwable {
+@Given("^\\[with(?: a)? (?:probability|chance)(?: of)? ((?:at most|(?:lower than|less than))|(?:at least|(?:greater than|higher than))) (\\d+\\.\\d+) \"([^\"]*)\" ((?:within the next|in less than)|(?:after|in more than)) (\\d+\\.\\d+) s\\]$")
+public void alternativeThree(java.lang.String probabilityBound,java.lang.Double p,java.lang.String stateFormula,java.lang.String timeBound,java.lang.Double t) throws Throwable {
 		
-		tmm.insertParameter("atBound", atBound);
-		tmm.insertParameter("thanBound", thanBound);
+		tmm.insertParameter("probabilityBound", probabilityBound);
 		tmm.insertParameter("p", p);
 		tmm.insertParameter("stateFormula", stateFormula);
 		tmm.insertParameter("timeBound", timeBound);
 		tmm.insertParameter("t", t);
+    	
+    	try{
+    		if(this.ptt.invokeTestingSuite(tmm)) System.out.println("Quality constraint satisfied");
+    		else Assert.fail("Quality constraint not satisfied");
+    	}
+    	catch(StateFormulaNotAssignedException e){
+    		System.err.println("StateFormula not assigned");
+    		Assert.fail("Quality constraint not satisfied");
+    	}catch(Exception e){
+    		e.printStackTrace();
+    		Assert.fail("Quality constraint not satisfied");
+    		
+    	}
+    	
+    }
+@Given("^\\[the (?:probability|chance) is ((?:at most|(?:lower than|less than))|(?:at least|(?:greater than|higher than))) (\\d+\\.\\d+) that \"([^\"]*)\" ((?:within the next|in less than)|(?:after|in more than)) (\\d+\\.\\d+) s\\]$")
+public void alternativeTwo(java.lang.String probabilityBound,java.lang.Double p,java.lang.String stateFormula,java.lang.String timeBound,java.lang.Double t) throws Throwable {
+		
+		tmm.insertParameter("probabilityBound", probabilityBound);
+		tmm.insertParameter("p", p);
+		tmm.insertParameter("stateFormula", stateFormula);
+		tmm.insertParameter("timeBound", timeBound);
+		tmm.insertParameter("t", t);
+    	
+    	try{
+    		if(this.ptt.invokeTestingSuite(tmm)) System.out.println("Quality constraint satisfied");
+    		else Assert.fail("Quality constraint not satisfied");
+    	}
+    	catch(StateFormulaNotAssignedException e){
+    		System.err.println("StateFormula not assigned");
+    		Assert.fail("Quality constraint not satisfied");
+    	}catch(Exception e){
+    		e.printStackTrace();
+    		Assert.fail("Quality constraint not satisfied");
+    		
+    	}
+    	
+    }
+@Given("^\\[\"([^\"]*)\" ((?:within the next|in less than)|(?:after|in more than)) (\\d+\\.\\d+) s with(?: a)? (?:probability|chance)(?: of)? ((?:at most|(?:lower than|less than))|(?:at least|(?:greater than|higher than))) (\\d+\\.\\d+)\\]$")
+public void alternativeNine(java.lang.String stateFormula,java.lang.String timeBound,java.lang.Double t,java.lang.String probabilityBound,java.lang.Double p) throws Throwable {
+		
+		tmm.insertParameter("stateFormula", stateFormula);
+		tmm.insertParameter("timeBound", timeBound);
+		tmm.insertParameter("t", t);
+		tmm.insertParameter("probabilityBound", probabilityBound);
+		tmm.insertParameter("p", p);
+    	
+    	try{
+    		if(this.ptt.invokeTestingSuite(tmm)) System.out.println("Quality constraint satisfied");
+    		else Assert.fail("Quality constraint not satisfied");
+    	}
+    	catch(StateFormulaNotAssignedException e){
+    		System.err.println("StateFormula not assigned");
+    		Assert.fail("Quality constraint not satisfied");
+    	}catch(Exception e){
+    		e.printStackTrace();
+    		Assert.fail("Quality constraint not satisfied");
+    		
+    	}
+    	
+    }
+@Given("^\\[the (?:probability|chance) (?:of|to|that|in which) \"([^\"]*)\" ((?:within the next|in less than)|(?:after|in more than)) (\\d+\\.\\d+) s is ((?:at most|(?:lower than|less than))|(?:at least|(?:greater than|higher than))) (\\d+\\.\\d+)\\]$")
+public void alternativeOne(java.lang.String stateFormula,java.lang.String timeBound,java.lang.Double t,java.lang.String probabilityBound,java.lang.Double p) throws Throwable {
+		
+		tmm.insertParameter("stateFormula", stateFormula);
+		tmm.insertParameter("timeBound", timeBound);
+		tmm.insertParameter("t", t);
+		tmm.insertParameter("probabilityBound", probabilityBound);
+		tmm.insertParameter("p", p);
     	
     	try{
     		if(this.ptt.invokeTestingSuite(tmm)) System.out.println("Quality constraint satisfied");

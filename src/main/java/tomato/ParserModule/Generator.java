@@ -95,10 +95,12 @@ public class Generator {
 
         Map<String,String> m = new HashMap<String, String>();
 
-        //m.put("alternativeOne","'the' Probability Of stateFormula timeBound t 'is' probabilityBound p");
-       // m.put("alternativeTwo","'the' Probability 'is' probabilityBound p 'that' stateFormula timeBound");
-       // m.put("alternativeThree","'with'[' a'] Probability[' of'] probabilityBound p stateFormula timeBound t");
-        m.put("alternativeFive", "'with' aProbabilityBound p Probability stateFormula timeBound t");
+        m.put("alternativeOne","'the' Probability Of stateFormula timeBound t 's is' probabilityBound p");
+        m.put("alternativeTwo","'the' Probability 'is' probabilityBound p 'that' stateFormula timeBound t 's'");
+        m.put("alternativeThree","'with'[' a'] Probability[' of'] probabilityBound p stateFormula timeBound t 's'");
+        m.put("alternativeNine","stateFormula timeBound t 's with'[' a'] Probability[' of'] probabilityBound p");
+       // m.put("alternativeFive", "'with' aProbabilityBound Probability stateFormula timeBound");
+        //m.put("alternativeSix", "'there is' aProbabilityBound p Probability of stateFormula timeBound t");
 
 
 

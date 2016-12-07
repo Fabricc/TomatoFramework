@@ -10,6 +10,7 @@ import org.aspectj.lang.annotation.After;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
+import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.CodeSignature;
 
 import cucumber.api.Scenario;
@@ -28,9 +29,9 @@ public class TesterModuleAspect {
 	private Boolean storing = false;
 	
     @After("execution(* *.before(Scenario)) && args(s)")
-    public void spotBefore(Scenario s){
+    public void spotBefore(Scenario s, JoinPoint jp){
     	
-    	System.out.println("Esegui scenario "+s.getName());
+    	System.out.println("Tomato Framework: Observing steps of Scenario "+s.getName()+" in file:"+jp.getSourceLocation().getFileName());
     	this.storing = true;
     	this.scen=s;
     	}
@@ -40,7 +41,16 @@ public class TesterModuleAspect {
     	this.storing = false;
     }
     
-    @After("execution(@cucumber.api.java.en.Given * *(..)) && !@annotation(tomato.TesterModule.main.Tomato)")
+    @Pointcut("execution(@cucumber.api.java.en.Given * *(..))")
+    public void Given(){}
+    
+    @Pointcut("execution(@cucumber.api.java.en.Then * *(..))")
+    public void Then(){}
+    
+    @Pointcut("execution(@cucumber.api.java.en.When * *(..))")
+    public void When(){}
+    
+    @After("(Given() || Then() || When()) && !@annotation(tomato.TesterModule.main.Tomato)")
     public void storeMethods(JoinPoint jp){
     	if(this.storing){
 
@@ -48,7 +58,8 @@ public class TesterModuleAspect {
     	if(scen.getSourceTagNames().contains("@quality")){
     		
     		this.classes.add(jp.getThis().getClass().getCanonicalName());
-    		this.methods.add(jp.getSignature().getName());
+    		String method = jp.getSignature().getName();
+    		this.methods.add(method);
     		this.arguments.add(jp.getArgs());
     		CodeSignature cs = (CodeSignature)jp.getSignature();
     		this.classesOfArguments.add(cs.getParameterTypes());
@@ -63,8 +74,13 @@ public class TesterModuleAspect {
     public void addInformation(TesterModuleMessenger tmm){
     	
     	tmm.insertMethod(classes, methods, arguments, classesOfArguments, nameOfArguments);
+    	classes = new LinkedList<String>();
+    	methods= new LinkedList<String>();
+    	arguments= new LinkedList<Object[]>();
+    	classesOfArguments = new LinkedList<Class[]>();
+    	nameOfArguments = new LinkedList<String[]>();
     
-    	System.out.println("adding stored method");
+    	//System.out.println("adding stored method");
     	
     }
     

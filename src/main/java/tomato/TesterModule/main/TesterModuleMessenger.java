@@ -101,6 +101,16 @@ public class TesterModuleMessenger {
 		this.nameOfArguments= names;
 		
 	}
+	
+	
+	public void cleanAll(){
+		this.classes=null;
+		this.methods=null;
+		this.arguments=null;
+		this.arguments_classes = null;
+		this.nameOfArguments= null;
+	}
+	
 
 	
 	public List<String> getClasses(){

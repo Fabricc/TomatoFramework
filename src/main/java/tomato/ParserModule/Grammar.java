@@ -3,6 +3,8 @@ package tomato.ParserModule;
 
 import java.io.File;
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import tomato.ParserModule.support.IllegalExpressionException;
 import tomato.ParserModule.support.SemanticWrapper;
@@ -22,15 +24,21 @@ public class Grammar {
     Grammar(){
         //Probability rules
         expressions.put("Probability", "'probability'|'chance'");
-        expressions.put("probabilityBound", "atBound|thanBound");
-        expressions.put("aProbabilityBound", "atBound[' a']|[' a'] thanBound");
-        expressions.put("atBound","'at most'|'at least'");
-        expressions.put("thanBound","greaterThan|lowerThan");
+        expressions.put("probabilityBound", "upperProbailityBound|lowerProbailityBound");
+        //expressions.put("aProbabilityBound", "atBound[' a']|[' a'] thanBound");
+        expressions.put("upperProbailityBound", "'at most'|lowerThan");
+        expressions.put("lowerProbailityBound", "'at least'|greaterThan");
+//        expressions.put("aProbabilityBound", "atUpperBound[' a']|atLowerBound[' a']|[' a'] thanUpperBound|[' a'] thanLowerBound");
+//        expressions.put("atUpperBound","'at most'");
+//        expressions.put("atLowerBound","'at least'");
+//        expressions.put("thanUpperBound","lowerThan");
+//        expressions.put("thanLowerBound","greaterThan");
+        
         expressions.put("greaterThan","'greater than'|'higher than'");
         expressions.put("lowerThan","'lower than'|'less than'");
         expressions.put("Of","'of'|'to'|'that'|'in which'");
         //Time rules
-        expressions.put("timeBound", "upperTimeBound t|lowerTimeBound t");
+        expressions.put("timeBound", "upperTimeBound|lowerTimeBound");
         expressions.put("upperTimeBound","'within the next'|'in less than'");
         expressions.put("lowerTimeBound","'after'|'in more than'");
         expressions.put("timeUnits","'time units'|'time steps'");
@@ -39,13 +47,11 @@ public class Grammar {
         expressions.put("stateFormula","[^\\\\\"]*");
         expressions.put("p","\\\\\\\\d+\\\\\\\\.\\\\\\\\d+");
         expressions.put("t","\\\\\\\\d+\\\\\\\\.\\\\\\\\d+");
-        
-
 
         constraints.put("upperTimeBound",new SemanticWrapper("<"));
-        constraints.put("lowerTimeBound",new SemanticWrapper(">"));
-        constraints.put("atBound",new SemanticWrapper("<"));
-        constraints.put("thanBound",new SemanticWrapper(">"));
+        constraints.put("lowerTimeBound", new SemanticWrapper(">"));
+        constraints.put("lowerProbailityBound",new SemanticWrapper(">"));
+        constraints.put("upperProbailityBound",new SemanticWrapper("<"));
         constraints.put("probabilityBound",new SemanticWrapper("probability constraint"));
         constraints.put("timeBound",new SemanticWrapper("time constraint"));
         constraints.put("timeInterval",new SemanticWrapper("><"));
@@ -121,10 +127,9 @@ public class Grammar {
                     String toReplace = "'"+term+"'";
                     
                     if(word.isOptional()){
-                    	toReplace="["+toReplace+"]";
-                    	result=result.replaceAll(toReplace, "\\\\(\\\\?\\\\:"+term+"\\\\)\\\\?");
-                    	
-                    }else result=result.replaceFirst(toReplace,term);
+                    	toReplace=Pattern.quote("["+toReplace+"]");
+                    	result=result.replaceAll(toReplace, "(?:"+term+")?");
+                    	}else if(word.isTerminalString()) result=result.replaceFirst(toReplace,term);
                 }
             }
         }

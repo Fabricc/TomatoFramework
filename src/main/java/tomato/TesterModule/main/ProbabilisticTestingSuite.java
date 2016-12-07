@@ -4,6 +4,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Callable;
@@ -42,7 +43,7 @@ public class ProbabilisticTestingSuite extends ParentTestingSuite {
 	}
 	
 	
-	private int numberIterations = 10;
+	private int numberIterations = 5;
 	
 
 	public void executeTesting(String stateFormula, List<Double> executions, List<Boolean> successes) 
@@ -62,6 +63,8 @@ public class ProbabilisticTestingSuite extends ParentTestingSuite {
 		//}
 		
 		StopWatch stopwatch = new StopWatch();
+		
+		List<Object> cache_object = new LinkedList<Object>();
 		
 		for(int i = 0; i<numberIterations; i++){
 			System.out.println("Iteration nr."+ (i+1));
@@ -83,11 +86,25 @@ public class ProbabilisticTestingSuite extends ParentTestingSuite {
 				
 				Method method = null;
 				
-					c = Class.forName(tmm.getClasses().get(j));
+					String class_name = tmm.getClasses().get(j);
+					c = Class.forName(class_name);
 					method = c.getMethod(met,class_arguments);
+					
+					Object o = null;
+					
+					for(int y = 0; y<cache_object.size(); y++){
+						String name_class_in_list = ((Class)(cache_object.get(y)).getClass()).getName();
+						if(class_name.equals(name_class_in_list)) o = cache_object.get(y);
+					}
+					
+					if(o==null){
+					if(this.dependency!=null && this.dclass!=null && this.dclass.equals(c.getName())){
+						o = c.getConstructor(this.dependency.getClass()).newInstance(this.dependency);
+					}else o = c.newInstance();
+					cache_object.add(o);
+					}
 				
-				
-				    Object o = c.newInstance();
+				    
 			
 				if(timed){
 					try{
@@ -193,6 +210,7 @@ public class ProbabilisticTestingSuite extends ParentTestingSuite {
 	//{p=0.5, t=5, timeBound=>, stateFormula=something happening, probabilityBound=<}
 	private boolean verifyRequirement(List<Double> executions, List<Boolean> successes) throws IncorrectConditionException{
 		System.out.println("Report ProbabilisticTestingSuite Execution");
+		
 		boolean[] passed = new boolean[executions.size()];
 		
 		boolean checkTime = false;
@@ -204,24 +222,34 @@ public class ProbabilisticTestingSuite extends ParentTestingSuite {
 			timeChecker = new conditionChecker(timeBound);
 			timeConditionValue = (Double)tmm.getParameter("t");
 		}
-		
+		System.out.println("StateFormula verified for the following values where time "+timeBound+" of "+timeConditionValue);
 		int number_of_passed=0;
-		for(int i=0; i<executions.size(); i++){
+		int number_of_execution = executions.size();
+		for(int i=0; i<number_of_execution; i++){
 		if(successes.get(i)){
-			System.out.println("Iteration nr."+i+" Time: "+executions.get(i));
-			if(checkTime) passed[i]=timeChecker.compare(executions.get(i), timeConditionValue);
+			System.out.print("Iteration nr."+i+" Time: "+executions.get(i)+" s ");
+			if(checkTime) {
+				passed[i]=timeChecker.compare(executions.get(i), timeConditionValue);
+				if(passed[i]) System.out.println("passed");
+				else System.out.println("not passed");
+			}
 			else passed[i]=true;
+				
 			
 			if(passed[i]) number_of_passed++;
 		}
 		}
 		
 		double probabilityConditionValue = (Double)tmm.getParameter("p");
-		conditionChecker probabilityChecker = new conditionChecker((String)tmm.getParameter("probabilityBound"));
+		String probabilityBound = (String)tmm.getParameter("probabilityBound");
+		conditionChecker probabilityChecker = new conditionChecker(probabilityBound);
 		
-		double executionProbability = number_of_passed/(executions.size());
+		
+		double executionProbability = (double)number_of_passed/(double)number_of_execution;
 		System.out.println("Tomato Framework =================== Stopping execution");
-		return probabilityChecker.compare(probabilityConditionValue,executionProbability);
+		System.out.println("Constraint verified if the previous assertion is true for "+probabilityBound+" "+probabilityConditionValue+" of iterations");
+		System.out.println("Probaility measured:"+executionProbability);
+		return probabilityChecker.compare(executionProbability,probabilityConditionValue);
 		
 		
 		

@@ -102,14 +102,16 @@ public static ArrayList<TermOccurrence> extractTerms2(String expression) throws 
 	    		continue;
 	    	}
 	    	
-	    	if(!emptyStackMode && previous_special_character=='[' && current_character==']') {
+	    	if(current_character==']'){
+	    	if(!emptyStackMode && previous_special_character=='[') {
 	    		stack.pop();
-	    		if(!term.equals("")) {
 	    		squareBracketMode = false;
+	    		if(!term.equals("")) {
 	    		addTermOnTheResult(term, res, true, true);
 	    		term="";
 	    		}
 	    		continue;
+	    	}
 	    	}
 	    	
 	    	if(i==expression.length()-1) {

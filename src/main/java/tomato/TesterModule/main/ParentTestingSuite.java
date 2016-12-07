@@ -12,6 +12,9 @@ import java.util.concurrent.ThreadLocalRandom;
 public abstract class ParentTestingSuite {
 	TesterModuleMessenger tmm;
 	
+	protected Object dependency;
+	protected String dclass;
+	
 	public ParentTestingSuite(){
 		this.tmm = new TesterModuleMessenger();
 	}
@@ -46,6 +49,18 @@ public abstract class ParentTestingSuite {
 		// so add 1 to make it inclusive
 		}
 	
+	public void declareDependency(String dclass, Object o){
+		this.dclass=dclass;
+		dependency=o;
+	}
+	
+	public void assignRuleRandom(String stateFormula, String method, String argument, int min, int max){
+		if(rules==null) rules = new LinkedList<RuleTuple>();
+		rules.add(new RandomRuleTuple(stateFormula, method, argument, min, max));
+		// nextInt is normally exclusive of the top value,
+		// so add 1 to make it inclusive
+		}
+	
 	public Object[] modifyArguments(String stateFormula, String method, Class[] class_arguments, Object[] arguments,
 			String[] names) {
 		
@@ -56,12 +71,17 @@ public abstract class ParentTestingSuite {
 			
 			for(RuleTuple rt: rules){
 				if(rt.identifyRule(stateFormula, method, argument_name)){
-					if(rt.getRule().equals("random")) modified_arguments[i]=((RandomRuleTuple)rt).getRandomValue();
+					if(rt.getRule().equals("randomInt")) modified_arguments[i]=((RandomRuleTuple)rt).getRandomIntValue();
+					if(rt.getRule().equals("randomDouble")) modified_arguments[i]=((RandomRuleTuple)rt).getRandomDoubleValue();
 					break;
 				}
 			}
 		}
 		
+		System.out.println("The method "+method+" will take the following arguments:");
+		for(int i=0; i<modified_arguments.length; i++){
+			System.out.println("Name:"+names[i]+" value:"+modified_arguments[i]);
+		}
 		return modified_arguments;
 		
 	}
