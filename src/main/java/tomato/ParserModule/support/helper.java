@@ -2,8 +2,10 @@ package tomato.ParserModule.support;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.EmptyStackException;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Stack;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -20,6 +22,108 @@ public class helper {
         return list;
     }
     
+
+private static TermOccurrence addTermOnTheResult(String term, List<TermOccurrence> list, boolean isTerminal, boolean isOptional){
+	TermOccurrence t = new TermOccurrence(term,isTerminal,isOptional);
+	list.add(t);
+	return t;
+}
+    
+  
+public static ArrayList<TermOccurrence> extractTerms2(String expression) throws IllegalExpressionException{
+	Stack<Character> stack = new Stack<Character>();
+	 ArrayList<TermOccurrence> res = new ArrayList<TermOccurrence>();
+	 boolean squareBracketMode = false;
+	 boolean appendixMode = false;
+	 boolean emptyStackMode = false;
+	 String term="";
+
+	    for (int i = 0;i < expression.length(); i++){
+	    	char current_character = expression.charAt(i);
+	    	char previous_special_character = 0;
+	    	
+	    	try{
+	    		
+	    	previous_special_character = stack.peek();
+	    		
+	    	}catch(EmptyStackException e){
+	    		emptyStackMode=true;
+	    	}
+	    	
+	    	if(current_character=='|'){
+	    		if(!term.equals("")){
+	    		Boolean isOptional = false;
+	    		if(squareBracketMode) isOptional = true;
+	    		addTermOnTheResult(term, res, false, true);
+	    		term="";
+	    		}
+	    		continue;
+	    	}
+	    	
+	    	if(current_character==' '){
+	    		if(!appendixMode){
+	    			if(!term.equals("")){
+	    
+	    		Boolean isOptional = false;
+	    		if(squareBracketMode) isOptional = true;
+	    		addTermOnTheResult(term, res, false, true);
+	    		term="";
+	    		}
+	    		}else{
+	    			term+=current_character;
+	    		}
+	    		continue;
+	    	}
+	    	
+	    	if(current_character=='\''){
+	    		if(!emptyStackMode && previous_special_character=='\''){
+	    			stack.pop();
+	    			appendixMode = false;
+		    		Boolean isOptional = false;
+		    		if(squareBracketMode) isOptional = true;
+		    		addTermOnTheResult(term, res, true, isOptional);
+		    		term="";
+		    		
+	    		}else{
+	    			stack.push(current_character);
+	    			appendixMode = true;
+	    			emptyStackMode=false;
+	    		}
+	    		continue;
+	    	}
+	    	
+	    	if(current_character=='[') {
+	    		if(!term.equals("")) {
+	    			addTermOnTheResult(term, res, false, false);
+	    			term="";
+	    		}
+	    		squareBracketMode = true;
+	    		stack.push(current_character);
+	    		continue;
+	    	}
+	    	
+	    	if(!emptyStackMode && previous_special_character=='[' && current_character==']') {
+	    		stack.pop();
+	    		if(!term.equals("")) {
+	    		squareBracketMode = false;
+	    		addTermOnTheResult(term, res, true, true);
+	    		term="";
+	    		}
+	    		continue;
+	    	}
+	    	
+	    	if(i==expression.length()-1) {
+	    		addTermOnTheResult(term+current_character, res, false, false);
+	    		continue;
+	    	}
+	    	
+	    	term+=current_character;
+	    }
+	    
+	    if(!stack.isEmpty()) throw new IllegalExpressionException();
+
+	return res;
+}
 
 public static ArrayList<TermOccurrence> extractTerms(String expression){
     String term="";

@@ -6,8 +6,18 @@ package tomato.ParserModule.support;
 public class TermOccurrence {
     String term;
     int startIndex, endIndex;
-    boolean isTerminal = false;
+    private boolean isTerminal = false;
 	private boolean isOptional = false;
+	
+	public TermOccurrence(String term) {
+		this.term = term;
+	}
+	
+	public TermOccurrence(String term, boolean isTerminal, boolean isOptional){
+		this.term = term;
+        this.isTerminal = isTerminal;
+        this.isOptional = isOptional;
+	}
 
     public TermOccurrence(String term, int startIndex, int endIndex) {
 
@@ -47,16 +57,13 @@ public class TermOccurrence {
         return endIndex;
     }
 
-    @Override
-    public String toString() {
-        return "TermOccurrence{" +
-                "term='" + term + '\'' +
-                ", startIndex=" + startIndex +
-                ", endIndex=" + endIndex +
-                '}';
-    }
 
-    public void defineTerminalString() {
+    @Override
+	public String toString() {
+		return "TermOccurrence [term=" + term + ", isTerminal=" + isTerminal + ", isOptional=" + isOptional + "]";
+	}
+
+	public void defineTerminalString() {
         this.isTerminal=true;
     }
     

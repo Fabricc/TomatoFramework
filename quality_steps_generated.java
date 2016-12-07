@@ -26,7 +26,7 @@ public class quality_steps_generated {
 		tmm = ptt.getMessenger();
 }
 
-@Given("^\\[with (?:(at most|at least)[ a]|(?: a)? ((greater than|higher than)|(lower than|less than))) (\\d+\\.\\d+) (?:probability|chance) \"([^\"]*)\" ((?:within the next|in less than) (\d+\.\d+)|(?:after|in more than) (\d+\.\d+)) (\\d+\\.\\d+)\\]$")
+@Given("^\\[with (?:((?:(?: a)?(?: a)?)?(\\d+\\.\\d+)(?:(?: a)?(?: a)?)?most|(?:(?: a)?(?: a)?)?(\\d+\\.\\d+)(?:(?: a)?(?: a)?)?le(?:(?: a)?(?: a)?)?st)[(?:(?: a)?(?: a)?)?(?:(?: a)?(?: a)?)?(?:(?: a)?(?: a)?)?(?:(?: a)?(?: a)?)?]|[(?:(?: a)?(?: a)?)?(?:(?: a)?(?: a)?)?(?:(?: a)?(?: a)?)?(?:(?: a)?(?: a)?)?](?:(?: a)?(?: a)?)?th(?:(?: a)?(?: a)?)?nBound) (\\d+\\.\\d+) (?:probability|chance) \"([^\"]*)\" ((?:within the next|in less than) (\d+\.\d+)|(?:after|in more than) (\d+\.\d+)) (\\d+\\.\\d+)\\]$")
 public void alternativeFive(java.lang.String atBound,java.lang.String thanBound,java.lang.Double p,java.lang.String stateFormula,java.lang.String timeBound,java.lang.Double t) throws Throwable {
 		
 		tmm.insertParameter("atBound", atBound);

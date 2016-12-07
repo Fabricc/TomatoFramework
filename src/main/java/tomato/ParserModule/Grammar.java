@@ -4,6 +4,7 @@ package tomato.ParserModule;
 import java.io.File;
 import java.util.*;
 
+import tomato.ParserModule.support.IllegalExpressionException;
 import tomato.ParserModule.support.SemanticWrapper;
 import tomato.ParserModule.support.TermOccurrence;
 import tomato.ParserModule.support.helper;
@@ -63,7 +64,13 @@ public class Grammar {
 
         if(!isTerminal) {
 
-            ArrayList<TermOccurrence> nonTerminals = helper.extractTerms(expression);
+            ArrayList<TermOccurrence> nonTerminals = null;
+			try {
+				nonTerminals = helper.extractTerms2(expression);
+			} catch (IllegalExpressionException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 
             for (TermOccurrence word : nonTerminals) {
                 String father = nonTerminalFather;
@@ -114,8 +121,8 @@ public class Grammar {
                     String toReplace = "'"+term+"'";
                     
                     if(word.isOptional()){
-                    	toReplace="\\["+toReplace+"\\]";
-                    	result=result.replaceAll(toReplace, "\\(\\?\\:"+term+"\\)\\?");
+                    	toReplace="["+toReplace+"]";
+                    	result=result.replaceAll(toReplace, "\\\\(\\\\?\\\\:"+term+"\\\\)\\\\?");
                     	
                     }else result=result.replaceFirst(toReplace,term);
                 }
