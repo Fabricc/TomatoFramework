@@ -65,23 +65,33 @@ public abstract class ParentTestingSuite {
 			String[] names) {
 		
 		Object[] modified_arguments = arguments.clone();
-		
+		boolean found = false;
 		for(int i = 0; i<class_arguments.length; i++){
 			String argument_name = names[i];
 			
+			
+			
 			for(RuleTuple rt: rules){
 				if(rt.identifyRule(stateFormula, method, argument_name)){
-					if(rt.getRule().equals("randomInt")) modified_arguments[i]=((RandomRuleTuple)rt).getRandomIntValue();
-					if(rt.getRule().equals("randomDouble")) modified_arguments[i]=((RandomRuleTuple)rt).getRandomDoubleValue();
+					if(rt.getRule().equals("randomInt")){
+						modified_arguments[i]=((RandomRuleTuple)rt).getRandomIntValue();
+						found=true;
+					}
+					if(rt.getRule().equals("randomDouble")){
+						modified_arguments[i]=((RandomRuleTuple)rt).getRandomDoubleValue();
+						found=true;
+					}
+						
 					break;
 				}
 			}
 		}
 		
+		if(found){
 		System.out.println("The method "+method+" will take the following arguments:");
 		for(int i=0; i<modified_arguments.length; i++){
-			System.out.println("Name:"+names[i]+" value:"+modified_arguments[i]);
-		}
+			System.out.println("Name: "+names[i]+" value:"+modified_arguments[i]);
+		}}
 		return modified_arguments;
 		
 	}

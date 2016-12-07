@@ -16,15 +16,14 @@ Feature: Examples
 		Then the software recovers automatically
 		And all the tasks are resumed
 		And ["the system recovers completely" in less than 3.0 s with a probability of at least 0.9]
-		
-		
+	
 		
 #Availability scenario with stateFormula's scope of one step and three paramaters
 	Scenario: Video streaming testing
 	 Given the user wants to open 3 video streams
 	 When the connectivity is 10 mb/s
 	 And 3 media servers are available
-	 Then the system reduces the QoS at the minimum level 
+	 Then the system reduces the QoS 
 	 And [with chance of at least 0.90 "QOS reaches the minimum" in more than 5 s]
 		
 #Security scenario with two stateFormulas

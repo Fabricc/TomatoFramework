@@ -43,7 +43,7 @@ public class ProbabilisticTestingSuite extends ParentTestingSuite {
 	}
 	
 	
-	private int numberIterations = 5;
+	private int numberIterations = 20;
 	
 
 	public void executeTesting(String stateFormula, List<Double> executions, List<Boolean> successes) 
@@ -103,6 +103,11 @@ public class ProbabilisticTestingSuite extends ParentTestingSuite {
 					}else o = c.newInstance();
 					cache_object.add(o);
 					}
+					
+					Object[] arguments = tmm.getArguments().get(j);
+					String[] names = tmm.getNameOArguments().get(j);
+					
+					Object[] modified_arguments = super.modifyArguments(stateFormula, met, class_arguments, arguments, names);
 				
 				    
 			
@@ -117,10 +122,7 @@ public class ProbabilisticTestingSuite extends ParentTestingSuite {
 						}
 						else stopwatch.resume();
 						
-						Object[] arguments = tmm.getArguments().get(j);
-						String[] names = tmm.getNameOArguments().get(j);
 						
-						Object[] modified_arguments = super.modifyArguments(stateFormula, met, class_arguments, arguments, names);
 						
 						method.invoke(o,modified_arguments);
 						//if(userdefined_mode) sfi.execute();
@@ -134,7 +136,7 @@ public class ProbabilisticTestingSuite extends ParentTestingSuite {
 					}
 					
 					} else {
-						method.invoke(o,tmm.getArguments().get(j));
+						method.invoke(o,modified_arguments);
 					}
 				}
 			
