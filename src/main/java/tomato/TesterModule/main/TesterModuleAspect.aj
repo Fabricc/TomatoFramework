@@ -36,6 +36,16 @@ public class TesterModuleAspect {
     	this.scen=s;
     	}
     
+    @After("execution(* *.after())")
+    public void spotAfter(JoinPoint jp){
+    	
+    	classes = new LinkedList<String>();
+    	methods= new LinkedList<String>();
+    	arguments= new LinkedList<Object[]>();
+    	classesOfArguments = new LinkedList<Class[]>();
+    	nameOfArguments = new LinkedList<String[]>();;
+    	}
+    
     @After("call(* *.getMethod(String, ..))")
     public void disableStoreMethods(){
     	this.storing = false;
@@ -74,12 +84,7 @@ public class TesterModuleAspect {
     public void addInformation(TesterModuleMessenger tmm){
     	
     	tmm.insertMethod(classes, methods, arguments, classesOfArguments, nameOfArguments);
-    	classes = new LinkedList<String>();
-    	methods= new LinkedList<String>();
-    	arguments= new LinkedList<Object[]>();
-    	classesOfArguments = new LinkedList<Class[]>();
-    	nameOfArguments = new LinkedList<String[]>();
-    
+  
     	//System.out.println("adding stored method");
     	
     }

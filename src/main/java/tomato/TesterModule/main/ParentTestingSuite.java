@@ -25,12 +25,16 @@ public abstract class ParentTestingSuite {
 	}
 	
 	private Map<String, List<String>> stateFormulaStepsMap;
-	private Map<String, stateFormulaImplementation> stateFormulaMethodsMap;
+	private Map<String, List<String>> stateFormulaMethodsMap;
 	private List<RuleTuple> rules;
 	
-	public void assignStateFormula(String stateFormula, stateFormulaImplementation method){
-		if(stateFormulaMethodsMap == null) stateFormulaMethodsMap = new HashMap<String,stateFormulaImplementation>();
-		stateFormulaMethodsMap.put(stateFormula, method);
+	public void assignStateFormulaExternal(String stateFormula, String method){
+		
+		if(stateFormulaMethodsMap == null) stateFormulaMethodsMap = new HashMap<String, List<String>>();
+		List<String> list = stateFormulaMethodsMap.get(stateFormula);
+		if(list==null) list=new LinkedList<String>();
+		list.add(method);
+		stateFormulaMethodsMap.put(stateFormula, list);
 	}
 	
 	public void assignStateFormula(String stateFormula, String method){
@@ -101,11 +105,13 @@ public abstract class ParentTestingSuite {
 	
 	
 	protected List<String> getStateFormulaSteps(String stateFormula){
-		return stateFormulaStepsMap.get(stateFormula);
+		if(stateFormulaStepsMap !=null) return stateFormulaStepsMap.get(stateFormula);
+		return null;
 	}
 	
-	protected stateFormulaImplementation getStateFormulaMethod(String stateFormula){
-		return stateFormulaMethodsMap.get(stateFormula);
+	protected List<String> getStateFormulaMethod(String stateFormula){
+		if(stateFormulaMethodsMap !=null) return stateFormulaMethodsMap.get(stateFormula);
+		return null;
 	}
 
 	public abstract boolean invokeTestingSuite(TesterModuleMessenger tmm) throws StateFormulaNotAssignedException;

@@ -22,6 +22,10 @@ public class TesterModuleMessenger {
 		this.semantic = LexicalParametersSerializer.deserialize();
 	}
 	
+	public void cleanParameters(){
+		this.parameters=null;
+	}
+	
 //	public void insertParameter(String name, Object par){
 //		if(this.parameters == null){
 //			this.parameters = new HashMap<String, Object>();

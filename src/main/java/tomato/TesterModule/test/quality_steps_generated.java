@@ -3,6 +3,7 @@ import org.junit.Assert;
 
 import cucumber.api.PendingException;
 import cucumber.api.Scenario;
+import cucumber.api.java.After;
 import cucumber.api.java.Before;
 import cucumber.api.java.en.Given;
 import tomato.TesterModule.main.ProbabilisticTestingSuite;
@@ -21,13 +22,13 @@ public class quality_steps_generated {
 		this.scenario=scenario;
 		this.ptt = new ProbabilisticTestingSuite();
 		
-		ptt.declareDependency("tomato.TesterModule.test.examples_steps",new services_and_tasks());
+		ptt.declareDependency("tomato.TesterModule.test.examples_steps",new shared_data());
 		
 		//Assign your StateFormulas and you rules here
 		
 		//Scenario: API testing
 		//Scope stateFormula
-		ptt.assignStateFormula("JsonPath key is received", "the_JsonPath_key_countries_should_contain_elements");
+		ptt.assignStateFormula("JsonPath key is received", "the_ JsonPath_key_countries_should_contain_elements");
 		//Rules
 		ptt.assignRuleRandom("JsonPath key is received", "the_JsonPath_key_countries_should_contain_elements", "arg1", 100, 300);
 		
@@ -38,6 +39,23 @@ public class quality_steps_generated {
 		//Rules
 		ptt.assignRuleRandom("the system recovers completely", "an_user_issued_concurrent_tasks", "tasks", 1, 10);
 		ptt.assignRuleRandom("the system recovers completely", "the_software_has_backup_services", "services", 1, 10);
+		
+		//Scenario: Message system
+		//Scope stateFormula
+		ptt.assignStateFormula("process b should receive the message", "the_process_A_sends_the_message_to_B");
+		ptt.assignStateFormulaExternal("the message is corrupted", "a_message_is_corrupted");
+		//Rules
+		ptt.assignRuleRandom("process b should receive the message", "a_processes_are_sending_a_message_in_the_same_channel_at_kb_s", "procs", 1, 10);
+		ptt.assignRuleRandom("process b should receive the message", "a_processes_are_sending_a_message_in_the_same_channel_at_kb_s", "speed", 1, 50);
+		ptt.assignRuleRandom("process b should receive the message", "the_noise_in_th_channel_is_db", "noise", 1, 4);
+		
+		//Scenario: Message system
+		//Scope stateFormula
+		ptt.assignStateFormulaExternal("the IP of the user is detected", "a_message_is_corrupted");
+		//Rules
+		ptt.assignRuleRandom("the IP of the user is detected", "the_hacker_uses_a_botnet_with_terminals", "terminals", 1, 10);
+
+				
 		
 		tmm = ptt.getMessenger();
 }
@@ -53,19 +71,22 @@ public class quality_steps_generated {
 			try{
 	    		if(this.ptt.invokeTestingSuite(tmm)) System.out.println("Quality constraint satisfied");
 	    		else {
-	    			System.err.println("Quality constraint not satisfied");
+	    			System.out.println("Quality constraint not satisfied");
 	    			Assert.fail("Quality constraint not satisfied");
 	    		}
 	    	}
 	    	catch(StateFormulaNotAssignedException e){
-	    		System.err.println("StateFormula not assigned");
+	    		System.out.println("StateFormula not assigned");
 	    		Assert.fail("Quality constraint not satisfied");
 	    	}catch(Exception e){
 	    		e.printStackTrace();
 	    		Assert.fail("Configuration Error");
 	    		
 	    	}finally{
-	    		tmm.cleanAll();
+	    		tmm.cleanParameters();
+	    		System.out.println();
+	    		System.out.println();
+	    		System.out.println();
 	    	}
 	    	
 	    }
@@ -81,19 +102,22 @@ public class quality_steps_generated {
 			try{
 	    		if(this.ptt.invokeTestingSuite(tmm)) System.out.println("Quality constraint satisfied");
 	    		else {
-	    			System.err.println("Quality constraint not satisfied");
+	    			System.out.println("Quality constraint not satisfied");
 	    			Assert.fail("Quality constraint not satisfied");
 	    		}
 	    	}
 	    	catch(StateFormulaNotAssignedException e){
-	    		System.err.println("StateFormula not assigned");
+	    		System.out.println("StateFormula not assigned");
 	    		Assert.fail("Quality constraint not satisfied");
 	    	}catch(Exception e){
 	    		e.printStackTrace();
 	    		Assert.fail("Configuration Error");
 	    		
 	    	}finally{
-	    		tmm.cleanAll();
+	    		tmm.cleanParameters();
+	    		System.out.println();
+	    		System.out.println();
+	    		System.out.println();
 	    	}
 	    	
 	    }
@@ -109,19 +133,22 @@ public class quality_steps_generated {
 	    	try{
 	    		if(this.ptt.invokeTestingSuite(tmm)) System.out.println("Quality constraint satisfied");
 	    		else {
-	    			System.err.println("Quality constraint not satisfied");
+	    			System.out.println("Quality constraint not satisfied");
 	    			Assert.fail("Configuration Error");
 	    		}
 	    	}
 	    	catch(StateFormulaNotAssignedException e){
-	    		System.err.println("StateFormula not assigned");
+	    		System.out.println("StateFormula not assigned");
 	    		Assert.fail("Quality constraint not satisfied");
 	    	}catch(Exception e){
 	    		e.printStackTrace();
 	    		Assert.fail("Configuration Error");
 	    		
 	    	}finally{
-	    		tmm.cleanAll();
+	    		tmm.cleanParameters();
+	    		System.out.println();
+	    		System.out.println();
+	    		System.out.println();
 	    	}
 	    	
 	    }
@@ -137,21 +164,61 @@ public class quality_steps_generated {
 			try{
 	    		if(this.ptt.invokeTestingSuite(tmm)) System.out.println("Quality constraint satisfied");
 	    		else {
-	    			System.err.println("Quality constraint not satisfied");
+	    			System.out.println("Quality constraint not satisfied");
 	    			Assert.fail("Quality constraint not satisfied");
 	    		}
 	    	}
 	    	catch(StateFormulaNotAssignedException e){
-	    		System.err.println("StateFormula not assigned");
+	    		System.out.println("StateFormula not assigned");
 	    		Assert.fail("Quality constraint not satisfied");
 	    	}catch(Exception e){
 	    		e.printStackTrace();
 	    		Assert.fail("Configuration Error");
 	    		
 	    	}finally{
-	    		tmm.cleanAll();
+	    		tmm.cleanParameters();
+	    		System.out.println();
+	    		System.out.println();
+	    		System.out.println();
 	    	}
 	    	
 	    }
+	
+	@Given("^\\[the (?:probability|chance) (?:of|to|that|in which) \"([^\"]*)\" is ((?:at most|(?:lower than|less than))|(?:at least|(?:greater than|higher than))) (\\d+\\.\\d+)\\]$")
+	public void alternativeOneNoTime(java.lang.String stateFormula,java.lang.String probabilityBound,java.lang.Double p) throws Throwable {
+			
+			tmm.insertParameter("stateFormula", stateFormula);
+			tmm.insertParameter("probabilityBound", probabilityBound);
+			tmm.insertParameter("p", p);
+	    	
+			try{
+	    		if(this.ptt.invokeTestingSuite(tmm)) System.out.println("Quality constraint satisfied");
+	    		else {
+	    			System.out.println("Quality constraint not satisfied");
+	    			Assert.fail("Quality constraint not satisfied");
+	    		}
+	    	}
+	    	catch(StateFormulaNotAssignedException e){
+	    		System.out.println("StateFormula not assigned");
+	    		Assert.fail("Quality constraint not satisfied");
+	    	}catch(Exception e){
+	    		e.printStackTrace();
+	    		Assert.fail("Configuration Error");
+	    		
+	    	}finally{
+	    		tmm.cleanParameters();
+	    		System.out.println();
+	    		System.out.println();
+	    		System.out.println();
+	    	}
+	    	
+	    }
+	
+	@After("@quality")
+	public void after(){
+		
+	}
+	
+	
 
 	}

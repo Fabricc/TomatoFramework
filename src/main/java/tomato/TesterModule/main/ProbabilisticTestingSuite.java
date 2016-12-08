@@ -43,7 +43,7 @@ public class ProbabilisticTestingSuite extends ParentTestingSuite {
 	}
 	
 	
-	private int numberIterations = 20;
+	private int numberIterations = 10;
 	
 
 	public void executeTesting(String stateFormula, List<Double> executions, List<Boolean> successes) 
@@ -53,7 +53,10 @@ public class ProbabilisticTestingSuite extends ParentTestingSuite {
 		
 		
 		List<String> steps = super.getStateFormulaSteps(stateFormula);
-		if(steps==null) throw new StateFormulaNotAssignedException();
+		List<String> external_methods = super.getStateFormulaMethod(stateFormula);
+		if(steps==null && external_methods==null) throw new StateFormulaNotAssignedException();
+		boolean external = false;
+		if(external_methods!=null) external=true;
 		//stateFormulaImplementation sfi = null;
 		//if(steps!=null) userdefined_mode = false;
 		//else{
@@ -72,15 +75,20 @@ public class ProbabilisticTestingSuite extends ParentTestingSuite {
 			boolean noExceptions = true;
 			
 			stopwatch.reset();
-			
+			boolean timed_constrain = false;
 			for(int j = 0; j<tmm.getClasses().size() && noExceptions; j++){
 				
 				Class c = null;
 				boolean timed = false;
 				
 				
+				
 				String met = tmm.getMethods().get(j);
-				if(steps.contains(met)) timed=true;
+				if(steps!=null && steps.contains(met)) {
+					timed=true;
+					timed_constrain=true;
+				}
+				
 				
 				Class[] class_arguments= tmm.getClassArguments().get(j);
 				
@@ -138,7 +146,19 @@ public class ProbabilisticTestingSuite extends ParentTestingSuite {
 					} else {
 						method.invoke(o,modified_arguments);
 					}
+				
+				if(external && j==tmm.getClasses().size()-1){
+					class_name = tmm.getClasses().get(0);
+					c = Class.forName(class_name);
+					method = c.getMethod(external_methods.get(0));
+					
+					Boolean result = (Boolean)method.invoke(o);
+					successes.add(i, result);
 				}
+				
+				}
+			
+			
 			
 			long milliseconds = stopwatch.getTime();
 
@@ -146,7 +166,7 @@ public class ProbabilisticTestingSuite extends ParentTestingSuite {
 			
 			executions.add(i, seconds);
 			stopwatch.reset();
-			successes.add(i, noExceptions);
+			if(timed_constrain) successes.add(i, noExceptions);
 		}
 	}
 	
@@ -214,19 +234,22 @@ public class ProbabilisticTestingSuite extends ParentTestingSuite {
 		System.out.println("Report ProbabilisticTestingSuite Execution");
 		
 		boolean[] passed = new boolean[executions.size()];
+		double executionProbability = 0;
 		
 		boolean checkTime = false;
 		conditionChecker timeChecker = null;
 		double timeConditionValue = 0;
 		String timeBound = (String)tmm.getParameter("timeBound");
+		int number_of_execution = executions.size();
 		if(timeBound!=null) {
 			checkTime=true;
 			timeChecker = new conditionChecker(timeBound);
 			timeConditionValue = (Double)tmm.getParameter("t");
-		}
+		
+		
 		System.out.println("StateFormula verified for the following values where time "+timeBound+" of "+timeConditionValue);
 		int number_of_passed=0;
-		int number_of_execution = executions.size();
+		
 		for(int i=0; i<number_of_execution; i++){
 		if(successes.get(i)){
 			System.out.print("Iteration nr."+i+" Time: "+executions.get(i)+" s ");
@@ -241,16 +264,32 @@ public class ProbabilisticTestingSuite extends ParentTestingSuite {
 			if(passed[i]) number_of_passed++;
 		}
 		}
+		executionProbability = (double)number_of_passed/(double)number_of_execution;
+		}else{
+			System.out.println("StateFormula verified for the following values where the condition is verified");
+			int verified=0;
+			int i=0;
+			for(boolean s: successes){
+				if(s) {
+					verified++;
+					System.out.println("Iteration nr."+i+" Verified: true");
+				}else System.out.println("Iteration nr."+i+" Verified: false");
+				i++;
+			}
+			executionProbability = (double)verified/(double)number_of_execution;
+		}
+		
 		
 		double probabilityConditionValue = (Double)tmm.getParameter("p");
 		String probabilityBound = (String)tmm.getParameter("probabilityBound");
 		conditionChecker probabilityChecker = new conditionChecker(probabilityBound);
 		
 		
-		double executionProbability = (double)number_of_passed/(double)number_of_execution;
-		System.out.println("Tomato Framework =================== Stopping execution");
+		
+		
 		System.out.println("Constraint verified if the previous assertion is true for "+probabilityBound+" "+probabilityConditionValue+" of iterations");
 		System.out.println("Probaility measured:"+executionProbability);
+		System.out.println("Tomato Report Framework =================== Stopping execution");
 		return probabilityChecker.compare(executionProbability,probabilityConditionValue);
 		
 		

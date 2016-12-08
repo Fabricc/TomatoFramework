@@ -11,9 +11,9 @@ import tomato.TesterModule.main.TesterModuleMessenger;
 
 public class examples_steps {
 	
-	public services_and_tasks st;
+	public shared_data st;
 	
-	public examples_steps(services_and_tasks st){
+	public examples_steps(shared_data st){
 		this.st=st;
 	}
 
@@ -83,31 +83,52 @@ public class examples_steps {
 
 	
 	//Availability
+	
+	
 
-
-	@Given("^the user wants to open (\\d+) video streams$")
-	public void the_user_wants_to_open_video_streams(int arg1) throws Throwable {
+	@Given("^a process A that wants to communicate with process B$")
+	public void a_process_A_that_wants_to_communicate_with_process_B() throws Throwable {
 	    // Write code here that turns the phrase above into concrete actions
-	    System.out.println("the_user_wants_to_open_video_streams executed");
+	    System.out.println("a_process_A_that_wants_to_communicate_with_process_B executed");
 	}
 
-	@When("^the connectivity is (\\d+) mb/s$")
-	public void the_connectivity_is_mb_s(int arg1) throws Throwable {
+	@Given("^a (\\d+) processes are sending a message in the same channel at (\\d+\\.\\d+) kb/s$")
+	public void a_processes_are_sending_a_message_in_the_same_channel_at_kb_s(int procs, double speed) throws Throwable {
 	    // Write code here that turns the phrase above into concrete actions
-	    System.out.println("the_connectivity_is_mb_s executed");
+	    this.st.processess=procs;
+	    this.st.speed=speed;
+	    System.out.println("a_processes_are_sending_a_message_in_the_same_channel_at_kb_s executed with "
+	    		+procs+" processes and communication rate of"+speed+" kb/s");
 	}
 
-	@When("^(\\d+) media servers are available$")
-	public void media_servers_are_available(int arg1) throws Throwable {
+	@Given("^the noise in th channel is (\\d+) db$")
+	public void the_noise_in_th_channel_is_db(int noise) throws Throwable {
 	    // Write code here that turns the phrase above into concrete actions
-	    System.out.println("media_servers_are_available executed");
+	    this.st.noise=noise;
+	    System.out.println("the_noise_in_th_channel_is_db executed with noise "+noise+" dB");
 	}
 
-	@Then("^the system reduces the QoS at the minimum level$")
-	public void the_system_reduces_the_QoS_at_the_minimum_level() throws Throwable {
+	@When("^the process A sends the message to B$")
+	public void the_process_A_sends_the_message_to_B() throws Throwable {
 	    // Write code here that turns the phrase above into concrete actions
-	    System.out.println("the_system_reduces_the_QoS_at_the_minimum_level executed");
+		long time = 100;
+		long sleep= time*st.processess*st.noise+(st.noise*100);
+		
+		Thread.sleep(sleep);
+		
+		System.out.println("the_process_A_sends_the_message_to_B executed");
 	}
+	
+	public boolean a_message_is_corrupted() throws Throwable {
+		if(this.st.sleep>2000) return true;
+		return false;
+	}
+	
+	public boolean spoofing_succesful(){
+		if(this.st.bots>3) return true;
+		else return false;
+	}
+	
 
 	//Security
 	
@@ -124,9 +145,10 @@ public class examples_steps {
 	}
 
 	@Given("^the hacker uses a botnet with (\\d+) terminals$")
-	public void the_hacker_uses_a_botnet_with_terminals(int arg1) throws Throwable {
+	public void the_hacker_uses_a_botnet_with_terminals(int terminals) throws Throwable {
 	    // Write code here that turns the phrase above into concrete actions
-	    System.out.println("the_hacker_uses_a_botnet_with_terminals executed");
+		this.st.bots=terminals;
+	    System.out.println("the_hacker_uses_a_botnet_with_terminals executed with "+terminals+" terminals");
 	}
 
 	@Then("^the system activates the protection against ip spoofing attack$")
