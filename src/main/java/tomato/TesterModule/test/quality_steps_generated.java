@@ -22,13 +22,11 @@ public class quality_steps_generated {
 		this.scenario=scenario;
 		this.ptt = new ProbabilisticTestingSuite();
 		
-		ptt.declareDependency("tomato.TesterModule.test.examples_steps",new shared_data());
-		
 		//Assign your StateFormulas and you rules here
 		
 		//Scenario: API testing
 		//Scope stateFormula
-		ptt.assignStateFormula("JsonPath key is received", "the_ JsonPath_key_countries_should_contain_elements");
+		ptt.assignStateFormula("JsonPath key is received", "the_JsonPath_key_countries_should_contain_elements");
 		//Rules
 		ptt.assignRuleRandom("JsonPath key is received", "the_JsonPath_key_countries_should_contain_elements", "arg1", 100, 300);
 		
@@ -43,7 +41,8 @@ public class quality_steps_generated {
 		//Scenario: Message system
 		//Scope stateFormula
 		ptt.assignStateFormula("process b should receive the message", "the_process_A_sends_the_message_to_B");
-		ptt.assignStateFormulaExternal("the message is corrupted", "a_message_is_corrupted");
+//		ptt.assignStateFormulaExternal("the message is corrupted", "a_message_is_corrupted");
+		ptt.assignStateFormula("the message is corrupted", "a_message_is_corrupted");
 		//Rules
 		ptt.assignRuleRandom("process b should receive the message", "a_processes_are_sending_a_message_in_the_same_channel_at_kb_s", "procs", 1, 10);
 		ptt.assignRuleRandom("process b should receive the message", "a_processes_are_sending_a_message_in_the_same_channel_at_kb_s", "speed", 1, 50);
@@ -51,7 +50,8 @@ public class quality_steps_generated {
 		
 		//Scenario: Message system
 		//Scope stateFormula
-		ptt.assignStateFormulaExternal("the IP of the user is detected", "a_message_is_corrupted");
+		//ptt.assignStateFormulaExternal("the IP of the user is detected", "a_message_is_corrupted");
+		ptt.assignStateFormula("the IP of the user is detected", "spoofing_succesful");
 		//Rules
 		ptt.assignRuleRandom("the IP of the user is detected", "the_hacker_uses_a_botnet_with_terminals", "terminals", 1, 10);
 
@@ -78,10 +78,6 @@ public class quality_steps_generated {
 	    	catch(StateFormulaNotAssignedException e){
 	    		System.out.println("StateFormula not assigned");
 	    		Assert.fail("Quality constraint not satisfied");
-	    	}catch(Exception e){
-	    		e.printStackTrace();
-	    		Assert.fail("Configuration Error");
-	    		
 	    	}finally{
 	    		tmm.cleanParameters();
 	    		System.out.println();
@@ -109,10 +105,6 @@ public class quality_steps_generated {
 	    	catch(StateFormulaNotAssignedException e){
 	    		System.out.println("StateFormula not assigned");
 	    		Assert.fail("Quality constraint not satisfied");
-	    	}catch(Exception e){
-	    		e.printStackTrace();
-	    		Assert.fail("Configuration Error");
-	    		
 	    	}finally{
 	    		tmm.cleanParameters();
 	    		System.out.println();
@@ -134,16 +126,12 @@ public class quality_steps_generated {
 	    		if(this.ptt.invokeTestingSuite(tmm)) System.out.println("Quality constraint satisfied");
 	    		else {
 	    			System.out.println("Quality constraint not satisfied");
-	    			Assert.fail("Configuration Error");
+	    			Assert.fail("Quality constraint not satisfied");
 	    		}
 	    	}
 	    	catch(StateFormulaNotAssignedException e){
 	    		System.out.println("StateFormula not assigned");
 	    		Assert.fail("Quality constraint not satisfied");
-	    	}catch(Exception e){
-	    		e.printStackTrace();
-	    		Assert.fail("Configuration Error");
-	    		
 	    	}finally{
 	    		tmm.cleanParameters();
 	    		System.out.println();
@@ -171,10 +159,6 @@ public class quality_steps_generated {
 	    	catch(StateFormulaNotAssignedException e){
 	    		System.out.println("StateFormula not assigned");
 	    		Assert.fail("Quality constraint not satisfied");
-	    	}catch(Exception e){
-	    		e.printStackTrace();
-	    		Assert.fail("Configuration Error");
-	    		
 	    	}finally{
 	    		tmm.cleanParameters();
 	    		System.out.println();
@@ -201,10 +185,6 @@ public class quality_steps_generated {
 	    	catch(StateFormulaNotAssignedException e){
 	    		System.out.println("StateFormula not assigned");
 	    		Assert.fail("Quality constraint not satisfied");
-	    	}catch(Exception e){
-	    		e.printStackTrace();
-	    		Assert.fail("Configuration Error");
-	    		
 	    	}finally{
 	    		tmm.cleanParameters();
 	    		System.out.println();

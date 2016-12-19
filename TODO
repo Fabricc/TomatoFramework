@@ -1,6 +1,4 @@
 TO DO:
--extend support for multiple quality constraints in the same scenario
--extend support for standalone quality constrain definition
 -extend support for multiple terminal symbols definition with same expression, but derived from different non-terminal
 -search a way to hide from the generated steps the TesterModuleMessenger, keeping it available for Aspectj
 -improve lexical parameter passage (Pair)
@@ -8,3 +6,11 @@ TO DO:
 -optimize timing method in probabilistic testing suite
 -manage exception handling
 -fix "at least|at most" bug
+- insert exception for multiple user defined method associated with statFormula
+
+DONE:
+-checked scalacheck
+-added support for shared execution for differenet nonfunctional requirements
+	-added iterationreport that keeps track of the execution time and exceptions of each iteration
+	-decoupled stateFormula verification of externally defined method and scenario scope
+-eliminated need for explicit declaration of dependency

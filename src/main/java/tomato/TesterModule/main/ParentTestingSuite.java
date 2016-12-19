@@ -12,7 +12,7 @@ import java.util.concurrent.ThreadLocalRandom;
 public abstract class ParentTestingSuite {
 	TesterModuleMessenger tmm;
 	
-	protected Object dependency;
+	private Object dependency;
 	protected String dclass;
 	
 	public ParentTestingSuite(){
@@ -25,16 +25,13 @@ public abstract class ParentTestingSuite {
 	}
 	
 	private Map<String, List<String>> stateFormulaStepsMap;
-	private Map<String, List<String>> stateFormulaMethodsMap;
+	private Map<String,String> stateFormulaExternalMethodsMap;
 	private List<RuleTuple> rules;
 	
 	public void assignStateFormulaExternal(String stateFormula, String method){
 		
-		if(stateFormulaMethodsMap == null) stateFormulaMethodsMap = new HashMap<String, List<String>>();
-		List<String> list = stateFormulaMethodsMap.get(stateFormula);
-		if(list==null) list=new LinkedList<String>();
-		list.add(method);
-		stateFormulaMethodsMap.put(stateFormula, list);
+		if(stateFormulaExternalMethodsMap == null) stateFormulaExternalMethodsMap = new HashMap<String, String>();
+		stateFormulaExternalMethodsMap.put(stateFormula, method);
 	}
 	
 	public void assignStateFormula(String stateFormula, String method){
@@ -109,8 +106,8 @@ public abstract class ParentTestingSuite {
 		return null;
 	}
 	
-	protected List<String> getStateFormulaMethod(String stateFormula){
-		if(stateFormulaMethodsMap !=null) return stateFormulaMethodsMap.get(stateFormula);
+	protected String getStateFormulaMethod(String stateFormula){
+		if(stateFormulaExternalMethodsMap !=null) return stateFormulaExternalMethodsMap.get(stateFormula);
 		return null;
 	}
 

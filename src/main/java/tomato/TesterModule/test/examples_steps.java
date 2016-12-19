@@ -120,12 +120,12 @@ public class examples_steps {
 	}
 	
 	public boolean a_message_is_corrupted() throws Throwable {
-		if(this.st.sleep>2000) return true;
+		if(this.st.sleep>1000) return true;
 		return false;
 	}
 	
 	public boolean spoofing_succesful(){
-		if(this.st.bots>3) return true;
+		if(this.st.bots>5) return true;
 		else return false;
 	}
 	
