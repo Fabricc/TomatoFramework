@@ -55,7 +55,7 @@ public class quality_steps_generated {
 		//Rules
 		ptt.assignRuleRandom("the IP of the user is detected", "the_hacker_uses_a_botnet_with_terminals", "terminals", 1, 10);
 
-				
+		ptt.showReliabilityReport();		
 		
 		tmm = ptt.getMessenger();
 }

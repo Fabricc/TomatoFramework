@@ -44,6 +44,8 @@ public class ProbabilisticTestingSuite extends ParentTestingSuite {
 	
 	private int numberIterations = 10;
 	
+	private Boolean reliabilityReport = false;
+	
 
 //	public void executeTesting(String stateFormula, List<Double> executions, List<Boolean> successes) 
 //			throws IllegalAccessException, IllegalArgumentException, InvocationTargetException, ClassNotFoundException, 
@@ -299,6 +301,9 @@ public class ProbabilisticTestingSuite extends ParentTestingSuite {
 		 try {
 			List<IterationReport> report = this.executeTesting(stateFormula);
 			executeTestingWithExternalMethod(report,stateFormula);
+			if(this.reliabilityReport){
+				this.generateReliabilityReport(report);
+			}
 			return this.verifyRequirement(report,stateFormula);
 		} catch (IllegalAccessException e) {
 			// TODO Auto-generated catch block
@@ -469,11 +474,42 @@ public class ProbabilisticTestingSuite extends ParentTestingSuite {
 		System.out.println("Tomato Report Framework =================== Stopping execution");
 		return probabilityChecker.compare(executionProbability,probabilityConditionValue);
 		
+		}
+	
+	private void generateReliabilityReport(List<IterationReport> report){
+		System.out.println("<<Opening Reliability Overview>>");
+		int totalExecutions = report.size();
+		int totalFailings = 0;
+		double totalExecutionTime = 0;
+		double mttf = 0;
 		
+		for(IterationReport ir:report){
+			if(!ir.isCorrectlyExecuted()) {
+				totalFailings++;
+				mttf+=ir.getTotalExecutionTime();
+			}
+			totalExecutionTime += ir.getTotalExecutionTime();
+			
+		}
 		
+		if(totalFailings==0) System.out.println("Scenario executed without failures");
+		{
+		//Calculation Probability Of Failure On Demand(POFOD)
+		double pofod = totalFailings/totalExecutions;
+		System.out.println("Probability Of Failure On Demand(POFOD) is "+pofod);
 		
+		//Calculation Rate Of Occurrence Of Failure(ROCOF)
+		double rocof = totalExecutionTime/totalFailings;
+		System.out.println("Rate Of Occurrence Of Failure(ROCOF) is "+rocof);
 		
-		
+		//Calculation Mean Time To Failure
+		mttf=mttf/totalFailings;
+		System.out.println("Mean Time To Failure(MTTF) is "+mttf);
+		}
+	}
+	
+	public void showReliabilityReport(){
+		this.reliabilityReport=true;
 	}
 	
 }
