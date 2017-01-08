@@ -301,10 +301,13 @@ public class ProbabilisticTestingSuite extends ParentTestingSuite {
 		 try {
 			List<IterationReport> report = this.executeTesting(stateFormula);
 			executeTestingWithExternalMethod(report,stateFormula);
+			System.out.println();
+			boolean result = this.verifyRequirement(report,stateFormula);
 			if(this.reliabilityReport){
 				this.generateReliabilityReport(report);
 			}
-			return this.verifyRequirement(report,stateFormula);
+			System.out.println();
+			return result;
 		} catch (IllegalAccessException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -435,7 +438,10 @@ public class ProbabilisticTestingSuite extends ParentTestingSuite {
 			if(checkTime) {
 				passed[i]=timeChecker.compare(ir.getTotalExecutionTime(), timeConditionValue);
 				if(passed[i]) System.out.println("passed");
-				else System.out.println("not passed");
+				else {
+					ir.declareStepFailed("quality constraint", new Exception());
+					System.out.println("not passed");
+				}
 			}
 			else passed[i]=true;
 				
@@ -455,7 +461,10 @@ public class ProbabilisticTestingSuite extends ParentTestingSuite {
 				if(ir.isCorrectlyExecuted()) {
 					verified++;
 					System.out.println("Iteration nr."+i+" Verified: true");
-				}else System.out.println("Iteration nr."+i+" failed because method "+ir.getFailingMethod());
+				}else {
+					
+					System.out.println("Iteration nr."+i+" failed because method "+ir.getFailingMethod());
+				}
 				i++;
 			}
 			executionProbability = (double)verified/(double)number_of_iterations;
@@ -478,34 +487,49 @@ public class ProbabilisticTestingSuite extends ParentTestingSuite {
 	
 	private void generateReliabilityReport(List<IterationReport> report){
 		System.out.println("<<Opening Reliability Overview>>");
-		int totalExecutions = report.size();
-		int totalFailings = 0;
+		double totalExecutions = report.size();
+		double totalFailings = 0;
 		double totalExecutionTime = 0;
 		double mttf = 0;
+		List<Double> ttfs = new LinkedList<Double>();
+		double timeToFailure=0;
 		
 		for(IterationReport ir:report){
 			if(!ir.isCorrectlyExecuted()) {
 				totalFailings++;
-				mttf+=ir.getTotalExecutionTime();
+				timeToFailure+=ir.getTotalExecutionTime();
+				if(totalFailings>1) ttfs.add(timeToFailure);
+				timeToFailure=0;
 			}
+			timeToFailure+=ir.getTotalExecutionTime();
 			totalExecutionTime += ir.getTotalExecutionTime();
 			
 		}
 		
-		if(totalFailings==0) System.out.println("Scenario executed without failures");
-		{
+		if(totalFailings==0) {
+			System.out.println("Scenario executed without failures");
+			System.out.println("<<Closing Reliability Overview>>");
+			return;
+		}
+		
 		//Calculation Probability Of Failure On Demand(POFOD)
 		double pofod = totalFailings/totalExecutions;
 		System.out.println("Probability Of Failure On Demand(POFOD) is "+pofod);
 		
 		//Calculation Rate Of Occurrence Of Failure(ROCOF)
-		double rocof = totalExecutionTime/totalFailings;
+		double rocof = totalFailings/totalExecutionTime;
 		System.out.println("Rate Of Occurrence Of Failure(ROCOF) is "+rocof);
 		
 		//Calculation Mean Time To Failure
-		mttf=mttf/totalFailings;
-		System.out.println("Mean Time To Failure(MTTF) is "+mttf);
+		if(totalFailings>1) {
+			for(Double d: ttfs){
+			mttf+=d;
+			}
+			mttf=mttf/ttfs.size();
+			System.out.println("Mean Time To Failure(MTTF) is "+mttf);
 		}
+		System.out.println("<<Closing Reliability Overview>>");
+		
 	}
 	
 	public void showReliabilityReport(){

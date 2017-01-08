@@ -148,6 +148,7 @@ public class examples_steps {
 	public void the_hacker_uses_a_botnet_with_terminals(int terminals) throws Throwable {
 	    // Write code here that turns the phrase above into concrete actions
 		this.st.bots=terminals;
+		Thread.sleep(200*this.st.bots);
 	    System.out.println("the_hacker_uses_a_botnet_with_terminals executed with "+terminals+" terminals");
 	}
 
