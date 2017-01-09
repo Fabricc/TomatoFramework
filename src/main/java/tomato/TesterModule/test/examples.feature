@@ -17,7 +17,6 @@ Feature: Examples
 		And all the tasks are resumed
 		And ["the system recovers completely" in less than 0.5 s with a probability of at least 0.9]
 		
-		
 #Security scenario with one stateFormula with external scope and one paramater
 	Scenario: Protection from IP spoofing attack
 		Given an user wants to login in the website
@@ -35,4 +34,11 @@ Feature: Examples
 		When the process A sends the message to B
 		Then ["process b should receive the message" within the next 3.0 s with a probability of at least 0.1]
 		Then [the probability in which "the message is corrupted" is less than 0.6]
+		
+#Reliability
+	Scenario: WebServer response
+		Given the client requests  3 files of 10 mb each to the server
+		Then ["the webserver responds" in less than 2 s with a probability of at least 1]
+		And the client elaborates the file
+		Then ["output is produced" in less than 3 s with a probability of a at least 1]
 		
