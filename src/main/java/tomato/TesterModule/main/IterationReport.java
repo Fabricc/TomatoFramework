@@ -12,9 +12,11 @@ public class IterationReport {
 	private List<Double> executionsTime;
 	private List<Boolean> stateFormulaScope;
 	private Set<Object> classInstances;
+	private Double totalTime;
 	
 	IterationReport(){
 		failedStep=0;
+		totalTime=0.0;
 		executionsTime = new LinkedList<Double>();
 		classInstances = new HashSet<Object>();
 		stateFormulaScope = new LinkedList<Boolean>();
@@ -35,11 +37,13 @@ public class IterationReport {
 	
 	void insertStepExecutionTime(Double time){
 		executionsTime.add(time);
+		totalTime+=time;
 		stateFormulaScope.add(false);
 	}
 	
 	void insertStepExecutionTime(Double time, boolean reportTime){
 		executionsTime.add(time);
+		totalTime+=time;
 		stateFormulaScope.add(reportTime);
 	}
 	
@@ -64,14 +68,20 @@ public class IterationReport {
 		return this.nameFailedStep;
 		}
 	
-	Double getTotalExecutionTime(){
+	Double getScopedTotalExecutionTime(List<Boolean> scope){
 		Double totalTime = 0.0;
 		for(int i=0; i<this.executionsTime.size(); i++){
-			if(this.stateFormulaScope.get(i)){
+			if(scope.get(i)){
 				totalTime+=this.executionsTime.get(i);
 			}
 		}
 		return totalTime;
 	}
+	
+	Double getTotalExecutionTime(){
+		return totalTime;
+	}
+	
+
 }
 	
