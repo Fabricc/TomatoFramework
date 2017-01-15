@@ -53,7 +53,7 @@ public class Generator {
             List<ParameterDataModel> params = new LinkedList<ParameterDataModel>();
 
             for(String name: parameters){
-                SemanticWrapper sw = grammar.constraints.get(name);
+                SemanticWrapper sw = grammar.semantic.get(name);
                 if(sw.getDescriptor().equals("class")){
                 	String type=((Class)sw.get()).getCanonicalName();
                     params.add(new ParameterDataModel(type,name));

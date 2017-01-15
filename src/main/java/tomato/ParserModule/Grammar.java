@@ -18,46 +18,46 @@ import tomato.ParserModule.support.helper;
 
 public class Grammar {
 
-    public Map<String, String> expressions = new HashMap<String, String>();
-    public Map<String, SemanticWrapper> constraints = new HashMap<String, SemanticWrapper>();
+    public Map<String, String> syntax = new HashMap<String, String>();
+    public Map<String, SemanticWrapper> semantic = new HashMap<String, SemanticWrapper>();
 
     Grammar(){
         //Probability rules
-        expressions.put("Probability", "'probability'|'chance'");
-        expressions.put("probabilityBound", "upperProbailityBound|lowerProbailityBound");
+        syntax.put("Probability", "'probability'|'chance'");
+        syntax.put("probabilityBound", "upperProbailityBound|lowerProbailityBound");
         //expressions.put("aProbabilityBound", "atBound[' a']|[' a'] thanBound");
-        expressions.put("upperProbailityBound", "'at most'|lowerThan");
-        expressions.put("lowerProbailityBound", "'at least'|greaterThan");
+        syntax.put("upperProbailityBound", "'at most'|lowerThan");
+        syntax.put("lowerProbailityBound", "'at least'|greaterThan");
 //        expressions.put("aProbabilityBound", "atUpperBound[' a']|atLowerBound[' a']|[' a'] thanUpperBound|[' a'] thanLowerBound");
 //        expressions.put("atUpperBound","'at most'");
 //        expressions.put("atLowerBound","'at least'");
 //        expressions.put("thanUpperBound","lowerThan");
 //        expressions.put("thanLowerBound","greaterThan");
         
-        expressions.put("greaterThan","'greater than'|'higher than'");
-        expressions.put("lowerThan","'lower than'|'less than'");
-        expressions.put("Of","'of'|'to'|'that'|'in which'");
+        syntax.put("greaterThan","'greater than'|'higher than'");
+        syntax.put("lowerThan","'lower than'|'less than'");
+        syntax.put("Of","'of'|'to'|'that'|'in which'");
         //Time rules
-        expressions.put("timeBound", "upperTimeBound|lowerTimeBound");
-        expressions.put("upperTimeBound","'within the next'|'in less than'");
-        expressions.put("lowerTimeBound","'after'|'in more than'");
-        expressions.put("timeUnits","'time units'|'time steps'");
-        expressions.put("timeInterval","'between '\\d+' and '\\d+' 'timeUnits");
+        syntax.put("timeBound", "upperTimeBound|lowerTimeBound");
+        syntax.put("upperTimeBound","'within the next'|'in less than'");
+        syntax.put("lowerTimeBound","'after'|'in more than'");
+        syntax.put("timeUnits","'time units'|'time steps'");
+        syntax.put("timeInterval","'between '\\d+' and '\\d+' 'timeUnits");
         //Parameters rules
-        expressions.put("stateFormula","[^\\\\\"]*");
-        expressions.put("p","\\\\\\\\d+\\\\\\\\.\\\\\\\\d+");
-        expressions.put("t","\\\\\\\\d+\\\\\\\\.\\\\\\\\d+");
+        syntax.put("stateFormula","[^\\\\\"]*");
+        syntax.put("p","\\\\\\\\d+\\\\\\\\.\\\\\\\\d+");
+        syntax.put("t","\\\\\\\\d+\\\\\\\\.\\\\\\\\d+");
 
-        constraints.put("upperTimeBound",new SemanticWrapper("<"));
-        constraints.put("lowerTimeBound", new SemanticWrapper(">"));
-        constraints.put("lowerProbailityBound",new SemanticWrapper(">"));
-        constraints.put("upperProbailityBound",new SemanticWrapper("<"));
-        constraints.put("probabilityBound",new SemanticWrapper("probability constraint"));
-        constraints.put("timeBound",new SemanticWrapper("time constraint"));
-        constraints.put("timeInterval",new SemanticWrapper("><"));
-        constraints.put("p",new SemanticWrapper(Double.class));
-        constraints.put("t",new SemanticWrapper(Double.class));
-        constraints.put("stateFormula",new SemanticWrapper(String.class));
+        semantic.put("upperTimeBound",new SemanticWrapper("<"));
+        semantic.put("lowerTimeBound", new SemanticWrapper(">"));
+        semantic.put("lowerProbailityBound",new SemanticWrapper(">"));
+        semantic.put("upperProbailityBound",new SemanticWrapper("<"));
+        semantic.put("probabilityBound",new SemanticWrapper("probability constraint"));
+        semantic.put("timeBound",new SemanticWrapper("time constraint"));
+        semantic.put("timeInterval",new SemanticWrapper("><"));
+        semantic.put("p",new SemanticWrapper(Double.class));
+        semantic.put("t",new SemanticWrapper(Double.class));
+        semantic.put("stateFormula",new SemanticWrapper(String.class));
     }
 
 
@@ -81,7 +81,7 @@ public class Grammar {
             for (TermOccurrence word : nonTerminals) {
                 String father = nonTerminalFather;
                 String term = word.getTerm();
-                String derivations = expressions.get(term);
+                String derivations = syntax.get(term);
                 if (!word.isTerminalString() && derivations != null) {
 
 
@@ -90,7 +90,7 @@ public class Grammar {
 
 
 
-                    SemanticWrapper meaning_of_the_term = constraints.get(term);
+                    SemanticWrapper meaning_of_the_term = semantic.get(term);
 
                     if (meaning_of_the_term != null) {
 
@@ -109,7 +109,7 @@ public class Grammar {
                                 if(!parameters.contains(father)) parameters.add(father);
                                 capturingGroupReplacement = true;
                             } else {
-                                lexical_parameters.put(term, new Pair(father, (String) constraints.get(father).get()));
+                                lexical_parameters.put(term, new Pair(father, (String) semantic.get(father).get()));
                                 father = term;
                                 capturingGroupReplacement = false;
                             }
@@ -121,7 +121,7 @@ public class Grammar {
                     result = helper.replaceTerm(term, replacement, result);
                 } else {
                     if (nonTerminalFather != null) {
-                        lexical_parameters.put(term, new Pair(nonTerminalFather, (String) constraints.get(nonTerminalFather).get()));
+                        lexical_parameters.put(term, new Pair(nonTerminalFather, (String) semantic.get(nonTerminalFather).get()));
                     }
                     
                     String toReplace = "'"+term+"'";
@@ -134,7 +134,7 @@ public class Grammar {
             }
         }
 
-            SemanticWrapper meaning = constraints.get(nonTerminalFather);
+            SemanticWrapper meaning = semantic.get(nonTerminalFather);
 
 
 
