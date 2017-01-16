@@ -6,21 +6,21 @@ import cucumber.api.Scenario;
 import cucumber.api.java.After;
 import cucumber.api.java.Before;
 import cucumber.api.java.en.Given;
-import tomato.TesterModule.main.ProbabilisticTestingSuite;
+import tomato.TesterModule.main.DefaultTestingSuite;
 import tomato.TesterModule.main.StateFormulaNotAssignedException;
 import tomato.TesterModule.main.TesterModuleMessenger;
 import tomato.TesterModule.main.Tomato;
 
 public class quality_steps_generated {
 
-	ProbabilisticTestingSuite ptt;
+	DefaultTestingSuite ptt;
 	Scenario scenario;
 	TesterModuleMessenger tmm;
 	
 	@Before("@quality")
 	public void before(Scenario scenario){
 		this.scenario=scenario;
-		this.ptt = new ProbabilisticTestingSuite();
+		this.ptt = new DefaultTestingSuite();
 		
 		//Assign your StateFormulas and you rules here
 		
@@ -54,6 +54,14 @@ public class quality_steps_generated {
 		ptt.assignStateFormula("the IP of the user is detected", "spoofing_succesful");
 		//Rules
 		ptt.assignRuleRandom("the IP of the user is detected", "the_hacker_uses_a_botnet_with_terminals", "terminals", 1, 10);
+		
+		//Scenario: WebServer Responde
+		//Scope stateFormula
+		ptt.assignStateFormula("the webserver responds", "the_client_requests_files_of_mb_each_to_the_server");
+		ptt.assignStateFormula("output is produced", "the_client_elaborates_the_file");
+		//Rules
+		ptt.assignRuleRandom("the webserver responds", "the_client_requests_files_of_mb_each_to_the_server", "file", 2, 15);
+		
 
 		ptt.showReliabilityReport();		
 		

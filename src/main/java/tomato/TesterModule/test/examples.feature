@@ -36,9 +36,9 @@ Feature: Examples
 		Then [the probability in which "the message is corrupted" is less than 0.6]
 		
 #Reliability
-	Scenario: WebServer response
-		Given the client requests  3 files of 10 mb each to the server
-		Then ["the webserver responds" in less than 2 s with a probability of at least 1]
+	Scenario: WebServer Response
+		Given the client requests 3 files of 10 mb each to the server
+		Then ["the webserver responds" within the next 3.0 s with a probability of at least 0.9]
 		And the client elaborates the file
-		Then ["output is produced" in less than 3 s with a probability of a at least 1]
+		And ["output is produced" in less than 0.5 s with a probability of at least 0.9]
 		

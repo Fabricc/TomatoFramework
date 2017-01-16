@@ -12,7 +12,7 @@ import org.apache.commons.lang3.time.StopWatch;
 
 
 
-public class ProbabilisticTestingSuite extends ParentTestingSuite {
+public class DefaultTestingSuite extends ParentTestingSuite {
 	
 	private class conditionChecker{
 		conditionChecker(String condition){

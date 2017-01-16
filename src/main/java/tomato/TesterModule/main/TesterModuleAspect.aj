@@ -89,6 +89,11 @@ public class TesterModuleAspect {
     	
     }
     
+    @After("call(boolean *.invokeTestingSuite(TesterModuleMessenger))")
+    public void enableStoreMethods(){
+    	this.storing = true;
+    }
+    
     
 //    @After("execution(@cucumber.api.java.en.Given * *(..))")
 //    public void spotAnnotations(JoinPoint jp) throws NoSuchMethodException, SecurityException, InstantiationException, IllegalAccessException, IllegalArgumentException, ClassNotFoundException{
