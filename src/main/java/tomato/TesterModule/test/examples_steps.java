@@ -160,14 +160,14 @@ public class examples_steps {
 	
 	@Given("^the client requests (\\d+) files of (\\d+) mb each to the server$")
 	public void the_client_requests_files_of_mb_each_to_the_server(int file, int size) throws Throwable {
-	    // Write code here that turns the phrase above into concrete actions
+		Thread.sleep(400);
 		System.out.println("the_client_requests_files_of_mb_each_to_the_server executed");
 	}
 
 
 	@Then("^the client elaborates the file$")
 	public void the_client_elaborates_the_file() throws Throwable {
-	    // Write code here that turns the phrase above into concrete actions
+		Thread.sleep(800);
 		System.out.println("the_client_elaborates_the_file executed");
 	}
 

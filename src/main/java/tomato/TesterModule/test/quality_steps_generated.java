@@ -18,7 +18,7 @@ public class quality_steps_generated {
 	TesterModuleMessenger tmm;
 	
 	@Before("@quality")
-	public void before(Scenario scenario){
+	public void iniziatializationStep(Scenario scenario){
 		this.scenario=scenario;
 		this.ptt = new DefaultTestingSuite();
 		
@@ -203,7 +203,7 @@ public class quality_steps_generated {
 	    }
 	
 	@After("@quality")
-	public void after(){
+	public void finalizationStep(){
 		
 	}
 	

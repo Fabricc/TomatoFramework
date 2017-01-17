@@ -21,6 +21,7 @@ public class TesterModuleAspect {
 	private Scenario scen;
 	
 	private List<String> classes = new LinkedList<String>();
+	private boolean ignoreNextClass = false;
 	private List<String> methods= new LinkedList<String>();
 	private List<Object[]> arguments= new LinkedList<Object[]>();
 	private List<Class[]> classesOfArguments = new LinkedList<Class[]>();
@@ -28,16 +29,16 @@ public class TesterModuleAspect {
 	
 	private Boolean storing = false;
 	
-    @After("execution(* *.before(Scenario)) && args(s)")
-    public void spotBefore(Scenario s, JoinPoint jp){
+    @After("execution(* *.iniziatializationStep(Scenario)) && args(s)")
+    public void spotIniziatializarionStep(Scenario s, JoinPoint jp){
     	
     	System.out.println("Tomato Framework: Observing steps of Scenario "+s.getName()+" in file:"+jp.getSourceLocation().getFileName());
     	this.storing = true;
     	this.scen=s;
     	}
     
-    @After("execution(* *.after())")
-    public void spotAfter(JoinPoint jp){
+    @After("execution(* *.finalizationStep())")
+    public void spotfinalizationStep(JoinPoint jp){
     	
     	classes = new LinkedList<String>();
     	methods= new LinkedList<String>();
@@ -62,20 +63,24 @@ public class TesterModuleAspect {
     
     @After("(Given() || Then() || When()) && !@annotation(tomato.TesterModule.main.Tomato)")
     public void storeMethods(JoinPoint jp){
-    	if(this.storing){
+    	if(!this.ignoreNextClass){
+    		if(this.storing){
 
     	
-    	if(scen.getSourceTagNames().contains("@quality")){
+    			if(scen.getSourceTagNames().contains("@quality")){
     		
-    		this.classes.add(jp.getThis().getClass().getCanonicalName());
-    		String method = jp.getSignature().getName();
-    		this.methods.add(method);
-    		this.arguments.add(jp.getArgs());
-    		CodeSignature cs = (CodeSignature)jp.getSignature();
-    		this.classesOfArguments.add(cs.getParameterTypes());
-    		this.nameOfArguments.add(cs.getParameterNames());
+    				this.classes.add(jp.getThis().getClass().getCanonicalName());
+    				String method = jp.getSignature().getName();
+    				this.methods.add(method);
+    				this.arguments.add(jp.getArgs());
+    				CodeSignature cs = (CodeSignature)jp.getSignature();
+    				this.classesOfArguments.add(cs.getParameterTypes());
+    				this.nameOfArguments.add(cs.getParameterNames());
 
     	}
+    	}
+    	}else{
+    		this.ignoreNextClass=false;
     	}
     }
     
@@ -89,9 +94,15 @@ public class TesterModuleAspect {
     	
     }
     
-    @After("call(boolean *.invokeTestingSuite(TesterModuleMessenger))")
+    @After("execution(boolean *.invokeTestingSuite(TesterModuleMessenger))")
     public void enableStoreMethods(){
     	this.storing = true;
+    	ignoreNextClass = true;
+//    	classes = new LinkedList<String>();
+//    	methods= new LinkedList<String>();
+//    	arguments= new LinkedList<Object[]>();
+//    	classesOfArguments = new LinkedList<Class[]>();
+//    	nameOfArguments = new LinkedList<String[]>();;
     }
     
     

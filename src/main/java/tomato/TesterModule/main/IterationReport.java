@@ -8,6 +8,7 @@ import java.util.Set;
 public class IterationReport {
 	private int failedStep;
 	private String nameFailedStep;
+	private List<String> steps; 
 	private Exception raisedException;
 	private List<Double> executionsTime;
 	private List<Boolean> stateFormulaScope;
@@ -20,6 +21,7 @@ public class IterationReport {
 		executionsTime = new LinkedList<Double>();
 		classInstances = new HashSet<Object>();
 		stateFormulaScope = new LinkedList<Boolean>();
+		steps = new LinkedList<String>();
 	}
 	
 	void addClassInstance(Object instance){
@@ -39,6 +41,11 @@ public class IterationReport {
 		executionsTime.add(time);
 		totalTime+=time;
 		stateFormulaScope.add(false);
+	}
+	
+	void insertStepExecutionTime(Double time, String step){
+		insertStepExecutionTime(time);
+		this.steps.add(step);
 	}
 	
 	void insertStepExecutionTime(Double time, boolean reportTime){

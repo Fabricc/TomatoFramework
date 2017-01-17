@@ -78,7 +78,7 @@ public class DefaultTestingSuite extends ParentTestingSuite {
 		List<String> stateFormulaScope = super.getStateFormulaSteps(stateFormula);
 		
 		int numberOfSteps = tmm.getClasses().size();
-		if(numberOfSteps==this.nextStep) return result;
+		//if(numberOfSteps==this.nextStep) return result;
 		for(int i = 0; i<numberIterations; i++){
 			System.out.println("Iteration nr."+ (i+1));
 			
@@ -87,7 +87,7 @@ public class DefaultTestingSuite extends ParentTestingSuite {
 			
 			IterationReport iteration_report = this.getIterationReport(i);
 			
-			for(int executionPointer = nextStep; executionPointer<numberOfSteps && noExceptions; executionPointer++){
+			for(int executionPointer = this.nextStep; executionPointer<numberOfSteps && noExceptions; executionPointer++){
 				
 				String class_name = tmm.getClasses().get(executionPointer);
 				Class c = Class.forName(class_name);
@@ -133,7 +133,7 @@ public class DefaultTestingSuite extends ParentTestingSuite {
 					long milliseconds = stopwatch.getTime();
 					double seconds = (double)(milliseconds / 1000.0);
 					//iteration_report.insertStepExecutionTime(seconds,inScope);
-					iteration_report.insertStepExecutionTime(seconds);
+					iteration_report.insertStepExecutionTime(seconds,name_function);
 					stopwatch.reset();
 					
 				}
