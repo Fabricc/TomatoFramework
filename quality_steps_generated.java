@@ -49,6 +49,28 @@ public void alternativeThree(java.lang.String probabilityBound,java.lang.Double 
     	}
     	
     }
+@Given("^\\[((?:rocof|rate of occurrence of failures)|(?:pofod|probability of failures on demand)|(?:mttf|mean time to failure)) (?:of|to|that|in which) \"([^\"]*)\" should be ((?:(?:lower than|less than))|(?:(?:greater than|higher than))) (\\d+\\.\\d+)\\]$")
+public void reliabilityConstraint(java.lang.String reliabilityMetric,java.lang.String stateFormula,java.lang.String reliabilityBound,java.lang.Double p) throws Throwable {
+		
+		tmm.insertParameter("reliabilityMetric", reliabilityMetric);
+		tmm.insertParameter("stateFormula", stateFormula);
+		tmm.insertParameter("reliabilityBound", reliabilityBound);
+		tmm.insertParameter("p", p);
+    	
+    	try{
+    		if(this.ptt.invokeTestingSuite(tmm)) System.out.println("Quality constraint satisfied");
+    		else Assert.fail("Quality constraint not satisfied");
+    	}
+    	catch(StateFormulaNotAssignedException e){
+    		System.err.println("StateFormula not assigned");
+    		Assert.fail("Quality constraint not satisfied");
+    	}catch(Exception e){
+    		e.printStackTrace();
+    		Assert.fail("Quality constraint not satisfied");
+    		
+    	}
+    	
+    }
 @Given("^\\[the (?:probability|chance) is ((?:at most|(?:lower than|less than))|(?:at least|(?:greater than|higher than))) (\\d+\\.\\d+) that \"([^\"]*)\" ((?:within the next|in less than)|(?:after|in more than)) (\\d+\\.\\d+) s\\]$")
 public void alternativeTwo(java.lang.String probabilityBound,java.lang.Double p,java.lang.String stateFormula,java.lang.String timeBound,java.lang.Double t) throws Throwable {
 		
