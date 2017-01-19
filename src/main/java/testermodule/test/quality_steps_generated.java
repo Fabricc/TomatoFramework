@@ -7,6 +7,7 @@ import cucumber.api.java.After;
 import cucumber.api.java.Before;
 import cucumber.api.java.en.Given;
 import testermodule.main.DefaultTestingSuite;
+import testermodule.main.ReliabilityTestingSuite;
 import testermodule.main.StateFormulaNotAssignedException;
 import testermodule.main.TesterModuleMessenger;
 import testermodule.main.Tomato;
@@ -77,7 +78,7 @@ public class quality_steps_generated {
 			tmm.insertParameter("t", t);
 	    	
 			try{
-	    		if(this.ptt.invokeTestingSuite(tmm,0)) System.out.println("Quality constraint satisfied");
+	    		if(this.ptt.invokeTestingSuite(tmm)) System.out.println("Quality constraint satisfied");
 	    		else {
 	    			System.out.println("Quality constraint not satisfied");
 	    			Assert.fail("Quality constraint not satisfied");
@@ -104,7 +105,7 @@ public class quality_steps_generated {
 			tmm.insertParameter("t", t);
 	    	
 			try{
-	    		if(this.ptt.invokeTestingSuite(tmm,0)) System.out.println("Quality constraint satisfied");
+	    		if(this.ptt.invokeTestingSuite(tmm)) System.out.println("Quality constraint satisfied");
 	    		else {
 	    			System.out.println("Quality constraint not satisfied");
 	    			Assert.fail("Quality constraint not satisfied");
@@ -131,7 +132,7 @@ public class quality_steps_generated {
 			tmm.insertParameter("p", p);
 	    	
 	    	try{
-	    		if(this.ptt.invokeTestingSuite(tmm,0)) System.out.println("Quality constraint satisfied");
+	    		if(this.ptt.invokeTestingSuite(tmm)) System.out.println("Quality constraint satisfied");
 	    		else {
 	    			System.out.println("Quality constraint not satisfied");
 	    			Assert.fail("Quality constraint not satisfied");
@@ -158,7 +159,7 @@ public class quality_steps_generated {
 			tmm.insertParameter("p", p);
 	    	
 			try{
-	    		if(this.ptt.invokeTestingSuite(tmm,0)) System.out.println("Quality constraint satisfied");
+	    		if(this.ptt.invokeTestingSuite(tmm)) System.out.println("Quality constraint satisfied");
 	    		else {
 	    			System.out.println("Quality constraint not satisfied");
 	    			Assert.fail("Quality constraint not satisfied");
@@ -184,7 +185,7 @@ public class quality_steps_generated {
 			tmm.insertParameter("p", p);
 	    	
 			try{
-	    		if(this.ptt.invokeTestingSuite(tmm,0)) System.out.println("Quality constraint satisfied");
+	    		if(this.ptt.invokeTestingSuite(tmm)) System.out.println("Quality constraint satisfied");
 	    		else {
 	    			System.out.println("Quality constraint not satisfied");
 	    			Assert.fail("Quality constraint not satisfied");
@@ -209,9 +210,11 @@ public class quality_steps_generated {
 			tmm.insertParameter("stateFormula", stateFormula);
 			tmm.insertParameter("reliabilityBound", reliabilityBound);
 			tmm.insertParameter("p", p);
+			
+			ReliabilityTestingSuite r = (ReliabilityTestingSuite) this.ptt;
 	    	
 	    	try{
-	    		if(this.ptt.invokeTestingSuite(tmm,1)) System.out.println("Quality constraint satisfied");
+	    		if(((ReliabilityTestingSuite)this.ptt).invokeTestingSuite(tmm)) System.out.println("Quality constraint satisfied");
 	    		else Assert.fail("Quality constraint not satisfied");
 	    	}
 	    	catch(StateFormulaNotAssignedException e){

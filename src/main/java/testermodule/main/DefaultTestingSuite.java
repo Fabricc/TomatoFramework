@@ -14,42 +14,30 @@ import org.apache.commons.lang3.time.StopWatch;
 
 public class DefaultTestingSuite extends ParentTestingSuite {
 	
-	private class conditionChecker{
-		conditionChecker(String condition){
-			if(condition.equals("<")){
-				this.mode=0;
-			}else if(condition.equals(">")){
-				this.mode=1;
-			}else if(condition.equals("=")){
-				this.mode=2;
-			}else if(condition.equals("<=")){
-				this.mode=3;
-			}else if(condition.equals(">=")){
-				this.mode=4;
-			}else this.mode=5;
-		}
-		
-		private int mode;
-		
-		public boolean compare(double a, double b) throws IncorrectConditionException{
-			if(this.mode==0) return (a<b);
-			if(this.mode==1) return (a>b);
-			if(this.mode==2) return (a==b);
-			if(this.mode==3) return (a<=b);
-			if(this.mode==4) return (a>=b);
-			throw new IncorrectConditionException();
-		}
-	}
 	
-	private class reliabilityReport{
-		public double rocof, mttf, pofod,totalFailings;
-	}
-	
+//	
+//	private class reliabilityReport{
+//		public double rocof, mttf, pofod,totalFailings;
+//	}
+//	
 	
 	private int numberIterations = 20;
 	private int nextStep = 0;
 	private Boolean requestedReliabilityReport = false;
 	private LinkedList<IterationReport> report;
+	private reliabilityReport rreport;
+	
+	protected reliabilityReport getReliabilityReport(){
+		if(rreport==null){
+			rreport=this.elaborateReliabilityReport();
+		}
+		
+		return rreport;
+	}
+	
+	protected Boolean isRequestedReliabilityReport(){
+		return this.requestedReliabilityReport;
+	}
 	
 	protected LinkedList<IterationReport> getReport(){
 		if(this.report==null){
@@ -208,22 +196,32 @@ public class DefaultTestingSuite extends ParentTestingSuite {
 		
 	}
 
-	
+//	protected boolean executeAndVerify() throws IllegalAccessException, IllegalArgumentException, 
+//	InvocationTargetException, ClassNotFoundException, NoSuchMethodException, SecurityException, 
+//	InstantiationException, StateFormulaNotAssignedException{
+//		
+//		String stateFormula = (String)tmm.getParameter("stateFormula");
+//		this.executeTesting(stateFormula);
+//		boolean result = this.verifyRequirement();
+//		return result;
+//	}
 	
 	//{p=3, t=5, timeBound=>, stateFormula=something happening, probabilityBound=<}
 	
 	@Override
-	public boolean invokeTestingSuite(TesterModuleMessenger tmm, int testing_suite) throws StateFormulaNotAssignedException{
+	public boolean invokeTestingSuite(TesterModuleMessenger tmm) throws StateFormulaNotAssignedException{
 		
 		System.out.println("Tomato Framework =================== Starting execution");
-		String stateFormula = (String)tmm.getParameter("stateFormula");
+		
 
 		 try {
-			this.executeTesting(stateFormula);
+			 String stateFormula = (String)tmm.getParameter("stateFormula");
+				this.executeTesting(stateFormula);
+			
 			System.out.println();
-			boolean result = this.verifyRequirement(stateFormula,testing_suite);
-			if(this.requestedReliabilityReport){
-				this.printReliabilityReport(elaborateReliabilityReport());
+			boolean result = this.verifyRequirement();
+			if(this.isRequestedReliabilityReport()){
+				printReliabilityReport();
 			}
 			System.out.println("Tomato Report Framework =================== Stopping execution");
 			return result;
@@ -254,49 +252,50 @@ public class DefaultTestingSuite extends ParentTestingSuite {
 		
 	}
 	
-	private boolean verifyRequirement(String stateFormula, int testingSuite) throws ClassNotFoundException, IllegalAccessException, IllegalArgumentException, InvocationTargetException{
-		if(testingSuite==0) return verifyProbabilisticRequirement(stateFormula);
-		if(testingSuite==1) return verifyReliabilityRequirement(elaborateReliabilityReport());
-		return false;
-		
-	}
+//	private boolean verifyRequirement(String stateFormula, int testingSuite) throws ClassNotFoundException, IllegalAccessException, IllegalArgumentException, InvocationTargetException{
+//		if(testingSuite==0) return verifyProbabilisticRequirement(stateFormula);
+//		if(testingSuite==1) return verifyReliabilityRequirement(elaborateReliabilityReport());
+//		return false;
+//		
+//	}
 	
-	private boolean verifyReliabilityRequirement(reliabilityReport report){
-		System.out.println("Report ReliabilityTestingSuite Execution");
-		String metric = (String)tmm.getParameter("reliabilityMetric");
-		String bound = (String)tmm.getParameter("reliabilityBound");
-		Double value = (Double)tmm.getParameter("p");
-		Double actual_value=0.0;
-		System.out.println("The value of the metric "+metric+" should be "+
-		bound+" "+tmm.getParameter("p"));
-		
-		if(metric.equals("rocof")) actual_value = report.rocof;
-		else if(metric.equals("pofod")) actual_value = report.pofod;
-		else if(metric.equals("mttf")) actual_value = report.mttf;
-		System.out.println("The current value is "+actual_value);
-		
-		conditionChecker checker = new conditionChecker(bound);
-		try {
-			if(checker.compare(actual_value,value)){
-				System.out.println("NFR Satisfied");
-				System.out.println();
-				System.out.println();
-				return true;
-			}else{
-				System.out.println("NFR Not Satisfied");
-				System.out.println();
-				System.out.println();
-				return false;
-			}
-		} catch (IncorrectConditionException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			return false;
-		}
-	}
+//	private boolean verifyReliabilityRequirement(reliabilityReport report){
+//		System.out.println("Report ReliabilityTestingSuite Execution");
+//		String metric = (String)tmm.getParameter("reliabilityMetric");
+//		String bound = (String)tmm.getParameter("reliabilityBound");
+//		Double value = (Double)tmm.getParameter("p");
+//		Double actual_value=0.0;
+//		System.out.println("The value of the metric "+metric+" should be "+
+//		bound+" "+tmm.getParameter("p"));
+//		
+//		if(metric.equals("rocof")) actual_value = report.rocof;
+//		else if(metric.equals("pofod")) actual_value = report.pofod;
+//		else if(metric.equals("mttf")) actual_value = report.mttf;
+//		System.out.println("The current value is "+actual_value);
+//		
+//		conditionChecker checker = new conditionChecker(bound);
+//		try {
+//			if(checker.compare(actual_value,value)){
+//				System.out.println("NFR Satisfied");
+//				System.out.println();
+//				System.out.println();
+//				return true;
+//			}else{
+//				System.out.println("NFR Not Satisfied");
+//				System.out.println();
+//				System.out.println();
+//				return false;
+//			}
+//		} catch (IncorrectConditionException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//			return false;
+//		}
+//	}
 	
 	
-	private boolean verifyProbabilisticRequirement(String stateFormula) throws ClassNotFoundException, IllegalAccessException, IllegalArgumentException, InvocationTargetException{
+	protected boolean verifyRequirement() throws ClassNotFoundException, IllegalAccessException, IllegalArgumentException, InvocationTargetException{
+		String stateFormula = (String)tmm.getParameter("stateFormula");
 		Boolean externalMethod = applyExternalStateFormulaMethod(stateFormula);
 		
 		System.out.println("Report ProbabilisticTestingSuite Execution");
@@ -397,7 +396,8 @@ public class DefaultTestingSuite extends ParentTestingSuite {
 		return false;
 		}
 	
-	private void printReliabilityReport(reliabilityReport report){
+	private void printReliabilityReport(){
+		reliabilityReport report = getReliabilityReport();
 		System.out.println("<<Opening Reliability Overview>>");
 		
 		if(report.totalFailings==0) {

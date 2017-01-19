@@ -7,6 +7,8 @@ TO DO:
 -manage exception handling
 -fix "at least|at most" bug
 - insert exception for multiple user defined method associated with statFormula
+- better dry for method invokeTestingSuite
+- manage view 
 
 DONE:
 -checked scalacheck

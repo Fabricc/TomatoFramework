@@ -85,7 +85,7 @@ public class TesterModuleAspect {
     }
     
     
-    @Before("call(boolean *.invokeTestingSuite(TesterModuleMessenger,int)) && args(tmm, *)")
+    @Before("call(boolean *.invokeTestingSuite(TesterModuleMessenger)) && args(tmm)")
     public void addInformation(TesterModuleMessenger tmm){
     	
     	tmm.insertMethod(classes, methods, arguments, classesOfArguments, nameOfArguments);
@@ -94,7 +94,7 @@ public class TesterModuleAspect {
     	
     }
     
-    @After("execution(boolean *.invokeTestingSuite(TesterModuleMessenger,int))")
+    @After("execution(boolean *.invokeTestingSuite(TesterModuleMessenger))")
     public void enableStoreMethods(){
     	this.storing = true;
     	ignoreNextClass = true;

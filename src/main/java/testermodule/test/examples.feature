@@ -6,7 +6,7 @@ Feature: Examples
 	Scenario: API testing
 		When I GET /api/riaf/reference/countries
     Then the JsonPath key countries should contain 249 elements
-    Then [the probability that "JsonPath key is received" in less than 0.6 s is at least 0.5]
+    Then [the probability that "JsonPath key is received" in less than 1.6 s is at least 0.5]
     And [rocof of "the whole scenario" should be lower than 0.5]
     
 
