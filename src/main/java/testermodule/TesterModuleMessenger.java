@@ -1,4 +1,4 @@
-package testermodule.main;
+package testermodule;
 
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -16,7 +16,15 @@ public class TesterModuleMessenger {
 	private List<String[]> nameOfArguments;
 	private Map<String, Pair> semantic;
 	private Map<String, Object> parameters;
+	private int nature = 0;
 	
+	public void defineNature(int nature){
+		this.nature = nature;
+	}
+	
+	public int getNature(){
+		return this.nature;
+	}
 	
 	protected TesterModuleMessenger(){
 		this.semantic = LexicalParametersSerializer.deserialize();

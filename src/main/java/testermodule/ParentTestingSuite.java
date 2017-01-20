@@ -1,9 +1,11 @@
-package testermodule.main;
+package testermodule;
 
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+
+import testermodule.exceptions.StateFormulaNotAssignedException;
 
 public abstract class ParentTestingSuite {
 	TesterModuleMessenger tmm;

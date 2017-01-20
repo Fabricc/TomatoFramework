@@ -9,6 +9,7 @@ TO DO:
 - insert exception for multiple user defined method associated with statFormula
 - better dry for method invokeTestingSuite
 - manage view 
+- eliminate the fact that you need to pass tmm for aspectj with invokeTesting 
 
 DONE:
 -checked scalacheck

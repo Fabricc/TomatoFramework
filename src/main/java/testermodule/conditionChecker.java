@@ -1,4 +1,6 @@
-package testermodule.main;
+package testermodule;
+
+import testermodule.exceptions.IncorrectConditionException;
 
 public class conditionChecker{
 	conditionChecker(String condition){

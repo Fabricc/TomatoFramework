@@ -1,4 +1,4 @@
-package testermodule.main;
+package testermodule.exceptions;
 
 public class IncorrectConditionException extends Exception {
 

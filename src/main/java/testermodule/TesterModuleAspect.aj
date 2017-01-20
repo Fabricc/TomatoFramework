@@ -1,4 +1,4 @@
-package testermodule.main;
+package testermodule;
 
 import java.lang.reflect.Method;
 import java.util.LinkedList;
@@ -61,7 +61,7 @@ public class TesterModuleAspect {
     @Pointcut("execution(@cucumber.api.java.en.When * *(..))")
     public void When(){}
     
-    @After("(Given() || Then() || When()) && !@annotation(testermodule.main.Tomato)")
+    @After("(Given() || Then() || When()) && !@annotation(testermodule.Tomato)")
     public void storeMethods(JoinPoint jp){
     	if(!this.ignoreNextClass){
     		if(this.storing){
@@ -94,84 +94,15 @@ public class TesterModuleAspect {
     	
     }
     
-    @After("execution(boolean *.invokeTestingSuite(TesterModuleMessenger))")
-    public void enableStoreMethods(){
+    @After("execution(boolean *.invokeTestingSuite(TesterModuleMessenger)) && args(tmm)")
+    public void enableStoreMethods(TesterModuleMessenger tmm){
     	this.storing = true;
     	ignoreNextClass = true;
-//    	classes = new LinkedList<String>();
-//    	methods= new LinkedList<String>();
-//    	arguments= new LinkedList<Object[]>();
-//    	classesOfArguments = new LinkedList<Class[]>();
-//    	nameOfArguments = new LinkedList<String[]>();;
+    	tmm.defineNature(0);
+      	
     }
     
-    
-//    @After("execution(@cucumber.api.java.en.Given * *(..))")
-//    public void spotAnnotations(JoinPoint jp) throws NoSuchMethodException, SecurityException, InstantiationException, IllegalAccessException, IllegalArgumentException, ClassNotFoundException{
-//    	
-//    	Boolean found = false;
-//    	
-//    	for (String str : scen.getSourceTagNames()){
-//    		if(str.equals("@quality")) {
-//    			
-//    			found=true;
-//    			
-//    			
-//    			}
-//    		}
-//    	
-//    	if(found){
-//    	System.out.println("and I test the quality");
-//		String klass = jp.getThis().getClass().getCanonicalName();
-//		String met = jp.getSignature().getName();
-//		Signature sig = jp.getSignature();
-//		Object[] parameters = jp.getArgs();
-//		Class[] class_parameters = new Class[parameters.length];
-//		System.out.println("and I am class: "+klass);
-//		System.out.println("and method: "+ met);
-//		System.out.println("and the arguments are:");
-//		for(int i=0; i<parameters.length; i++){
-//			System.out.println(parameters[i].getClass().getCanonicalName());
-//			class_parameters[i] = parameters[i].getClass();
-//		}
-//		
-//	
-//		
-//		Class c = Class.forName(klass);
-//		
-//		Method[] allMethods = c.getDeclaredMethods();
-//		
-//		for(Method m : allMethods){
-//			System.out.println(m.getName());
-//			System.out.println(m.getParameterCount());
-//			
-//		}
-//		
-//		try {
-//		
-//		Method method = c.getMethod(met, String.class,int.class, int.class);
-//		
-//		Object o = c.newInstance();
-//		
-//		System.out.println("what?");
-//		
-//		
-//			method.invoke(o, parameters);
-//		} catch (InvocationTargetException e) {
-//			// TODO Auto-generated catch block
-//			System.err.println(e.getCause());
-//		}}	
-//    
-    
-    
-  //  }
-    
-    
-    
-    
-    
-    	
-    }
+}
 
 
 

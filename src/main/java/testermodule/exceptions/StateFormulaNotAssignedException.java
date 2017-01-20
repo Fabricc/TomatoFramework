@@ -1,4 +1,4 @@
-package testermodule.main;
+package testermodule.exceptions;
 
 public class StateFormulaNotAssignedException extends Exception {
 
