@@ -7,6 +7,7 @@ TO DO:
 -manage exception handling
 -fix "at least|at most" bug
 - insert exception for multiple user defined method associated with statFormula
+-add recogniition of initializiation and finalization step. Possible incompatibilities with new testing suites
 
 DONE:
 -checked scalacheck
