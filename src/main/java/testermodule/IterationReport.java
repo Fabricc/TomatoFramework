@@ -1,4 +1,4 @@
-package testermodule.main;
+package testermodule;
 
 import java.util.HashSet;
 import java.util.LinkedList;

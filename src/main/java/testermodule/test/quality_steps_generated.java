@@ -6,10 +6,12 @@ import cucumber.api.Scenario;
 import cucumber.api.java.After;
 import cucumber.api.java.Before;
 import cucumber.api.java.en.Given;
-import testermodule.main.DefaultTestingSuite;
-import testermodule.main.StateFormulaNotAssignedException;
-import testermodule.main.TesterModuleMessenger;
-import testermodule.main.Tomato;
+import testermodule.DefaultTestingSuite;
+import testermodule.DefaultTestingSuiteImplementation;
+import testermodule.ReliabilityNature;
+import testermodule.TesterModuleMessenger;
+import testermodule.Tomato;
+import testermodule.exceptions.StateFormulaNotAssignedException;
 
 public class quality_steps_generated {
 
@@ -20,7 +22,7 @@ public class quality_steps_generated {
 	@Before("@quality")
 	public void iniziatializationStep(Scenario scenario){
 		this.scenario=scenario;
-		this.ptt = new DefaultTestingSuite();
+		this.ptt = new DefaultTestingSuiteImplementation();
 		
 		//Assign your StateFormulas and you rules here
 		
@@ -62,8 +64,9 @@ public class quality_steps_generated {
 		//Rules
 		ptt.assignRuleRandom("the webserver responds", "the_client_requests_files_of_mb_each_to_the_server", "file", 2, 15);
 		
-
-		ptt.showReliabilityReport();		
+		this.ptt = ReliabilityNature.safelyDecore(ptt);
+		
+		//((ReliabilityNature) ptt).enableReliabilityReport();
 		
 		tmm = ptt.getMessenger();
 }
@@ -77,7 +80,7 @@ public class quality_steps_generated {
 			tmm.insertParameter("t", t);
 	    	
 			try{
-	    		if(this.ptt.invokeTestingSuite(tmm,0)) System.out.println("Quality constraint satisfied");
+	    		if(this.ptt.invokeTestingSuite(tmm)) System.out.println("Quality constraint satisfied");
 	    		else {
 	    			System.out.println("Quality constraint not satisfied");
 	    			Assert.fail("Quality constraint not satisfied");
@@ -104,7 +107,7 @@ public class quality_steps_generated {
 			tmm.insertParameter("t", t);
 	    	
 			try{
-	    		if(this.ptt.invokeTestingSuite(tmm,0)) System.out.println("Quality constraint satisfied");
+	    		if(this.ptt.invokeTestingSuite(tmm)) System.out.println("Quality constraint satisfied");
 	    		else {
 	    			System.out.println("Quality constraint not satisfied");
 	    			Assert.fail("Quality constraint not satisfied");
@@ -131,7 +134,7 @@ public class quality_steps_generated {
 			tmm.insertParameter("p", p);
 	    	
 	    	try{
-	    		if(this.ptt.invokeTestingSuite(tmm,0)) System.out.println("Quality constraint satisfied");
+	    		if(this.ptt.invokeTestingSuite(tmm)) System.out.println("Quality constraint satisfied");
 	    		else {
 	    			System.out.println("Quality constraint not satisfied");
 	    			Assert.fail("Quality constraint not satisfied");
@@ -158,7 +161,7 @@ public class quality_steps_generated {
 			tmm.insertParameter("p", p);
 	    	
 			try{
-	    		if(this.ptt.invokeTestingSuite(tmm,0)) System.out.println("Quality constraint satisfied");
+	    		if(this.ptt.invokeTestingSuite(tmm)) System.out.println("Quality constraint satisfied");
 	    		else {
 	    			System.out.println("Quality constraint not satisfied");
 	    			Assert.fail("Quality constraint not satisfied");
@@ -184,7 +187,7 @@ public class quality_steps_generated {
 			tmm.insertParameter("p", p);
 	    	
 			try{
-	    		if(this.ptt.invokeTestingSuite(tmm,0)) System.out.println("Quality constraint satisfied");
+	    		if(this.ptt.invokeTestingSuite(tmm)) System.out.println("Quality constraint satisfied");
 	    		else {
 	    			System.out.println("Quality constraint not satisfied");
 	    			Assert.fail("Quality constraint not satisfied");
@@ -209,9 +212,10 @@ public class quality_steps_generated {
 			tmm.insertParameter("stateFormula", stateFormula);
 			tmm.insertParameter("reliabilityBound", reliabilityBound);
 			tmm.insertParameter("p", p);
-	    	
+			tmm.defineNature(1);
+			
 	    	try{
-	    		if(this.ptt.invokeTestingSuite(tmm,1)) System.out.println("Quality constraint satisfied");
+	    		if(((ReliabilityNature)ReliabilityNature.safelyDecore(ptt)).invokeTestingSuite(tmm)) System.out.println("Quality constraint satisfied");
 	    		else Assert.fail("Quality constraint not satisfied");
 	    	}
 	    	catch(StateFormulaNotAssignedException e){

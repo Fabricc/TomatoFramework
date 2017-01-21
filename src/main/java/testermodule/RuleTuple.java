@@ -1,4 +1,4 @@
-package testermodule.main;
+package testermodule;
 
 public abstract class RuleTuple {
 	String stateFormula;

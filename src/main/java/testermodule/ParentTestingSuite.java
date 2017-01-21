@@ -1,18 +1,15 @@
-package testermodule.main;
+package testermodule;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.Callable;
-import java.util.concurrent.ThreadLocalRandom;
+
+import testermodule.exceptions.StateFormulaNotAssignedException;
 
 public abstract class ParentTestingSuite {
 	TesterModuleMessenger tmm;
 	
-	private Object dependency;
 	protected String dclass;
 	
 	public ParentTestingSuite(){
@@ -52,7 +49,6 @@ public abstract class ParentTestingSuite {
 	
 	public void declareDependency(String dclass, Object o){
 		this.dclass=dclass;
-		dependency=o;
 	}
 	
 	public void assignRuleRandom(String stateFormula, String method, String argument, int min, int max){
@@ -111,65 +107,9 @@ public abstract class ParentTestingSuite {
 		return null;
 	}
 
-	public abstract boolean invokeTestingSuite(TesterModuleMessenger tmm, int testing_suite) throws StateFormulaNotAssignedException;
+	public abstract boolean invokeTestingSuite(TesterModuleMessenger tmm) throws StateFormulaNotAssignedException;
 
 
-
-		
-//		try{
-//			
-//			for(int i = 0; i<tmm.getClasses().size(); i++){
-//				Class c = Class.forName(tmm.getClasses().get(i));
-//				
-//				String met = tmm.getMethods().get(i);
-//				
-//				tmm.getClassArguments().get(i);
-//				
-//				Class[] class_arguments= tmm.getClassArguments().get(i);
-//				
-////				for(int j = 0; j<class_arguments.length; j++){
-////					if(class_arguments[j].equals(Integer.class)){
-////						class_arguments[j] = int.class;
-////					}
-////				}
-////				
-//				
-//				Method method = c.getMethod(met,tmm.getClassArguments().get(i));
-//				
-//				Object o = c.newInstance();
-//		        method.invoke(o,tmm.getArguments().get(i));
-//		        
-//		       
-//		        
-//			}
-//		
-//		
-//
-//		
-//		} catch (InvocationTargetException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		} catch (ClassNotFoundException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//			
-//		} catch (NoSuchMethodException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		} catch (SecurityException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		} catch (InstantiationException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		} catch (IllegalAccessException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
-		
-	
-
-	
 
 }
 
