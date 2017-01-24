@@ -13,6 +13,8 @@ import org.apache.commons.lang3.time.StopWatch;
 import testermodule.exceptions.IncorrectConditionException;
 import testermodule.exceptions.StateFormulaNotAssignedException;
 import testermodule.exceptions.verificationAlreadyExecutedException;
+import testermodule.support.IterationReport;
+import testermodule.support.conditionChecker;
 
 
 
@@ -87,7 +89,7 @@ public class DefaultTestingSuiteImplementation extends ParentTestingSuite implem
 			
 			IterationReport iteration_report = this.getIterationReport(i);
 			try {
-				executeScenario(iteration_report);
+				executeScenario(iteration_report,this.nextStep);
 			} catch (ClassNotFoundException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -119,13 +121,14 @@ public class DefaultTestingSuiteImplementation extends ParentTestingSuite implem
 		
 	}
 	
-	public IterationReport executeScenario(IterationReport iteration_report) throws ClassNotFoundException, NoSuchMethodException, SecurityException, InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException{
+	
+	public IterationReport executeScenario(IterationReport iteration_report, int nextStep) throws ClassNotFoundException, NoSuchMethodException, SecurityException, InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException{
 		int numberOfSteps = tmm.getClasses().size();
 		StopWatch stopwatch = new StopWatch();
 		boolean noExceptions = true;
 		String stateFormula = (String)tmm.getParameter("stateFormula");
 		
-		for(int executionPointer = this.nextStep; executionPointer<numberOfSteps && noExceptions; executionPointer++){
+		for(int executionPointer = nextStep; executionPointer<numberOfSteps && noExceptions; executionPointer++){
 			
 			String class_name = tmm.getClasses().get(executionPointer);
 			Class c = Class.forName(class_name);

@@ -1,4 +1,4 @@
-package testermodule;
+package testermodule.support;
 
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -15,7 +15,7 @@ public class IterationReport {
 	private Set<Object> classInstances;
 	private Double totalTime;
 	
-	IterationReport(){
+	public IterationReport(){
 		failedStep=0;
 		totalTime=0.0;
 		executionsTime = new LinkedList<Double>();
@@ -24,11 +24,11 @@ public class IterationReport {
 		steps = new LinkedList<String>();
 	}
 	
-	void addClassInstance(Object instance){
+	public void addClassInstance(Object instance){
 		classInstances.add(instance);
 	}
 	
-	Object getClassInstanceByName(String klass){
+	public Object getClassInstanceByName(String klass){
 		for(Object instance: this.classInstances){
 			if((instance.getClass().getName()).equals(klass)){
 				return instance;
@@ -37,45 +37,45 @@ public class IterationReport {
 		return null;
 	}
 	
-	void insertStepExecutionTime(Double time){
+	public void insertStepExecutionTime(Double time){
 		executionsTime.add(time);
 		totalTime+=time;
 		stateFormulaScope.add(false);
 	}
 	
-	void insertStepExecutionTime(Double time, String step){
+	public void insertStepExecutionTime(Double time, String step){
 		insertStepExecutionTime(time);
 		this.steps.add(step);
 	}
 	
-	void insertStepExecutionTime(Double time, boolean reportTime){
+	public void insertStepExecutionTime(Double time, boolean reportTime){
 		executionsTime.add(time);
 		totalTime+=time;
 		stateFormulaScope.add(reportTime);
 	}
 	
-	void declareStepFailed(String nameStep, Exception e){
+	public void declareStepFailed(String nameStep, Exception e){
 		this.failedStep = executionsTime.size();
 		this.nameFailedStep = nameStep;
 		this.raisedException = e;
 	}
 	
-	void declareStepFailed(String nameStep, Exception e, int step){
+	public void declareStepFailed(String nameStep, Exception e, int step){
 		this.failedStep = step;
 		this.nameFailedStep = nameStep;
 		this.raisedException = e;
 	}
 	
-	boolean isCorrectlyExecuted(){
+	public boolean isCorrectlyExecuted(){
 		if(failedStep>0) return false;
 		else return true;
 	}
 	
-	String getFailingMethod(){
+	public String getFailingMethod(){
 		return this.nameFailedStep;
 		}
 	
-	Double getScopedTotalExecutionTime(List<Boolean> scope){
+	public Double getScopedTotalExecutionTime(List<Boolean> scope){
 		Double totalTime = 0.0;
 		for(int i=0; i<this.executionsTime.size(); i++){
 			if(scope.get(i)){
@@ -85,7 +85,7 @@ public class IterationReport {
 		return totalTime;
 	}
 	
-	Double getTotalExecutionTime(){
+	public Double getTotalExecutionTime(){
 		return totalTime;
 	}
 	

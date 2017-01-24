@@ -7,15 +7,15 @@ import java.util.List;
 import testermodule.exceptions.IncorrectConditionException;
 import testermodule.exceptions.StateFormulaNotAssignedException;
 import testermodule.exceptions.verificationAlreadyExecutedException;
+import testermodule.support.IterationReport;
+import testermodule.support.conditionChecker;
+import testermodule.support.reliabilityReport;
 
 public class ReliabilityNature extends  DefaultTestingSuiteDecorator{
 
 	private ReliabilityNature(DefaultTestingSuite decoratedDefaultTestingSuite) {
 			super(decoratedDefaultTestingSuite);
 		}
-		
-		
-	
 	
 	public static DefaultTestingSuite safelyDecore(DefaultTestingSuite decoratedDefaultTestingSuite){
 		if(!decoratedDefaultTestingSuite.getDecorations().contains("Reliability")){
@@ -30,26 +30,6 @@ public class ReliabilityNature extends  DefaultTestingSuiteDecorator{
 		this.requestedReliabilityReport=true;
 	}
 	
-	@Override
-	public void executeTesting() throws  StateFormulaNotAssignedException {
-		
-		super.executeTesting();
-	}
-
-	@Override
-	public LinkedList<IterationReport> getReport() {
-		 return super.getReport();
-	}
-	
-	@Override
-	public IterationReport getIterationReport(int index) {
-		return super.getIterationReport(index);
-	}
-	
-	@Override
-	public boolean applyExternalStateFormulaMethod(String stateFormula){
-		return super.applyExternalStateFormulaMethod(stateFormula);
-	}
 	
 //	@Override
 //	public boolean verifyRequirement()
@@ -110,14 +90,14 @@ public class ReliabilityNature extends  DefaultTestingSuiteDecorator{
 		}
 		
 		//Calculation Probability Of Failure On Demand(POFOD)
-		System.out.println("Probability Of Failure On Demand(POFOD) is "+report.pofod);
+		System.out.println("Probability Of Failure On Demand(POFOD): "+report.pofod+" out of 1");
 		
 		//Calculation Rate Of Occurrence Of Failure(ROCOF)
-		System.out.println("Rate Of Occurrence Of Failure(ROCOF) is "+report.rocof);
+		System.out.println("Rate Of Occurrence Of Failure(ROCOF): "+report.rocof+" failures per second");
 		
 		//Calculation Mean Time To Failure
 		if(report.totalFailings>1) {
-			System.out.println("Mean Time To Failure(MTTF) is "+report.mttf);
+			System.out.println("Mean Time To Failure(MTTF): "+report.mttf+" seconds");
 		}
 		System.out.println("<<Closing Reliability Overview>>");
 		
@@ -174,13 +154,16 @@ public class ReliabilityNature extends  DefaultTestingSuiteDecorator{
 
 	public boolean invokeTestingSuite(TesterModuleMessenger tmm) throws StateFormulaNotAssignedException {
 		super.executeTesting();
-		if(this.requestedReliabilityReport) this.printReliabilityReport();
+		
+		boolean result=false;
 		try {
-			return this.verifyRequirement();
+			result = this.verifyRequirement();
 		} catch (verificationAlreadyExecutedException e) {
 			e.printStackTrace();
 		}
-		return false;
+		
+		if(this.requestedReliabilityReport) this.printReliabilityReport();
+		return result;
 	}
 	
 	public String getNatureDescription(){
@@ -193,6 +176,7 @@ public class ReliabilityNature extends  DefaultTestingSuiteDecorator{
 		list.add(this.getNatureDescription());
 		return list;
 	}
+
 
 
 }

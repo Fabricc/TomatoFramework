@@ -33,12 +33,12 @@ public class examples_steps {
 	   System.out.println("i_GET_api_riaf_reference_countries executed");
 	}
 
-	@Then("^the JsonPath key countries should contain (\\d+) elements$")
-	public void the_JsonPath_key_countries_should_contain_elements(int arg1) throws Throwable {
+	@Then("^the JsonPath key countries contains (\\d+) elements$")
+	public void the_JsonPath_key_countries_contains_elements(int arg1) throws Throwable {
 	    // Write code here that turns the phrase above into concrete actions
-	    if(arg1<200) Thread.sleep(400);
+	    if(arg1<20) Thread.sleep(400);
 	    else Thread.sleep(800);
-	    System.out.println("the_JsonPath_key_countries_should_contain_elements executed");
+	    System.out.println("the_JsonPath_key_countries_contains_elements executed with "+arg1+" elements");
 	}
 	
 	//Reliability

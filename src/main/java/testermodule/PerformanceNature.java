@@ -4,8 +4,18 @@ import java.lang.reflect.InvocationTargetException;
 
 import testermodule.exceptions.StateFormulaNotAssignedException;
 import testermodule.exceptions.verificationAlreadyExecutedException;
+import testermodule.support.IterationReport;
 
 public class PerformanceNature extends DefaultTestingSuiteDecorator {
+	
+	class Executer implements Runnable{
+
+		public void run() {
+			// TODO Auto-generated method stub
+			
+		}
+		
+	}
 
 	private PerformanceNature(DefaultTestingSuite decoratedDefaultTestingSuite) {
 		super(decoratedDefaultTestingSuite);
@@ -30,11 +40,20 @@ public class PerformanceNature extends DefaultTestingSuiteDecorator {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			
-		
-		
 		
 		return false;
 	}
-
+	
+	public void executeTesting() throws StateFormulaNotAssignedException{
+		
+	}
+	
+	public IterationReport executeScenario(IterationReport iteration_report, int nextStep) throws ClassNotFoundException, NoSuchMethodException, 
+		SecurityException, InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException{
+	return null;
+	}
+	
 }
+	
+
+

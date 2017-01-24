@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.Map;
 
 import testermodule.exceptions.StateFormulaNotAssignedException;
+import testermodule.rules.RandomRuleTuple;
+import testermodule.rules.RuleTuple;
 
 public abstract class ParentTestingSuite {
 	TesterModuleMessenger tmm;

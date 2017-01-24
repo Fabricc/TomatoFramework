@@ -6,6 +6,8 @@ import cucumber.api.Scenario;
 import cucumber.api.java.After;
 import cucumber.api.java.Before;
 import cucumber.api.java.en.Given;
+import cucumber.api.java.en.Then;
+import cucumber.api.java.en.When;
 import testermodule.DefaultTestingSuite;
 import testermodule.DefaultTestingSuiteImplementation;
 import testermodule.ReliabilityNature;
@@ -28,9 +30,9 @@ public class quality_steps_generated {
 		
 		//Scenario: API testing
 		//Scope stateFormula
-		ptt.assignStateFormula("JsonPath key is received", "the_JsonPath_key_countries_should_contain_elements");
+		ptt.assignStateFormula("JsonPath key is received", "the_JsonPath_key_countries_contains_elements");
 		//Rules
-		ptt.assignRuleRandom("JsonPath key is received", "the_JsonPath_key_countries_should_contain_elements", "arg1", 100, 300);
+		ptt.assignRuleRandom("JsonPath key is received", "the_JsonPath_key_countries_contains_elements", "arg1", 2, 50);
 		
 		//Scenario: Error recovery
 		//Scope stateFormula
@@ -66,10 +68,12 @@ public class quality_steps_generated {
 		
 		this.ptt = ReliabilityNature.safelyDecore(ptt);
 		
-		//((ReliabilityNature) ptt).enableReliabilityReport();
+		
+		((ReliabilityNature) ptt).enableReliabilityReport();
 		
 		tmm = ptt.getMessenger();
 }
+	@Tomato
 	@Given("^\\[with(?: a)? (?:probability|chance)(?: of)? ((?:at most|(?:lower than|less than))|(?:at least|(?:greater than|higher than))) (\\d+\\.\\d+) \"([^\"]*)\" ((?:within the next|in less than)|(?:after|in more than)) (\\d+\\.\\d+) s\\]$")
 	public void alternativeThree(java.lang.String probabilityBound,java.lang.Double p,java.lang.String stateFormula,java.lang.String timeBound,java.lang.Double t) throws Throwable {
 			
@@ -97,6 +101,8 @@ public class quality_steps_generated {
 	    	}
 	    	
 	    }
+	
+	@Tomato
 	@Given("^\\[the (?:probability|chance) is ((?:at most|(?:lower than|less than))|(?:at least|(?:greater than|higher than))) (\\d+\\.\\d+) that \"([^\"]*)\" ((?:within the next|in less than)|(?:after|in more than)) (\\d+\\.\\d+) s\\]$")
 	public void alternativeTwo(java.lang.String probabilityBound,java.lang.Double p,java.lang.String stateFormula,java.lang.String timeBound,java.lang.Double t) throws Throwable {
 			
@@ -124,6 +130,8 @@ public class quality_steps_generated {
 	    	}
 	    	
 	    }
+	
+	@Tomato
 	@Given("^\\[\"([^\"]*)\" ((?:within the next|in less than)|(?:after|in more than)) (\\d+\\.\\d+) s with(?: a)? (?:probability|chance)(?: of)? ((?:at most|(?:lower than|less than))|(?:at least|(?:greater than|higher than))) (\\d+\\.\\d+)\\]$")
 	public void alternativeNine(java.lang.String stateFormula,java.lang.String timeBound,java.lang.Double t,java.lang.String probabilityBound,java.lang.Double p) throws Throwable {
 			
@@ -151,6 +159,8 @@ public class quality_steps_generated {
 	    	}
 	    	
 	    }
+	
+	@Tomato
 	@Given("^\\[the (?:probability|chance) (?:of|to|that|in which) \"([^\"]*)\" ((?:within the next|in less than)|(?:after|in more than)) (\\d+\\.\\d+) s is ((?:at most|(?:lower than|less than))|(?:at least|(?:greater than|higher than))) (\\d+\\.\\d+)\\]$")
 	public void alternativeOne(java.lang.String stateFormula,java.lang.String timeBound,java.lang.Double t,java.lang.String probabilityBound,java.lang.Double p) throws Throwable {
 			
@@ -179,6 +189,7 @@ public class quality_steps_generated {
 	    	
 	    }
 	
+	@Tomato
 	@Given("^\\[the (?:probability|chance) (?:of|to|that|in which) \"([^\"]*)\" is ((?:at most|(?:lower than|less than))|(?:at least|(?:greater than|higher than))) (\\d+\\.\\d+)\\]$")
 	public void alternativeOneNoTime(java.lang.String stateFormula,java.lang.String probabilityBound,java.lang.Double p) throws Throwable {
 			
@@ -205,6 +216,7 @@ public class quality_steps_generated {
 	    	
 	    }
 	
+	@Tomato
 	@Given("^\\[((?:rocof|rate of occurrence of failures)|(?:pofod|probability of failures on demand)|(?:mttf|mean time to failure)) (?:of|to|that|in which) \"([^\"]*)\" should be ((?:(?:lower than|less than))|(?:(?:greater than|higher than))) (\\d+\\.\\d+)\\]$")
 	public void reliabilityConstraint(java.lang.String reliabilityMetric,java.lang.String stateFormula,java.lang.String reliabilityBound,java.lang.Double p) throws Throwable {
 			
@@ -229,25 +241,10 @@ public class quality_steps_generated {
 	    	
 	    }
 	
+	@Tomato
 	@After("@quality")
 	public void finalizationStep(){
 		
-	}
-	
-	@Given("^the price of a \"(.*?)\" is (\\d+)c$")
-	public void the_price_of_a_is_c(String arg1, int arg2) throws Throwable {
-	// Write code here that turns the phrase above into concrete actions
-	throw new PendingException();
-	}
-	@When("^I checkout (\\d+) \"(.*?)\"$")
-	public void i_checkout(int arg1, String arg2) throws Throwable {
-	// Write code here that turns the phrase above into concrete actions
-	throw new PendingException();
-	}
-	@Then("^the total price should be (\\d+)c$")
-	public void the_total_price_should_be_c(int arg1) throws Throwable {
-	// Write code here that turns the phrase above into concrete actions
-	throw new PendingException();
 	}
 	
 	

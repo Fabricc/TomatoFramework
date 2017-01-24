@@ -1,4 +1,4 @@
-package testermodule;
+package testermodule.rules;
 
 public abstract class RuleTuple {
 	String stateFormula;
@@ -8,14 +8,14 @@ public abstract class RuleTuple {
 	int int_value;
 	double double_value;
 	
-	RuleTuple(String stateFormula, String method, String variable, String  rule){
+	public RuleTuple(String stateFormula, String method, String variable, String  rule){
 		this.stateFormula = stateFormula;
 		this.method = method;
 		this.variable = variable;
 		this.rule = rule;
 	}
 	
-	RuleTuple(String stateFormula, String method, String variable, String rule, double value){
+	public RuleTuple(String stateFormula, String method, String variable, String rule, double value){
 		this.stateFormula = stateFormula;
 		this.method = method;
 		this.variable = variable;
@@ -23,14 +23,14 @@ public abstract class RuleTuple {
 		this.rule = rule;
 	}
 
-	boolean identifyRule(String stateFormula, String method, String variable){
+	public boolean identifyRule(String stateFormula, String method, String variable){
 		if(this.stateFormula.equals(stateFormula) &&
 				this.method.equals(method) &&
 				this.variable.equals(variable)) return true;
 		else return false;
 	}
 	
-	String getRule(){
+	public String getRule(){
 		return this.rule;
 	}
 	

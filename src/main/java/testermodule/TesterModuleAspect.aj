@@ -32,7 +32,7 @@ public class TesterModuleAspect {
     @After("execution(* *.iniziatializationStep(Scenario)) && args(s)")
     public void spotIniziatializarionStep(Scenario s, JoinPoint jp){
     	
-    	System.out.println("Tomato Framework: Observing steps of Scenario "+s.getName()+" in file:"+jp.getSourceLocation().getFileName());
+    	System.out.println("Tomato Framework: Observing steps of Scenario "+s.getName());
     	this.storing = true;
     	this.scen=s;
     	}
@@ -97,7 +97,7 @@ public class TesterModuleAspect {
     @After("execution(boolean *.invokeTestingSuite(TesterModuleMessenger)) && args(tmm)")
     public void enableStoreMethods(TesterModuleMessenger tmm){
     	this.storing = true;
-    	ignoreNextClass = true;
+    	//ignoreNextClass = true;
     	tmm.defineNature(0);
       	
     }

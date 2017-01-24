@@ -1,9 +1,9 @@
-package testermodule;
+package testermodule.support;
 
 import testermodule.exceptions.IncorrectConditionException;
 
 public class conditionChecker{
-	conditionChecker(String condition){
+	public conditionChecker(String condition){
 		if(condition.equals("<")){
 			this.mode=0;
 		}else if(condition.equals(">")){

@@ -6,6 +6,7 @@ import java.util.List;
 
 import testermodule.exceptions.StateFormulaNotAssignedException;
 import testermodule.exceptions.verificationAlreadyExecutedException;
+import testermodule.support.IterationReport;
 
 public interface DefaultTestingSuite {
 	public void executeTesting() throws StateFormulaNotAssignedException;
@@ -35,4 +36,6 @@ public interface DefaultTestingSuite {
 	public String getNatureDescription();
 	
 	public List<String> getDecorations();
+	
+	public IterationReport executeScenario(IterationReport iteration_report, int nextStep) throws ClassNotFoundException, NoSuchMethodException, SecurityException, InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException;
 }

@@ -4,8 +4,8 @@ Feature: Examples
   
 #Performance scenario with stateFormula's scope of one step and one paramater
 	Scenario: API testing
+		Given the JsonPath key countries contains 15 elements
 		When I GET /api/riaf/reference/countries
-    Then the JsonPath key countries should contain 249 elements
     Then [the probability that "JsonPath key is received" in less than 0.5 s is at least 0.2]
     And [rocof of "the whole scenario" should be lower than 0.5]
     
@@ -17,7 +17,7 @@ Feature: Examples
 		When a fatal error occurs
 		Then the software recovers automatically
 		And all the tasks are resumed
-		And ["the system recovers completely" in less than 0.5 s with a probability of at least 0.9]
+		And ["the system recovers completely" in less than 4.0 s with a probability of at least 0.9]
 		
 #Security scenario with one stateFormula with external scope and one paramater
 	Scenario: Protection from IP spoofing attack

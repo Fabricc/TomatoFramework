@@ -6,6 +6,7 @@ import java.util.List;
 
 import testermodule.exceptions.StateFormulaNotAssignedException;
 import testermodule.exceptions.verificationAlreadyExecutedException;
+import testermodule.support.IterationReport;
 
 public abstract class DefaultTestingSuiteDecorator implements DefaultTestingSuite{
 	
@@ -71,6 +72,10 @@ public abstract class DefaultTestingSuiteDecorator implements DefaultTestingSuit
 	
 	public void assignStateFormula(String stateFormula, String method){
 		this.decoratedDefaulTestingSuite.assignStateFormula(stateFormula, method);
+	}
+	
+	public IterationReport executeScenario(IterationReport iteration_report, int nextStep) throws ClassNotFoundException, NoSuchMethodException, SecurityException, InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException{
+		return this.decoratedDefaulTestingSuite.executeScenario(iteration_report,nextStep);
 	}
 	
 
