@@ -7,7 +7,7 @@ import java.util.HashMap;
 
 import generatormodule.Pair;
 
-public class LexicalParametersSerializer {
+public class Helpers {
 
 	public static HashMap<String, Pair> deserialize() {
 		HashMap<String, Pair> map = null;
@@ -31,6 +31,14 @@ public class LexicalParametersSerializer {
         //System.out.println("Deserialized HashMap..");
         return map;
         // Display content using Iterator
+	}
+	
+	public static Double millisecondsToSeconds(long l){
+		return (Double) (l/1000.0);
+	}
+	
+	public static long secondsToMilliseconds(Double d){
+		return (long) (d*1000);
 	}
 
 }

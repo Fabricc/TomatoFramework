@@ -10,6 +10,7 @@ import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import testermodule.DefaultTestingSuite;
 import testermodule.DefaultTestingSuiteImplementation;
+import testermodule.PerformanceNature;
 import testermodule.ReliabilityNature;
 import testermodule.TesterModuleMessenger;
 import testermodule.Tomato;
@@ -43,7 +44,7 @@ public class quality_steps_generated {
 		ptt.assignRuleRandom("the system recovers completely", "the_software_has_backup_services", "services", 1, 10);
 		
 		//Scenario: Message system
-		//Scope stateFormula
+		//Scope stateFormula 
 		ptt.assignStateFormula("process b should receive the message", "the_process_A_sends_the_message_to_B");
 //		ptt.assignStateFormulaExternal("the message is corrupted", "a_message_is_corrupted");
 		ptt.assignStateFormula("the message is corrupted", "a_message_is_corrupted");
@@ -69,10 +70,24 @@ public class quality_steps_generated {
 		this.ptt = ReliabilityNature.safelyDecore(ptt);
 		
 		
+		
+		
 		((ReliabilityNature) ptt).enableReliabilityReport();
 		
 		tmm = ptt.getMessenger();
 }
+	
+	@After("@Performance")
+	public void executePerformanceTest(){
+		try {
+			tmm.insertParameter("stateFormula", "the system recovers completely");
+			((PerformanceNature)PerformanceNature.safelyDecore(ptt)).invokeTestingSuite(tmm);
+		} catch (StateFormulaNotAssignedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
 	@Tomato
 	@Given("^\\[with(?: a)? (?:probability|chance)(?: of)? ((?:at most|(?:lower than|less than))|(?:at least|(?:greater than|higher than))) (\\d+\\.\\d+) \"([^\"]*)\" ((?:within the next|in less than)|(?:after|in more than)) (\\d+\\.\\d+) s\\]$")
 	public void alternativeThree(java.lang.String probabilityBound,java.lang.Double p,java.lang.String stateFormula,java.lang.String timeBound,java.lang.Double t) throws Throwable {
@@ -241,6 +256,7 @@ public class quality_steps_generated {
 	    	
 	    }
 	
+
 	@Tomato
 	@After("@quality")
 	public void finalizationStep(){

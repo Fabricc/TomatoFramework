@@ -11,6 +11,7 @@ Feature: Examples
     
 
 #Availability scenario with stateFormula's scope of two steps and two paramaters
+	@Performance
 	Scenario: Error recovery
 		Given an user issued 3 concurrent tasks
 		And the software has 3 backup services

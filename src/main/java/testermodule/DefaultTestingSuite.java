@@ -1,4 +1,4 @@
-package testermodule;
+ package testermodule;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.LinkedList;
@@ -12,6 +12,8 @@ public interface DefaultTestingSuite {
 	public void executeTesting() throws StateFormulaNotAssignedException;
 	
 	public LinkedList<IterationReport> getReport();
+	
+	public void wipeReport();
 	
 	public void defineRequirementNature(int nature);
 	

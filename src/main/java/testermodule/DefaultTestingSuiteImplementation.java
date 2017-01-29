@@ -54,6 +54,10 @@ public class DefaultTestingSuiteImplementation extends ParentTestingSuite implem
 		return this.nature;
 	}
 	
+	public void wipeReport(){
+		this.report=null;
+	}
+	
 	public LinkedList<IterationReport> getReport(){
 		if(this.report==null){
 			this.report = new LinkedList<IterationReport>();
@@ -83,7 +87,10 @@ public class DefaultTestingSuiteImplementation extends ParentTestingSuite implem
 		
 		
 		
-		//if(numberOfSteps==this.nextStep) return result;
+		if(numberOfSteps==this.nextStep) {
+			System.out.println("No methods to execute");
+			return;
+		}
 		for(int i = 0; i<numberIterations; i++){
 			System.out.println("Iteration nr."+ (i+1));
 			
