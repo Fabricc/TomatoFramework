@@ -16,6 +16,7 @@ import generatormodule.support.helper;
  */
 
 
+
 public class Grammar {
 
     public Map<String, String> syntax = new HashMap<String, String>();
