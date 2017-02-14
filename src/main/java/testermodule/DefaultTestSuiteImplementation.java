@@ -18,7 +18,7 @@ import testermodule.support.conditionChecker;
 
 
 
-public class DefaultTestingSuiteImplementation extends ParentTestingSuite implements DefaultTestingSuite {
+public class DefaultTestSuiteImplementation extends ParentTestSuite implements DefaultTestSuite {
 	
 	
 //	

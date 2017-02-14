@@ -9,12 +9,12 @@ import testermodule.exceptions.StateFormulaNotAssignedException;
 import testermodule.rules.RandomRuleTuple;
 import testermodule.rules.RuleTuple;
 
-public abstract class ParentTestingSuite {
+public abstract class ParentTestSuite {
 	TesterModuleMessenger tmm;
 	
 	protected String dclass;
 	
-	public ParentTestingSuite(){
+	public ParentTestSuite(){
 		this.tmm = new TesterModuleMessenger();
 	}
 	

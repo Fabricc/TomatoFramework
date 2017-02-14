@@ -11,13 +11,13 @@ import testermodule.support.IterationReport;
 import testermodule.support.conditionChecker;
 import testermodule.support.reliabilityReport;
 
-public class ReliabilityNature extends  DefaultTestingSuiteDecorator{
+public class ReliabilityNature extends  DefaultTestSuiteDecorator{
 
-	private ReliabilityNature(DefaultTestingSuite decoratedDefaultTestingSuite) {
+	private ReliabilityNature(DefaultTestSuite decoratedDefaultTestingSuite) {
 			super(decoratedDefaultTestingSuite);
 		}
 	
-	public static DefaultTestingSuite safelyDecore(DefaultTestingSuite decoratedDefaultTestingSuite){
+	public static DefaultTestSuite safelyDecore(DefaultTestSuite decoratedDefaultTestingSuite){
 		if(!decoratedDefaultTestingSuite.getDecorations().contains("Reliability")){
 			return new ReliabilityNature(decoratedDefaultTestingSuite);
 		}else return decoratedDefaultTestingSuite;

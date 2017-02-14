@@ -8,7 +8,7 @@ import support.Helpers;
 import testermodule.exceptions.StateFormulaNotAssignedException;
 import testermodule.support.IterationReport;
 
-public class PerformanceNature extends DefaultTestingSuiteDecorator {
+public class PerformanceNature extends DefaultTestSuiteDecorator {
 	
 	class Executer implements Runnable{
 		
@@ -63,11 +63,11 @@ public class PerformanceNature extends DefaultTestingSuiteDecorator {
 	
 	private double rateScenarioExecution = 0.1;
 
-	private PerformanceNature(DefaultTestingSuite decoratedDefaultTestingSuite) {
+	private PerformanceNature(DefaultTestSuite decoratedDefaultTestingSuite) {
 		super(decoratedDefaultTestingSuite);
 	}
 	
-	public static DefaultTestingSuite safelyDecore(DefaultTestingSuite decoratedDefaultTestingSuite){
+	public static DefaultTestSuite safelyDecore(DefaultTestSuite decoratedDefaultTestingSuite){
 		if(!decoratedDefaultTestingSuite.getDecorations().contains("Performance")){
 			return new PerformanceNature(decoratedDefaultTestingSuite);
 		}else return decoratedDefaultTestingSuite;

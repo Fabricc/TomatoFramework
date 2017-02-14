@@ -8,11 +8,11 @@ import testermodule.exceptions.StateFormulaNotAssignedException;
 import testermodule.exceptions.verificationAlreadyExecutedException;
 import testermodule.support.IterationReport;
 
-public abstract class DefaultTestingSuiteDecorator implements DefaultTestingSuite{
+public abstract class DefaultTestSuiteDecorator implements DefaultTestSuite{
 	
-	protected final DefaultTestingSuite decoratedDefaulTestingSuite;
+	protected final DefaultTestSuite decoratedDefaulTestingSuite;
 	
-	public DefaultTestingSuiteDecorator(DefaultTestingSuite decoratedDefaulTestingSuite){
+	public DefaultTestSuiteDecorator(DefaultTestSuite decoratedDefaulTestingSuite){
 		this.decoratedDefaulTestingSuite = decoratedDefaulTestingSuite;
 	}
 

@@ -8,8 +8,8 @@ import cucumber.api.java.Before;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
-import testermodule.DefaultTestingSuite;
-import testermodule.DefaultTestingSuiteImplementation;
+import testermodule.DefaultTestSuite;
+import testermodule.DefaultTestSuiteImplementation;
 import testermodule.PerformanceNature;
 import testermodule.ReliabilityNature;
 import testermodule.TesterModuleMessenger;
@@ -18,14 +18,14 @@ import testermodule.exceptions.StateFormulaNotAssignedException;
 
 public class quality_steps_generated {
 
-	DefaultTestingSuite ptt;
+	DefaultTestSuite ptt;
 	Scenario scenario;
 	TesterModuleMessenger tmm;
 	
 	@Before("@quality")
 	public void initializationStep(Scenario scenario){
 		this.scenario=scenario;
-		this.ptt = new DefaultTestingSuiteImplementation();
+		this.ptt = new DefaultTestSuiteImplementation();
 		
 		//Assign your StateFormulas and you rules here
 		

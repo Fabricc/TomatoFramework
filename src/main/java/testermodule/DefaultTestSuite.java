@@ -8,7 +8,7 @@ import testermodule.exceptions.StateFormulaNotAssignedException;
 import testermodule.exceptions.verificationAlreadyExecutedException;
 import testermodule.support.IterationReport;
 
-public interface DefaultTestingSuite {
+public interface DefaultTestSuite {
 	public void executeTesting() throws StateFormulaNotAssignedException;
 	
 	public LinkedList<IterationReport> getReport();
