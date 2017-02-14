@@ -78,5 +78,13 @@ public abstract class DefaultTestingSuiteDecorator implements DefaultTestingSuit
 		return this.decoratedDefaulTestingSuite.executeScenario(iteration_report,nextStep);
 	}
 	
+	public void wipeReport(){
+		this.decoratedDefaulTestingSuite.wipeReport();
+	}
+	
+	public void setIterations(int iterations){
+		this.decoratedDefaulTestingSuite.setIterations(iterations);
+	}
+	
 
 }

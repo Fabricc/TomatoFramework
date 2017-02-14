@@ -27,7 +27,7 @@ public class DefaultTestingSuiteImplementation extends ParentTestingSuite implem
 //	}
 //	
 	
-	private int numberIterations = 4;
+	private int numberIterations = 10;
 	private int nextStep = 0;
 	private int nature = 0;
 	//private Boolean requestedReliabilityReport = false;
@@ -52,6 +52,14 @@ public class DefaultTestingSuiteImplementation extends ParentTestingSuite implem
 	
 	public int getNature(){
 		return this.nature;
+	}
+	
+	public void wipeReport(){
+		this.report=null;
+	}
+	
+	public void setIterations(int iterations){
+		this.numberIterations = iterations;
 	}
 	
 	public LinkedList<IterationReport> getReport(){
@@ -83,7 +91,10 @@ public class DefaultTestingSuiteImplementation extends ParentTestingSuite implem
 		
 		
 		
-		//if(numberOfSteps==this.nextStep) return result;
+		if(numberOfSteps==this.nextStep) {
+			System.out.println("No methods to execute");
+			return;
+		}
 		for(int i = 0; i<numberIterations; i++){
 			System.out.println("Iteration nr."+ (i+1));
 			
@@ -234,9 +245,10 @@ public class DefaultTestingSuiteImplementation extends ParentTestingSuite implem
 		
 		for(IterationReport ir: report){
 			Object classInstance = ir.getClassInstanceByName(className);
-			
+//With external methods is needed a way to define what is expected. In fact, in this context true does not necessarily means success and viceversa.
+//hacked for the demo
 			try {
-				if(ir.isCorrectlyExecuted() && !(Boolean)userDefinedStateFormulaMethod.invoke(classInstance)){
+				if(ir.isCorrectlyExecuted() && (Boolean)userDefinedStateFormulaMethod.invoke(classInstance)){
 					ir.declareStepFailed(userDefinedStateFormulaMethod.getName(), new Exception());
 				}
 			} catch (IllegalAccessException e) {

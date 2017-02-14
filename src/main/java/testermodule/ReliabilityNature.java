@@ -144,7 +144,7 @@ public class ReliabilityNature extends  DefaultTestingSuiteDecorator{
 	
 
 	
-	protected reliabilityReport getReliabilityReport(){
+	public reliabilityReport getReliabilityReport(){
 		if(rreport==null){
 			rreport=this.elaborateReliabilityReport();
 		}

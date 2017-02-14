@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import generatormodule.Pair;
-import support.LexicalParametersSerializer;
+import support.Helpers;
 
 public class TesterModuleMessenger {
 	private List<String> classes;
@@ -27,7 +27,7 @@ public class TesterModuleMessenger {
 	}
 	
 	protected TesterModuleMessenger(){
-		this.semantic = LexicalParametersSerializer.deserialize();
+		this.semantic = Helpers.deserialize();
 	}
 	
 	public void cleanParameters(){

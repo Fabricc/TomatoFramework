@@ -92,8 +92,8 @@ public class examples_steps {
 	    System.out.println("a_process_A_that_wants_to_communicate_with_process_B executed");
 	}
 
-	@Given("^a (\\d+) processes are sending a message in the same channel at (\\d+\\.\\d+) kb/s$")
-	public void a_processes_are_sending_a_message_in_the_same_channel_at_kb_s(int procs, double speed) throws Throwable {
+	@Given("^(\\d+) other processes are sending a message in the same channel at (\\d+\\.\\d+) kb/s$")
+	public void other_processes_are_sending_a_message_in_the_same_channel_at_kb_s(int procs, double speed) throws Throwable {
 	    // Write code here that turns the phrase above into concrete actions
 	    this.st.processess=procs;
 	    this.st.speed=speed;
@@ -101,7 +101,7 @@ public class examples_steps {
 	    		+procs+" processes and communication rate of"+speed+" kb/s");
 	}
 
-	@Given("^the noise in th channel is (\\d+) db$")
+	@Given("^the noise in the channel is (\\d+) db$")
 	public void the_noise_in_th_channel_is_db(int noise) throws Throwable {
 	    // Write code here that turns the phrase above into concrete actions
 	    this.st.noise=noise;
@@ -111,16 +111,16 @@ public class examples_steps {
 	@When("^the process A sends the message to B$")
 	public void the_process_A_sends_the_message_to_B() throws Throwable {
 	    // Write code here that turns the phrase above into concrete actions
-		long time = 100;
-		long sleep= time*st.processess*st.noise+(st.noise*100);
-		
+		long time = 10;
+		long sleep= time*st.processess*st.noise+(st.noise*10);
+		this.st.sleep = sleep;
 		Thread.sleep(sleep);
 		
 		System.out.println("the_process_A_sends_the_message_to_B executed");
 	}
 	
 	public boolean a_message_is_corrupted() throws Throwable {
-		if(this.st.sleep>1000) return true;
+		if(this.st.sleep>70) return true;
 		return false;
 	}
 	

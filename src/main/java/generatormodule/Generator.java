@@ -85,7 +85,7 @@ public class Generator {
             oos.writeObject(lexical_parameters);
             oos.close();
             fos.close();
-            System.out.printf("Serialized HashMap data is saved in lexicalparams.ser");
+            System.out.printf("Your grammar was elaborated without errors. Step definitions generated.");
 
     }
 
@@ -99,9 +99,7 @@ public class Generator {
         m.put("alternativeTwo","'the' Probability 'is' probabilityBound p 'that' stateFormula timeBound t 's'");
         m.put("alternativeThree","'with'[' a'] Probability[' of'] probabilityBound p stateFormula timeBound t 's'");
         m.put("alternativeNine","stateFormula timeBound t 's with'[' a'] Probability[' of'] probabilityBound p");
-       // m.put("alternativeFive", "'with' aProbabilityBound Probability stateFormula timeBound");
-        //m.put("alternativeSix", "'there is' aProbabilityBound p Probability of stateFormula timeBound t");
-        m.put("reliabilityConstraint", "reliabilityMetric Of stateFormula 'should be' reliabilityBound p");
+
 
 
 

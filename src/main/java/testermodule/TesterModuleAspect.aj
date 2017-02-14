@@ -29,8 +29,8 @@ public class TesterModuleAspect {
 	
 	private Boolean storing = false;
 	
-    @After("execution(* *.iniziatializationStep(Scenario)) && args(s)")
-    public void spotIniziatializarionStep(Scenario s, JoinPoint jp){
+    @After("execution(* *.initializationStep(Scenario)) && args(s)")
+    public void spotinitializationStep(Scenario s, JoinPoint jp){
     	
     	System.out.println("Tomato Framework: Observing steps of Scenario "+s.getName());
     	this.storing = true;

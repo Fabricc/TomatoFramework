@@ -26,15 +26,8 @@ public class Grammar {
         //Probability rules
         syntax.put("Probability", "'probability'|'chance'");
         syntax.put("probabilityBound", "upperProbailityBound|lowerProbailityBound");
-        //expressions.put("aProbabilityBound", "atBound[' a']|[' a'] thanBound");
         syntax.put("upperProbailityBound", "'at most'|lowerThan");
         syntax.put("lowerProbailityBound", "'at least'|greaterThan");
-//        expressions.put("aProbabilityBound", "atUpperBound[' a']|atLowerBound[' a']|[' a'] thanUpperBound|[' a'] thanLowerBound");
-//        expressions.put("atUpperBound","'at most'");
-//        expressions.put("atLowerBound","'at least'");
-//        expressions.put("thanUpperBound","lowerThan");
-//        expressions.put("thanLowerBound","greaterThan");
-        
         syntax.put("greaterThan","'greater than'|'higher than'");
         syntax.put("lowerThan","'lower than'|'less than'");
         syntax.put("Of","'of'|'to'|'that'|'in which'");
@@ -59,6 +52,13 @@ public class Grammar {
         semantic.put("p",new SemanticWrapper(Double.class));
         semantic.put("t",new SemanticWrapper(Double.class));
         semantic.put("stateFormula",new SemanticWrapper(String.class));
+        
+//      expressions.put("aProbabilityBound", "atBound[' a']|[' a'] thanBound");
+//      expressions.put("aProbabilityBound", "atUpperBound[' a']|atLowerBound[' a']|[' a'] thanUpperBound|[' a'] thanLowerBound");
+//      expressions.put("atUpperBound","'at most'");
+//      expressions.put("atLowerBound","'at least'");
+//      expressions.put("thanUpperBound","lowerThan");
+//      expressions.put("thanLowerBound","greaterThan");
         
         //Reliability Grammar
         syntax.put("reliabilityMetric", "ROCOF|POFOD|MTTF");
