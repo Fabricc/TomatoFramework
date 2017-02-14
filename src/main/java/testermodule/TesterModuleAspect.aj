@@ -63,6 +63,7 @@ public class TesterModuleAspect {
     
     @After("(Given() || Then() || When()) && !@annotation(testermodule.Tomato)")
     public void storeMethods(JoinPoint jp){
+
     	if(!this.ignoreNextClass){
     		if(this.storing){
 
@@ -90,7 +91,7 @@ public class TesterModuleAspect {
     	
     	tmm.insertMethod(classes, methods, arguments, classesOfArguments, nameOfArguments);
   
-    	//System.out.println("adding stored method");
+    	System.out.println("adding stored method");
     	
     }
     
