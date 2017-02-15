@@ -80,7 +80,7 @@ public class quality_steps_generated {
 	public void executePerformanceTest(){
 		try {
 			tmm.insertParameter("stateFormula", "the system recovers completely");
-			((PerformanceNature)PerformanceNature.safelyDecore(ptt)).invokeTestingSuite(tmm);
+			((PerformanceNature)PerformanceNature.safelyDecore(ptt)).invokeTestSuite(tmm);
 		} catch (StateFormulaNotAssignedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -98,7 +98,7 @@ public class quality_steps_generated {
 			tmm.insertParameter("t", t);
 	    	
 			try{
-	    		if(this.ptt.invokeTestingSuite(tmm)) System.out.println("Quality constraint satisfied");
+	    		if(this.ptt.invokeTestSuite(tmm)) System.out.println("Quality constraint satisfied");
 	    		else {
 	    			System.out.println("Quality constraint not satisfied");
 	    			Assert.fail("Quality constraint not satisfied");
@@ -127,7 +127,7 @@ public class quality_steps_generated {
 			tmm.insertParameter("t", t);
 	    	
 			try{
-	    		if(this.ptt.invokeTestingSuite(tmm)) System.out.println("Quality constraint satisfied");
+	    		if(this.ptt.invokeTestSuite(tmm)) System.out.println("Quality constraint satisfied");
 	    		else {
 	    			System.out.println("Quality constraint not satisfied");
 	    			Assert.fail("Quality constraint not satisfied");
@@ -156,7 +156,7 @@ public class quality_steps_generated {
 			tmm.insertParameter("p", p);
 	    	
 	    	try{
-	    		if(this.ptt.invokeTestingSuite(tmm)) System.out.println("Quality constraint satisfied");
+	    		if(this.ptt.invokeTestSuite(tmm)) System.out.println("Quality constraint satisfied");
 	    		else {
 	    			System.out.println("Quality constraint not satisfied");
 	    			Assert.fail("Quality constraint not satisfied");
@@ -185,7 +185,7 @@ public class quality_steps_generated {
 			tmm.insertParameter("p", p);
 	    	
 			try{
-	    		if(this.ptt.invokeTestingSuite(tmm)) System.out.println("Quality constraint satisfied");
+	    		if(this.ptt.invokeTestSuite(tmm)) System.out.println("Quality constraint satisfied");
 	    		else {
 	    			System.out.println("Quality constraint not satisfied");
 	    			Assert.fail("Quality constraint not satisfied");
@@ -212,7 +212,7 @@ public class quality_steps_generated {
 			tmm.insertParameter("p", p);
 	    	
 			try{
-	    		if(this.ptt.invokeTestingSuite(tmm)) System.out.println("Quality constraint satisfied");
+	    		if(this.ptt.invokeTestSuite(tmm)) System.out.println("Quality constraint satisfied");
 	    		else {
 	    			System.out.println("Quality constraint not satisfied");
 	    			Assert.fail("Quality constraint not satisfied");
@@ -241,7 +241,7 @@ public class quality_steps_generated {
 			tmm.defineNature(1);
 			
 	    	try{
-	    		if(((ReliabilityNature)ReliabilityNature.safelyDecore(ptt)).invokeTestingSuite(tmm)) System.out.println("Quality constraint satisfied");
+	    		if(((ReliabilityNature)ReliabilityNature.safelyDecore(ptt)).invokeTestSuite(tmm)) System.out.println("Quality constraint satisfied");
 	    		else Assert.fail("Quality constraint not satisfied");
 	    	}
 	    	catch(StateFormulaNotAssignedException e){

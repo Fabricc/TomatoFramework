@@ -281,7 +281,7 @@ public class DefaultTestSuiteImplementation extends ParentTestSuite implements D
 	//{p=3, t=5, timeBound=>, stateFormula=something happening, probabilityBound=<}
 	
 	@Override
-	public boolean invokeTestingSuite(TesterModuleMessenger tmm) throws StateFormulaNotAssignedException{
+	public boolean invokeTestSuite(TesterModuleMessenger tmm) throws StateFormulaNotAssignedException{
 
 				this.executeTesting();
 				try {

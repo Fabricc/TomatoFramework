@@ -23,7 +23,7 @@ public interface DefaultTestSuite {
 	
 	public TesterModuleMessenger getMessenger();
 	
-	public boolean invokeTestingSuite(TesterModuleMessenger tmm) throws StateFormulaNotAssignedException;
+	public boolean invokeTestSuite(TesterModuleMessenger tmm) throws StateFormulaNotAssignedException;
 	
 	public IterationReport getIterationReport(int index);
 	

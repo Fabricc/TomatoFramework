@@ -77,7 +77,7 @@ public class PerformanceNature extends DefaultTestSuiteDecorator {
 		return "Performance";
 	}
 	
-	public boolean invokeTestingSuite(TesterModuleMessenger tmm) throws StateFormulaNotAssignedException {     
+	public boolean invokeTestSuite(TesterModuleMessenger tmm) throws StateFormulaNotAssignedException {     
 			System.out.println("<<Opening Performance Overview>>");
 			executeTesting();
 //			try {

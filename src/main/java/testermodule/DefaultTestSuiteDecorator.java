@@ -46,8 +46,8 @@ public abstract class DefaultTestSuiteDecorator implements DefaultTestSuite{
 		return this.decoratedDefaulTestingSuite.verifyRequirement();
 	}
 	
-	public boolean invokeTestingSuite(TesterModuleMessenger tmm) throws StateFormulaNotAssignedException{
-		return this.decoratedDefaulTestingSuite.invokeTestingSuite(tmm);
+	public boolean invokeTestSuite(TesterModuleMessenger tmm) throws StateFormulaNotAssignedException{
+		return this.decoratedDefaulTestingSuite.invokeTestSuite(tmm);
 	}
 	
 	public boolean isRequirementNature(int nature){

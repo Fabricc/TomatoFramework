@@ -109,7 +109,7 @@ public abstract class ParentTestSuite {
 		return null;
 	}
 
-	public abstract boolean invokeTestingSuite(TesterModuleMessenger tmm) throws StateFormulaNotAssignedException;
+	public abstract boolean invokeTestSuite(TesterModuleMessenger tmm) throws StateFormulaNotAssignedException;
 
 
 

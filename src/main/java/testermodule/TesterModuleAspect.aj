@@ -86,12 +86,12 @@ public class TesterModuleAspect {
     }
     
     
-    @Before("call(boolean *.invokeTestingSuite(TesterModuleMessenger)) && args(tmm)")
+    @Before("call(boolean *.invokeTestSuite(TesterModuleMessenger)) && args(tmm)")
     public void addInformation(TesterModuleMessenger tmm){
     	
     	tmm.insertMethod(classes, methods, arguments, classesOfArguments, nameOfArguments);
   
-    	System.out.println("adding stored method");
+    	//System.out.println("adding stored method");
     	
     }
     

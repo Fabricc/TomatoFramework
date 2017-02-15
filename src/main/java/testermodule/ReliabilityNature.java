@@ -152,7 +152,7 @@ public class ReliabilityNature extends  DefaultTestSuiteDecorator{
 		return rreport;
 	}
 
-	public boolean invokeTestingSuite(TesterModuleMessenger tmm) throws StateFormulaNotAssignedException {
+	public boolean invokeTestSuite(TesterModuleMessenger tmm) throws StateFormulaNotAssignedException {
 		super.executeTesting();
 		
 		boolean result=false;
