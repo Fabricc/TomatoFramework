@@ -11,4 +11,4 @@ of a project. Furthermore, it provides an updated and automated overview of the 
 
 If you want to find more information about the methodology you can read the thesis in the folder docs.
 ## Demo
-If you want to see a demo of how the tool works, click [here]( https://drive.google.com/file/d/0B9YqbH0wuwN-UVFGOW9aX3dVU3M/view?usp=sharing ).
+If you want to see a demo showing an execution of TomatoFramework, click [here]( https://drive.google.com/file/d/0B9YqbH0wuwN-UVFGOW9aX3dVU3M/view?usp=sharing ).
